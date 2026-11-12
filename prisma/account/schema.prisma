@@ -1,0 +1,241 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x", "rhel-openssl-3.0.x"]
+  output        = "../../src/generated/account-client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL_ACCOUNT")
+  directUrl = env("DIRECT_URL_ACCOUNT")
+}
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  username     String? @unique
+  passwordHash String
+  name         String
+  avatarUrl    String?
+  phone        String?
+  location     String?
+  bio          String?
+
+  companionPersona CompanionPersona @default(KINA)
+  role             UserRole         @default(USER)
+
+  isSuspended      Boolean          @default(false)
+  suspendedUntil   DateTime?
+  isBanned         Boolean          @default(false)
+  banReason        String?
+  warningCount     Int              @default(0)
+
+  onboardingCompleted Boolean @default(false)
+
+  termsAcceptedAt               DateTime?
+  termsVersion                  String?
+  communityGuidelinesAcceptedAt DateTime?
+  communityGuidelinesVersion    String?
+
+  zybaScore   Int?
+  stressLevel Int?
+  streak      Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assessment       Assessment?
+  moodEntries      MoodEntry[]
+  dailyAssessments DailyAssessment[]
+  journalEntries   JournalEntry[]
+  activities       ActivityLog[]
+  notificationPref NotificationPref?
+  moderationLogs   ModerationLog[]  @relation("ModeratedUser")
+  adminActions     ModerationLog[]  @relation("ModeratingAdmin")
+
+  streakDays         Int?      @default(0)
+  lastStreakDate     DateTime?
+  lastAvatarChangeAt DateTime?
+
+  @@map("users")
+}
+
+// FASE 4: ganti CommunicationStyle → CompanionPersona
+enum CompanionPersona {
+  KINA // dulu CASUAL
+  OLLIE // dulu FORMAL
+  RUBI // dulu FUN
+  BRUNO // baru
+}
+
+model NotificationPref {
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companionNotif Boolean @default(true)
+  wellnessNotif  Boolean @default(true)
+  communityNotif Boolean @default(false)
+
+  @@map("notification_prefs")
+}
+
+model Assessment {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  goal                 String?
+  gender               String?
+  age                  Int?
+  weightKg             Float?
+  initialMood          MoodLevel?
+  soughtHelpBefore     Boolean?
+  physicalSymptoms     String[]
+  sleepQualityRating   Int?
+  stressLevel          Int?
+  medications          String?
+  mentalHealthSymptoms String[]
+  expressionText       String?
+  flaggedForRisk       Boolean    @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@map("assessments")
+}
+
+enum MoodLevel {
+  DEPRESSED
+  SAD
+  NEUTRAL
+  HAPPY
+  OVERJOYED
+}
+
+model MoodEntry {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mood        MoodLevel
+  stressLevel Int?
+  note        String?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@map("mood_entries")
+}
+
+model DailyAssessment {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date            String
+  mood            MoodLevel
+  stressLevel     Int?
+  sleepRating     Int?
+  energyTags      String[]
+  reflection      String?
+  flaggedForRisk  Boolean   @default(false)
+  calculatedScore Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId, createdAt])
+  @@index([userId, date, createdAt])
+  @@map("daily_assessments")
+}
+
+model JournalEntry {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  mood      MoodLevel?
+  createdAt DateTime   @default(now())
+
+  @@index([userId, createdAt])
+  @@map("journal_entries")
+}
+
+enum ActivityType {
+  WALKING
+  RUNNING
+  WORKOUT
+  BREATHING
+  SLEEP
+}
+
+model ActivityLog {
+  id            String       @id @default(cuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          ActivityType
+  durationMin   Int?
+  distanceMeter Int?
+  targetMin     Int?
+  completed     Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+
+  @@index([userId, createdAt])
+  @@map("activity_logs")
+}
+
+enum ResourceType {
+  ARTICLE
+  COURSE
+  AUDIO
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  type        ResourceType
+  title       String
+  author      String?
+  coverUrl    String?
+  audioUrl    String?
+  durationMin Int?
+  body        String?
+  createdAt   DateTime     @default(now())
+
+  @@index([type, createdAt])
+  @@index([createdAt])
+  @@map("resources")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum ModerationActionType {
+  WARN
+  HIDE_POST
+  HIDE_COMMENT
+  DELETE_POST
+  DELETE_COMMENT
+  SUSPEND
+  BAN
+  LIFT_RESTRICTION
+  DISMISS_REPORT
+}
+
+model ModerationLog {
+  id           String               @id @default(cuid())
+  adminId      String
+  admin        User                 @relation("ModeratingAdmin", fields: [adminId], references: [id], onDelete: Cascade)
+  targetUserId String
+  targetUser   User                 @relation("ModeratedUser", fields: [targetUserId], references: [id], onDelete: Cascade)
+  action       ModerationActionType
+  reason       String
+  durationDays Int?
+  reportId     String?
+  metadata     Json?
+  createdAt    DateTime             @default(now())
+
+  @@index([targetUserId, createdAt])
+  @@index([adminId, createdAt])
+  @@map("moderation_logs")
+}

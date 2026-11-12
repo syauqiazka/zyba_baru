@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x", "rhel-openssl-3.0.x"]
+  output = "../../src/generated/community-client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL_COMMUNITY")
+  directUrl = env("DIRECT_URL_COMMUNITY")
+}
+
+model CommunityPost {
+  id               String   @id @default(cuid())
+  userId           String   // TANPA @relation — user ada di Account DB
+  content          String?
+  imageUrl         String?
+  audioUrl         String?
+  audioDurationSec Int?
+  stickerId        String?
+  isHidden         Boolean  @default(false)
+  commentsDisabled Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  comments CommunityComment[]
+  likes    CommunityLike[]
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+  @@map("community_posts")
+}
+
+model CommunityComment {
+  id        String        @id @default(cuid())
+  postId    String
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String        // TANPA @relation
+  content   String?
+  stickerId String?
+  parentId  String?
+  parent    CommunityComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   CommunityComment[] @relation("CommentReplies")
+  isHidden  Boolean            @default(false)
+  createdAt DateTime           @default(now())
+
+  @@index([postId, createdAt])
+  @@index([userId, createdAt])
+  @@index([parentId, createdAt])
+  @@map("community_comments")
+}
+
+model CommunityLike {
+  id     String        @id @default(cuid())
+  postId String
+  post   CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String
+  createdAt DateTime   @default(now())
+
+  @@unique([postId, userId])
+  @@index([userId, createdAt])
+  @@map("community_likes")
+}
+
+// ── Direct Messages (AGENTS.md 31.D) ──
+model DirectConversation {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastMessageAt DateTime @default(now())
+
+  participants DirectParticipant[]
+  messages     DirectMessage[]
+
+  @@index([lastMessageAt])
+  @@map("direct_conversations")
+}
+
+model DirectParticipant {
+  id             String              @id @default(cuid())
+  conversationId String
+  conversation   DirectConversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String              // from Account DB
+  joinedAt       DateTime            @default(now())
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@map("direct_participants")
+}
+
+model DirectMessage {
+  id             String             @id @default(cuid())
+  conversationId String
+  conversation   DirectConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String             // from Account DB
+  content        String
+  createdAt      DateTime           @default(now())
+  readAt         DateTime?
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("direct_messages")
+}
+
+// ── Social Graph (AGENTS.md 31.3) ──
+model CommunityFollow {
+  id          String   @id @default(cuid())
+  followerId  String   // from Account DB
+  followingId String   // from Account DB
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followerId, createdAt])
+  @@index([followingId, createdAt])
+  @@map("community_follows")
+}
+
+model CommunityBookmark {
+  id        String   @id @default(cuid())
+  userId    String   // from Account DB
+  postId    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+  @@index([userId, createdAt])
+  @@map("community_bookmarks")
+}
+
+model CommunityNotification {
+  id            String    @id @default(cuid())
+  recipientId   String    // from Account DB
+  actorId       String    // from Account DB
+  type          String    // follow, like, comment, reply, mention
+  postId        String?
+  commentId     String?
+  conversationId String?
+  readAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([recipientId, createdAt])
+  @@index([recipientId, readAt])
+  @@map("community_notifications")
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWING
+  ACTION_TAKEN
+  DISMISSED
+}
+
+enum ReportTargetType {
+  POST
+  COMMENT
+}
+
+model CommunityReport {
+  id             String           @id @default(cuid())
+  reporterId     String           // from Account DB
+  targetType     ReportTargetType
+  targetId       String           // postId or commentId
+  postId         String?          // related post id for easy linking
+  reportedUserId String           // author of the post or comment
+  reason         String           // spam, harassment, hate_speech, inappropriate, self_harm, other
+  details        String?          // user explanation
+  status         ReportStatus     @default(PENDING)
+  reviewedBy     String?          // admin userId from Account DB
+  resolutionNote String?
+  resolvedAt     DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([status, createdAt])
+  @@index([targetType, targetId])
+  @@index([reportedUserId, createdAt])
+  @@index([reporterId, createdAt])
+  @@map("community_reports")
+}
+

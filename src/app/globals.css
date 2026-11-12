@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Canonical Tokens dari DESIGN.md & PALETTE_LOCK.md */
+  --color-cream: #F7F2E7;
+  --color-brown-900: #3B2A20;
+  --color-brown-700: #5A4636;
+  --color-green-500: #8FAE5D;
+  --color-green-100: #E4EED2;
+  --color-orange-500: #F2884B;
+  --color-orange-100: #FCE3D3;
+  --color-danger: #D9534F;
+
+  /* Mood Tokens */
+  --color-mood-depressed: #A99BE0;
+  --color-mood-sad: #EE8A5E;
+  --color-mood-neutral: #6B5645;
+  --color-mood-happy: #E8C24A;
+  --color-mood-overjoyed: #8FAE5D;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-brown-900);
+  font-family: var(--font-dm-sans), sans-serif;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Aksesibilitas: prefers-reduced-motion mematikan seluruh animasi */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus ring seragam untuk aksesibilitas keyboard */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px rgba(242, 136, 75, 0.4);
+}
+
+/* Custom scrollbar bergaya kertas halus */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 42, 32, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 42, 32, 0.25);
+}
+
