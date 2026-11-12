@@ -66,3 +66,4 @@ export function QuotaModal({ isOpen, onClose }: QuotaModalProps) {
     </div>
   );
 }
+

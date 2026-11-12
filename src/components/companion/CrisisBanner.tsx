@@ -69,3 +69,4 @@ export function CrisisBanner({ onDismiss, className = "" }: CrisisBannerProps) {
     </div>
   );
 }
+
