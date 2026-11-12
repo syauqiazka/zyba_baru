@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthTokenFromCookies } from "@/lib/authCookies";
 import { verifyToken } from "@/lib/jwt";
-import { companionDb } from "@/backend/db/companionClient";
+import { companionRepo } from "@/backend/db/companionRepo";
 
 export const dynamic = "force-dynamic";
 
@@ -21,16 +21,7 @@ export async function GET(
     }
 
     const { id } = params;
-
-    const conversation = await companionDb.conversation.findUnique({
-      where: { id },
-      include: {
-        messages: {
-          orderBy: { createdAt: "asc" },
-          take: 100,
-        },
-      },
-    });
+    const conversation = await companionRepo.getConversation(id, session.userId);
 
     if (!conversation) {
       return NextResponse.json(
@@ -39,34 +30,10 @@ export async function GET(
       );
     }
 
-    // Pastikan percakapan milik user yang sedang login
-    if (conversation.userId !== session.userId) {
-      return NextResponse.json(
-        { error: "Akses tidak diizinkan" },
-        { status: 403 }
-      );
-    }
-
     return NextResponse.json({
-      conversation: {
-        id: conversation.id,
-        title: conversation.title,
-        emotionTag: conversation.emotionTag,
-        createdAt: conversation.createdAt.toISOString(),
-        updatedAt: conversation.updatedAt.toISOString(),
-        messages: conversation.messages.map((m) => ({
-          id: m.id,
-          role: m.role,
-          content: m.content,
-          modelUsed: m.modelUsed,
-          attachmentType: m.attachmentType,
-          attachmentUrl: m.attachmentUrl,
-          audioDurationSec: m.audioDurationSec,
-          flaggedForRisk: m.flaggedForRisk,
-          ttsAudioUrl: m.ttsAudioUrl,
-          createdAt: m.createdAt.toISOString(),
-        })),
-      },
+      title: conversation.title,
+      emotionTag: conversation.emotionTag,
+      messages: conversation.messages,
     });
   } catch (error: any) {
     console.error("Gagal memuat detail percakapan:", error);
@@ -93,31 +60,16 @@ export async function DELETE(
     }
 
     const { id } = params;
+    const deleted = await companionRepo.deleteConversation(id, session.userId);
 
-    const conversation = await companionDb.conversation.findUnique({
-      where: { id },
-      select: { userId: true },
-    });
-
-    if (!conversation) {
+    if (!deleted) {
       return NextResponse.json(
         { error: "Percakapan tidak ditemukan" },
         { status: 404 }
       );
     }
 
-    if (conversation.userId !== session.userId) {
-      return NextResponse.json(
-        { error: "Akses tidak diizinkan" },
-        { status: 403 }
-      );
-    }
-
-    await companionDb.conversation.delete({
-      where: { id },
-    });
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, message: "Percakapan berhasil dihapus" });
   } catch (error: any) {
     console.error("Gagal menghapus percakapan:", error);
     return NextResponse.json(

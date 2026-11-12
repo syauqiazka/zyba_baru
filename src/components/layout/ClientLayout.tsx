@@ -11,7 +11,8 @@ interface ClientLayoutProps {
 
 export function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
-  const hideMobileDock = pathname === "/mood-check-in";
+  const isChatRoute = pathname.startsWith("/companion");
+  const hideMobileDock = pathname === "/mood-check-in" || isChatRoute;
   const [userName, setUserName] = useState("Teman ZYBA");
 
   useEffect(() => {
@@ -34,10 +35,14 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       {/* 2. Main Content Canvas: Offset by sidebar width on desktop */}
       <main
         className={`w-full min-h-screen transition-all md:pl-64 ${
-          hideMobileDock ? "pt-4 md:pt-8 px-4 sm:px-8 pb-24 md:pb-12" : "pt-4 md:pt-8 px-4 sm:px-8 pb-28 md:pb-12"
+          isChatRoute
+            ? "p-2 sm:p-4 md:p-6"
+            : hideMobileDock
+            ? "pt-4 md:pt-8 px-4 sm:px-8 pb-24 md:pb-12"
+            : "pt-4 md:pt-8 px-4 sm:px-8 pb-28 md:pb-12"
         }`}
       >
-        <div className="max-w-[1240px] mx-auto w-full">
+        <div className={`mx-auto w-full ${isChatRoute ? "h-full" : "max-w-[1240px]"}`}>
           {children}
         </div>
       </main>

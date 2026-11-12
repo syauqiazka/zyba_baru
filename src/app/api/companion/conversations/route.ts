@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAuthTokenFromCookies } from "@/lib/authCookies";
 import { verifyToken } from "@/lib/jwt";
-import { companionDb } from "@/backend/db/companionClient";
+import { companionRepo } from "@/backend/db/companionRepo";
+import { checkMessageQuota } from "@/backend/ai/quota";
 
 export const dynamic = "force-dynamic";
 
@@ -17,34 +18,14 @@ export async function GET() {
       return NextResponse.json({ error: "Sesi tidak valid" }, { status: 401 });
     }
 
-    const conversations = await companionDb.conversation.findMany({
-      where: { userId: session.userId },
-      orderBy: { updatedAt: "desc" },
-      take: 50,
-      include: {
-        messages: {
-          orderBy: { createdAt: "desc" },
-          take: 1,
-          select: {
-            content: true,
-            createdAt: true,
-            role: true,
-          },
-        },
-      },
+    const conversations = await companionRepo.listConversations(session.userId);
+    const quota = await checkMessageQuota(session.userId);
+
+    return NextResponse.json({
+      conversations,
+      remainingQuota: quota.remaining,
+      maxQuota: quota.maxQuota,
     });
-
-    const formatted = conversations.map((c) => ({
-      id: c.id,
-      title: c.title,
-      emotionTag: c.emotionTag,
-      createdAt: c.createdAt.toISOString(),
-      updatedAt: c.updatedAt.toISOString(),
-      lastMessage: c.messages[0]?.content || null,
-      lastMessageAt: c.messages[0]?.createdAt.toISOString() || c.updatedAt.toISOString(),
-    }));
-
-    return NextResponse.json({ conversations: formatted });
   } catch (error: any) {
     console.error("Gagal mengambil riwayat percakapan:", error);
     return NextResponse.json(
@@ -67,18 +48,28 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json().catch(() => ({}));
-    const title = typeof body.title === "string" && body.title.trim()
+    let title = typeof body.title === "string" && body.title.trim()
       ? body.title.trim().slice(0, 60)
-      : "Ruang Curhat Baru";
+      : (body.initialMessage && typeof body.initialMessage === "string"
+          ? body.initialMessage.slice(0, 35) + "..."
+          : "Ruang Curhat Baru");
     const emotionTag = typeof body.emotionTag === "string" ? body.emotionTag : null;
 
-    const newConv = await companionDb.conversation.create({
-      data: {
+    const newConv = await companionRepo.createConversation(
+      session.userId,
+      title,
+      emotionTag
+    );
+
+    // If initialMessage was supplied, store it as the first user message
+    if (body.initialMessage && typeof body.initialMessage === "string") {
+      await companionRepo.addMessage({
+        conversationId: newConv.id,
         userId: session.userId,
-        title,
-        emotionTag,
-      },
-    });
+        role: "user",
+        content: body.initialMessage.trim(),
+      });
+    }
 
     return NextResponse.json(
       { conversationId: newConv.id, title: newConv.title },

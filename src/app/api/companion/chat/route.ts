@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthTokenFromCookies } from "@/lib/authCookies";
 import { verifyToken } from "@/lib/jwt";
-import { companionDb } from "@/backend/db/companionClient";
+import { companionRepo } from "@/backend/db/companionRepo";
 import { checkMessageQuota, incrementMessageQuota } from "@/backend/ai/quota";
 import { generateCompanionResponse, ChatMessageContext } from "@/backend/ai/aiProvider";
 import { detectRisk } from "@/lib/crisisDetection";
@@ -54,111 +54,63 @@ export async function POST(req: Request) {
           ? `${trimmedContent.slice(0, 32)}...`
           : trimmedContent;
 
-      const newConv = await companionDb.conversation.create({
-        data: {
-          userId: session.userId,
-          title: generatedTitle,
-          emotionTag: risk.flagged ? "CRISIS" : null,
-        },
-      });
+      const newConv = await companionRepo.createConversation(
+        session.userId,
+        generatedTitle,
+        risk.flagged ? "CRISIS" : null
+      );
       conversationId = newConv.id;
-    } else {
-      // Pastikan kepemilikan percakapan
-      const existing = await companionDb.conversation.findUnique({
-        where: { id: conversationId },
-        select: { userId: true, title: true },
-      });
-
-      if (!existing || existing.userId !== session.userId) {
-        return NextResponse.json({ error: "Percakapan tidak ditemukan" }, { status: 404 });
-      }
-
-      // Perbarui judul jika masih default
-      if (existing.title === "Ruang Curhat Baru" || existing.title === "New Conversation") {
-        const updatedTitle =
-          trimmedContent.length > 35
-            ? `${trimmedContent.slice(0, 32)}...`
-            : trimmedContent;
-        await companionDb.conversation.update({
-          where: { id: conversationId },
-          data: { title: updatedTitle },
-        });
-      }
     }
 
-    // 4. Simpan Pesan Pengguna
-    const userMessage = await companionDb.message.create({
-      data: {
-        conversationId,
-        role: "user",
-        content: trimmedContent,
-        flaggedForRisk: risk.flagged,
-      },
+    // 4. Catat pesan user
+    await companionRepo.addMessage({
+      conversationId,
+      userId: session.userId,
+      role: "user",
+      content: trimmedContent,
+      flaggedForRisk: risk.flagged,
     });
 
-    // 5. Ambil Riwayat Percakapan Terakhir untuk Konteks AI (Maksimum 10 pesan terakhir)
-    const history = await companionDb.message.findMany({
-      where: { conversationId },
-      orderBy: { createdAt: "desc" },
-      take: 10,
-    });
+    // 5. Susun konteks percakapan sebelumnya
+    const recentMessages = await companionRepo.getRecentMessages(conversationId, 6);
+    const context: ChatMessageContext[] = recentMessages.map((m) => ({
+      role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant",
+      content: m.content || "",
+    }));
 
-    const contextMessages: ChatMessageContext[] = history
-      .reverse()
-      .map((m) => ({
-        role: (m.role === "assistant" ? "assistant" : "user") as "user" | "assistant",
-        content: m.content || "",
-      }));
-
-    // 6. Panggil Multi-Provider AI Fallback Engine
-    const aiResult = await generateCompanionResponse(
-      persona as PersonaId,
-      contextMessages,
+    // 6. Jalankan AI Multi-Provider Chained Fallback
+    const personaKey = (persona as PersonaId) || "KINA";
+    const aiResponse = await generateCompanionResponse(
+      personaKey,
+      context,
       modelPreference
     );
 
-    // 7. Simpan Balasan Asisten
-    const assistantMessage = await companionDb.message.create({
-      data: {
-        conversationId,
-        role: "assistant",
-        content: aiResult.content,
-        modelUsed: `${aiResult.provider}:${aiResult.modelUsed}`,
-      },
+    // 7. Simpan respons asisten
+    const assistantMessage = await companionRepo.addMessage({
+      conversationId,
+      userId: session.userId,
+      role: "assistant",
+      content: aiResponse.content,
+      modelUsed: aiResponse.modelUsed,
+      flaggedForRisk: risk.flagged,
     });
 
-    // 8. Update Waktu Percakapan & Naikkan Kuota
-    await companionDb.conversation.update({
-      where: { id: conversationId },
-      data: { updatedAt: new Date() },
-    });
-
+    // 8. Naikkan kuota harian
     const newCount = await incrementMessageQuota(session.userId);
-    const remainingQuota = Math.max(0, 20 - newCount);
+    const remaining = Math.max(0, 20 - newCount);
 
     return NextResponse.json({
       conversationId,
-      userMessage: {
-        id: userMessage.id,
-        role: userMessage.role,
-        content: userMessage.content,
-        flaggedForRisk: userMessage.flaggedForRisk,
-        createdAt: userMessage.createdAt.toISOString(),
-      },
-      assistantMessage: {
-        id: assistantMessage.id,
-        role: assistantMessage.role,
-        content: assistantMessage.content,
-        modelUsed: assistantMessage.modelUsed,
-        createdAt: assistantMessage.createdAt.toISOString(),
-      },
-      remainingQuota,
-      crisisDetected: risk.flagged,
+      message: assistantMessage,
+      remainingQuota: remaining,
+      maxQuota: 20,
+      flaggedForRisk: risk.flagged,
     });
   } catch (error: any) {
-    console.error("Gagal memproses chat companion:", error);
+    console.error("Gagal memproses pesan curhat:", error);
     return NextResponse.json(
-      { error: "Gagal memproses pesan curhat", details: error.message },
+      { error: "Gagal memproses respons AI", details: error.message },
       { status: 500 }
     );
   }

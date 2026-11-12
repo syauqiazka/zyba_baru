@@ -112,6 +112,7 @@ async function capture() {
     { url: "http://localhost:3005/assessment", slug: "assessment", auth: "incomplete" },
     { url: "http://localhost:3005/dashboard", slug: "dashboard", auth: "completed" },
     { url: "http://localhost:3005/mood-check-in", slug: "mood-check-in", auth: "completed" },
+    { url: "http://localhost:3005/companion", slug: "companion", auth: "completed" },
   ];
 
   const viewports = [
