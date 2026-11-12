@@ -18,7 +18,7 @@ export function BottomSanctuary() {
 
   return (
     <nav
-      className="fixed bottom-3 left-4 right-4 z-50 flex h-16 items-center justify-around rounded-2xl border border-brown-900/10 bg-cream/92 px-2 shadow-[0_8px_32px_rgba(44,34,30,0.12)] backdrop-blur-xl md:hidden"
+      className="fixed bottom-3 left-4 right-4 z-50 flex h-16 items-center justify-around rounded-2xl border border-brown-900/8 bg-white/95 px-2 shadow-[0_8px_32px_rgba(27,36,30,0.08)] backdrop-blur-xl md:hidden"
       aria-label="Navigasi Bawah"
     >
       {MOBILE_ITEMS.map((item) => {
@@ -36,8 +36,8 @@ export function BottomSanctuary() {
             <div
               className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "bg-orange-500 text-brown-900 shadow-sm scale-105"
-                  : "text-brown-700/80 group-hover:text-brown-900 group-hover:bg-brown-900/5"
+                  ? "bg-[#3E7B54] text-white shadow-xs scale-105"
+                  : "text-brown-700/80 group-hover:text-brown-900 group-hover:bg-[#F5F8F5]"
               }`}
             >
               <Icon className="h-4 w-4 stroke-[1.8]" />
@@ -45,7 +45,7 @@ export function BottomSanctuary() {
             <span
               className={`mt-1 text-[10px] leading-tight transition-colors ${
                 isActive
-                  ? "font-bold text-brown-900"
+                  ? "font-bold text-[#1B241E]"
                   : "font-medium text-brown-700/70"
               }`}
             >

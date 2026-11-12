@@ -77,13 +77,13 @@ export function MonthlyTrackerCard() {
         </p>
 
         {/* Bar Chart Area (Inspired by Habitdo & Ref 1) */}
-        <div className="mt-4 rounded-2xl border border-brown-900/8 bg-cream/30 p-4">
+        <div className="mt-4 rounded-2xl border border-brown-900/8 bg-[#F5F8F5] p-4">
           <div className="flex items-center justify-between text-xs mb-3">
             <span className="font-bold text-brown-900 flex items-center gap-1.5">
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
+              <TrendingUp className="h-4 w-4 text-[#3E7B54]" />
               {activeTab === "monthly" ? "Tingkat Kehadiran Bulanan (2026)" : "Ritme 7 Hari Ini"}
             </span>
-            <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-semibold text-[#28583B] bg-[#EAF4EC] px-2 py-0.5 rounded-full border border-[#C8E4CD]">
               {activeTab === "monthly" ? "Puncak: November (92%)" : "Rata-rata: 76%"}
             </span>
           </div>
@@ -97,15 +97,15 @@ export function MonthlyTrackerCard() {
                       <div
                         className={`w-full rounded-md transition-all duration-500 ${
                           d.active
-                            ? "bg-emerald-600 shadow-2xs"
-                            : "bg-emerald-500/40 hover:bg-emerald-500/60"
+                            ? "bg-[#3E7B54] shadow-2xs"
+                            : "bg-[#C8E4CD] hover:bg-[#A3D9A5]"
                         }`}
                         style={{ height: `${d.val}%` }}
                       />
                     </div>
                     <span
                       className={`text-[10px] leading-tight ${
-                        d.active ? "font-bold text-emerald-800" : "font-medium text-brown-700/70"
+                        d.active ? "font-bold text-[#28583B]" : "font-medium text-brown-700/70"
                       }`}
                     >
                       {d.month}
@@ -118,15 +118,15 @@ export function MonthlyTrackerCard() {
                       <div
                         className={`w-full rounded-md transition-all duration-500 ${
                           d.active
-                            ? "bg-orange-500 shadow-2xs"
-                            : "bg-emerald-500/50 hover:bg-emerald-500/70"
+                            ? "bg-[#3E7B54] shadow-2xs"
+                            : "bg-[#C8E4CD] hover:bg-[#A3D9A5]"
                         }`}
                         style={{ height: `${d.val}%` }}
                       />
                     </div>
                     <span
                       className={`text-[10px] leading-tight ${
-                        d.active ? "font-bold text-orange-600" : "font-medium text-brown-700/70"
+                        d.active ? "font-bold text-[#28583B]" : "font-medium text-brown-700/70"
                       }`}
                     >
                       {d.day}
@@ -137,26 +137,26 @@ export function MonthlyTrackerCard() {
         </div>
 
         {/* Mini Plant Nurture Widget (Inspired by Habitdo "Plant Your Progress") */}
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-emerald-600/20 bg-emerald-50/50 p-3.5">
+        <div className="mt-4 flex items-center justify-between rounded-2xl border border-[#C8E4CD] bg-[#EAF4EC] p-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-700 shadow-2xs">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#28583B] shadow-2xs">
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M12 22v-8" />
                 <path d="M9 14c-3-2-5-6-2-9 4 1 5 5 5 9z" fill="#A3D9A5" />
-                <path d="M15 11c3-2 5-6 2-9-4 1-5 5-5 9z" fill="#81C784" />
+                <path d="M15 11c3-2 5-6 2-9-4 1-5 5-5 9z" fill="#3E7B54" />
               </svg>
             </div>
             <div>
-              <span className="text-xs font-bold text-emerald-950 block">
+              <span className="text-xs font-bold text-[#1B241E] block">
                 Taman Batin • Tingkat 2
               </span>
-              <span className="text-[11px] text-emerald-800/80 block">
+              <span className="text-[11px] text-[#28583B] block">
                 Disiram 5 dari 7 hari minggu ini
               </span>
             </div>
           </div>
 
-          <span className="text-xs font-bold text-emerald-800 bg-white px-2.5 py-1 rounded-xl shadow-2xs border border-emerald-200/50">
+          <span className="text-xs font-bold text-[#28583B] bg-white px-2.5 py-1 rounded-xl shadow-2xs border border-[#C8E4CD]">
             Mekar Subur
           </span>
         </div>

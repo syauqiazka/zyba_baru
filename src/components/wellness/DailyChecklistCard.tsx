@@ -101,7 +101,7 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
         {/* Visual Progress Bar */}
         <div className="mb-5 h-2 w-full overflow-hidden rounded-full bg-brown-900/8 p-0.5">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500"
+            className="h-full rounded-full bg-[#3E7B54] transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -115,8 +115,8 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
               onClick={() => toggleItem(item.id)}
               className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all duration-200 ${
                 item.done
-                  ? "border-emerald-600/30 bg-emerald-50/40"
-                  : "border-brown-900/8 bg-cream/30 hover:border-orange-500/30 hover:bg-cream/60"
+                  ? "border-[#C8E4CD] bg-[#EAF4EC]"
+                  : "border-brown-900/8 bg-[#F5F8F5] hover:border-emerald-500/30 hover:bg-[#EAF4EC]/50"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -124,8 +124,8 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
                 <div
                   className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
                     item.done
-                      ? "border-emerald-600 bg-emerald-600 text-white"
-                      : "border-brown-900/30 bg-white hover:border-orange-500"
+                      ? "border-[#3E7B54] bg-[#3E7B54] text-white"
+                      : "border-brown-900/30 bg-white hover:border-[#3E7B54]"
                   }`}
                 >
                   {item.done && <Check className="h-3 w-3 stroke-[3]" />}
@@ -145,8 +145,8 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
               <span
                 className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${
                   item.done
-                    ? "bg-emerald-100 text-emerald-800"
-                    : "bg-brown-900/5 text-brown-700/70"
+                    ? "bg-white text-[#28583B] shadow-2xs"
+                    : "bg-white/80 text-brown-700 shadow-2xs"
                 }`}
               >
                 {item.category}

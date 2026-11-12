@@ -14,7 +14,7 @@ import {
   Settings,
   ShieldAlert,
   LogOut,
-  Flame,
+  Sparkles,
 } from "lucide-react";
 
 interface SanctuarySidebarProps {
@@ -47,14 +47,14 @@ export function SanctuarySidebar({ userName = "Teman ZYBA" }: SanctuarySidebarPr
 
   return (
     <aside
-      className="hidden md:flex fixed left-0 top-0 bottom-0 z-40 w-64 flex-col justify-between border-r border-brown-900/10 bg-[#FAF7F0] p-4 text-brown-900 transition-all"
+      className="hidden md:flex fixed left-0 top-0 bottom-0 z-40 w-64 flex-col justify-between border-r border-brown-900/8 bg-white p-4 text-brown-900 transition-all shadow-[2px_0_16px_rgba(27,36,30,0.02)]"
       aria-label="Navigasi Utama"
     >
       {/* Top: Logo & Main Navigation */}
       <div className="space-y-6">
         {/* Brand Logo (Inspired by Habitdo & Zyba) */}
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-orange-500 text-brown-900 shadow-xs">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#3E7B54] text-white shadow-xs">
             <span className="font-serif text-xl font-black">Z</span>
           </div>
           <div>
@@ -90,8 +90,8 @@ export function SanctuarySidebar({ userName = "Teman ZYBA" }: SanctuarySidebarPr
                 href={item.href}
                 className={`group flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-xs font-semibold transition-all duration-200 ${
                   isActive
-                    ? "bg-emerald-700 text-white shadow-xs font-bold"
-                    : "text-brown-700 hover:bg-brown-900/5 hover:text-brown-900"
+                    ? "bg-[#3E7B54] text-white shadow-xs font-bold"
+                    : "text-brown-700 hover:bg-[#F5F8F5] hover:text-brown-900"
                 }`}
               >
                 <Icon
@@ -103,7 +103,7 @@ export function SanctuarySidebar({ userName = "Teman ZYBA" }: SanctuarySidebarPr
                 {item.href === "/companion" && (
                   <span
                     className={`ml-auto text-[9px] font-extrabold px-1.5 py-0.5 rounded-full ${
-                      isActive ? "bg-white/20 text-white" : "bg-orange-100 text-orange-900"
+                      isActive ? "bg-white/20 text-white" : "bg-emerald-100 text-emerald-900"
                     }`}
                   >
                     AI
@@ -116,30 +116,30 @@ export function SanctuarySidebar({ userName = "Teman ZYBA" }: SanctuarySidebarPr
       </div>
 
       {/* Bottom: Crisis Hotline, Hearth Flame & Profile */}
-      <div className="space-y-3 border-t border-brown-900/10 pt-4">
+      <div className="space-y-3 border-t border-brown-900/8 pt-4">
         {/* Quick Crisis Hotline */}
         <Link
           href="/guidebook"
-          className="flex items-center gap-2 rounded-xl bg-orange-50 border border-orange-200/60 px-3 py-2 text-xs font-bold text-orange-950 hover:bg-orange-100 transition-colors"
+          className="flex items-center gap-2 rounded-xl bg-peach-100 border border-peach-200 px-3 py-2 text-xs font-bold text-brown-900 hover:bg-peach-200/60 transition-colors"
         >
-          <ShieldAlert className="h-4 w-4 text-orange-600 shrink-0 stroke-[2]" />
+          <ShieldAlert className="h-4 w-4 text-peach-600 shrink-0 stroke-[2]" />
           <div className="leading-tight">
             <span className="block text-[11px] font-bold">Bantuan Krisis 24/7</span>
-            <span className="block text-[9px] font-medium text-orange-800/80">Hotline Darurat 119</span>
+            <span className="block text-[9px] font-medium text-brown-700/80">Hotline Darurat 119</span>
           </div>
         </Link>
 
         {/* User Card & Logout */}
-        <div className="flex items-center justify-between rounded-2xl bg-white/80 p-2.5 border border-brown-900/10 shadow-2xs">
+        <div className="flex items-center justify-between rounded-2xl bg-[#F5F8F5] p-2.5 border border-brown-900/8 shadow-2xs">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-sand-200 text-brown-900 font-bold text-xs">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-botanical-100 text-botanical-700 font-bold text-xs">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden text-left">
               <span className="block truncate text-xs font-bold text-brown-900">
                 {userName}
               </span>
-              <span className="block text-[10px] text-brown-700/70 font-medium">
+              <span className="block text-[10px] text-brown-700 font-medium">
                 Ruang Pribadi
               </span>
             </div>
@@ -158,4 +158,3 @@ export function SanctuarySidebar({ userName = "Teman ZYBA" }: SanctuarySidebarPr
     </aside>
   );
 }
-

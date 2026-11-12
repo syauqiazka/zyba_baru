@@ -210,7 +210,7 @@ export default function MoodCheckInPage() {
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/dashboard"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-orange-500 px-8 text-sm font-bold text-brown-900 shadow-sm transition-all hover:bg-orange-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[#3E7B54] px-8 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#346B48] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
             >
               Kembali ke Dashboard
             </Link>
@@ -245,7 +245,7 @@ export default function MoodCheckInPage() {
       {/* Progress Bar */}
       <div className="mb-8 h-1.5 w-full overflow-hidden rounded-full bg-brown-900/10">
         <div
-          className="h-full bg-orange-500 transition-all duration-300 ease-out"
+          className="h-full bg-[#3E7B54] transition-all duration-300 ease-out"
           style={{ width: `${(step / 5) * 100}%` }}
         />
       </div>
@@ -628,7 +628,7 @@ export default function MoodCheckInPage() {
             type="button"
             onClick={handleNext}
             disabled={loading}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-orange-500 px-7 text-xs font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#3E7B54] px-7 text-xs font-bold text-white shadow-sm hover:bg-[#346B48] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 disabled:opacity-50"
           >
             {loading
               ? "Menyimpan..."
@@ -641,7 +641,7 @@ export default function MoodCheckInPage() {
       </div>
 
       {/* Mobile Sticky Navigation Pill */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-brown-900/10 bg-cream/95 backdrop-blur-md p-3 px-4 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-brown-900/10 bg-white/95 backdrop-blur-md p-3 px-4 md:hidden">
         <div className="flex items-center justify-between gap-3">
           {step > 1 ? (
             <button
@@ -666,7 +666,7 @@ export default function MoodCheckInPage() {
             type="button"
             onClick={handleNext}
             disabled={loading}
-            className="flex h-12 flex-[2] items-center justify-center gap-1.5 rounded-xl bg-orange-500 text-xs font-bold text-brown-900 shadow-sm disabled:opacity-50"
+            className="flex h-12 flex-[2] items-center justify-center gap-1.5 rounded-xl bg-[#3E7B54] text-xs font-bold text-white shadow-sm disabled:opacity-50"
           >
             {loading
               ? "Menyimpan..."

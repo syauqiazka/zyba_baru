@@ -133,7 +133,7 @@ export function RecommendedCarousel() {
                   </span>
                 </div>
 
-                <h3 className="text-xs font-bold text-brown-900 group-hover:text-orange-600 transition-colors leading-snug">
+                <h3 className="text-xs font-bold text-brown-900 group-hover:text-[#3E7B54] transition-colors leading-snug">
                   {item.title}
                 </h3>
                 <p className="mt-1 text-[11px] leading-relaxed text-brown-700/80">
@@ -143,7 +143,7 @@ export function RecommendedCarousel() {
 
               {/* Arrow Icon in Bottom Right (Persis Sketsa User: kotak dengan panah -> di pojok kanan bawah) */}
               <div className="mt-4 flex items-center justify-end pt-2 border-t border-brown-900/5">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-brown-900 shadow-2xs group-hover:bg-orange-500 group-hover:text-brown-900 group-hover:translate-x-0.5 transition-all">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-brown-900 shadow-2xs group-hover:bg-[#3E7B54] group-hover:text-white group-hover:translate-x-0.5 transition-all">
                   <ArrowRight className="h-3 w-3 stroke-[2.5]" />
                 </div>
               </div>

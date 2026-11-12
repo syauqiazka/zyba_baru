@@ -1,6 +1,6 @@
-# PALETTE_LOCK.md — ZYBA v2 (The Tactile Sanctuary)
+# PALETTE_LOCK.md — ZYBA v2 (Fresh Botanical Sanctuary)
 
-> **STATUS: DESIGN FREEZE.** Sumber kebenaran visual tertinggi adalah `DESIGN.md`. Dokumen ini mencatat kontrak kunci mutlak palet warna dan aturan kontras yang divalidasi. Seluruh nilai hex dan kelas Tailwind di bawah ini identik dengan `DESIGN.md` dan **tidak boleh diubah**.
+> **STATUS: TERKUNCI (Disetujui User).** Berdasarkan konfirmasi pengguna pada perombakan visual dan referensi resmi Habitdo, palet warna ZYBA menggunakan **Palet Botani Segar (*Fresh Botanical Sanctuary*)** untuk menghadirkan kenyamanan visual maksimal, kejelasan hierarki, dan keterbacaan tinggi.
 
 ---
 
@@ -8,37 +8,32 @@
 
 | Token | Hex | Kelas Tailwind | Peruntukan Resmi |
 |---|---|---|---|
-| **Cream** | `#F7F2E7` | `bg-cream` | Kanvas halaman (~75% permukaan) |
-| **Milk** | `#FFFFFF` | `bg-white` / `bg-white/90` | Permukaan kartu, surface kertas |
-| **Brown 900** | `#3B2A20` | `text-brown-900` / `bg-brown-900` | Teks utama, tombol primer, identitas user (avatar) |
-| **Brown 700** | `#5A4636` | `text-brown-700` | Teks sekunder, label, meta, caption |
-| **Orange 500** | `#F2884B` | `bg-orange-500` | **Aksi** (Kirim, Post, CTA utama), ikon "suka" aktif |
-| **Orange 100** | `#FCE3D3` | `bg-orange-100` | Latar hangat, chip emosi, state terpilih jawaban |
-| **Green 500** | `#8FAE5D` | `text-green-500` | Pertumbuhan, selesai, status online |
-| **Green 100** | `#E4EED2` | `bg-green-100` | Latar aktivitas/napas, tombol sekunder |
-| **Border** | `rgba(59,42,32,0.10)` | `border-brown-900/10` | Garis kontak kertas tipis 1px |
-| **Focus** | `rgba(242,136,75,0.40)` | `ring-orange-500/40` | Ring fokus keyboard yang terlihat |
+| **Canvas Botanical** | `#F5F8F5` | `bg-cream` / `bg-canvas-botanical` | Kanvas halaman utama (segar, bersih, menenangkan) |
+| **Milk White** | `#FFFFFF` | `bg-white` / `bg-white/95` | Permukaan kartu, background widget, modal |
+| **Charcoal 900** | `#1B241E` | `text-brown-900` / `text-charcoal-900` | Teks utama, judul serif/sans, angka skor, kontras tajam |
+| **Charcoal 700** | `#526056` | `text-brown-700` / `text-charcoal-700` | Teks sekunder, deskripsi, caption, meta |
+| **Botanical 500** | `#3E7B54` | `bg-botanical-500` / `bg-green-500` | **Warna Utama:** Tombol aktif sidebar (Habitdo style), CTA utama, centang selesai, progress bar utama |
+| **Botanical 100** | `#EAF4EC` | `bg-botanical-100` / `bg-green-100` | Latar kartu mint pastel, badge langkah selesai |
+| **Peach 500** | `#F28C6E` | `bg-peach-500` / `bg-orange-500` | **Aksen Kehangatan:** Sorotan mood, tombol sekunder, lilin kehangatan, aksen interaktif |
+| **Peach 100** | `#FDF1EB` | `bg-peach-100` / `bg-orange-100` | Latar kartu peach pastel, avatar aksen |
+| **Border Soft** | `rgba(27,36,30,0.08)` | `border-brown-900/8` / `border-charcoal-900/8` | Garis batas kartu & divider sangat lembut |
+| **Focus** | `rgba(62,123,84,0.35)` | `ring-botanical-500/35` | Ring fokus keyboard yang terlihat & rapi |
 | **Danger** | `#D9534F` | `bg-danger` | **Hanya** hapus akun/post. Dilarang untuk konten krisis |
 
-### Token Mood Emosi
-| Emosi | Hex | Kelas Tailwind | Nuansa |
+### 2. Kartu Pastel Pendukung (Bento Accents)
+| Varian Kartu | Background | Border | Ikon / Badge |
 |---|---|---|---|
-| **Depressed** | `#A99BE0` | `bg-mood-depressed` | Lavender tenang untuk duka/beban berat |
-| **Sad** | `#EE8A5E` | `bg-mood-sad` | Terracotta lembut untuk sedih/murung |
-| **Neutral** | `#6B5645` | `bg-mood-neutral` | Earthy brown untuk datar/hening |
-| **Happy** | `#E8C24A` | `bg-mood-happy` | Golden sun untuk nyaman/senang |
-| **Overjoyed** | `#8FAE5D` | `bg-mood-overjoyed` | Olive green untuk gembira/bersemangat |
+| **Mint / Pertumbuhan** | `#EAF4EC` | `#C8E4CD` | `#2D6A4F` |
+| **Peach / Kehangatan** | `#FDF1EB` | `#F9D5C5` | `#C85A3B` |
+| **Sky / Ketenangan** | `#EDF4F8` | `#CDE0EC` | `#3B7494` |
+| **Butter / Refleksi** | `#FBF6EA` | `#F2E4BE` | `#8C6E32` |
+| **Lavender / Nafas** | `#F3EFF8` | `#DDD2EA` | `#6A5296` |
 
 ---
 
-## 2. Aturan Kontras WCAG (Wajib Dipatuhi)
+## 3. Aturan Kontras WCAG (Wajib Dipatuhi)
 
-Sesuai audit kontras pada `DESIGN.md` §2.2:
-
-1. **Teks di atas `orange-500` WAJIB `brown-900`** (Rasio 5.5:1, lulus WCAG AA).
-2. **Teks putih di atas `orange-500` DILARANG KERAS** (Rasio 2.5:1, GAGAL WCAG).
-3. **`orange-500` sebagai teks di atas `cream`/`orange-100` DILARANG** (Rasio < 3.3:1, GAGAL WCAG). Hanya boleh untuk ikon/grafis ≥ 24px.
-4. **`green-500` sebagai teks di atas `cream`** hanya diizinkan pada teks besar/tebal (≥ 18.66px bold) atau ikon.
-5. **Badge/Chip**: Menggunakan kombinasi `bg-orange-100 text-brown-900` atau `bg-green-100 text-brown-900`.
-6. Jangan pernah menyampaikan informasi hanya melalui warna saja.
-
+1. **Teks di atas `botanical-500` (`#3E7B54`) WAJIB `#FFFFFF`** (Rasio 5.2 : 1, lulus WCAG AA).
+2. **Teks di atas `peach-500` (`#F28C6E`) WAJIB `charcoal-900` (`#1B241E`)** (Rasio 5.6 : 1, lulus WCAG AA).
+3. **Teks di atas `canvas-botanical` (`#F5F8F5`) menggunakan `charcoal-900` (`#1B241E`)** (Rasio 13.5 : 1, lulus WCAG AAA).
+4. **Teks sekunder di atas kanvas menggunakan `charcoal-700` (`#526056`)** (Rasio 6.2 : 1, lulus WCAG AA).
