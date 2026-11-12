@@ -114,6 +114,7 @@ Dokumen lama saling bertentangan di beberapa titik. Untuk rebuild, keputusan ber
 | D10 | Data lokal fallback | **Tidak ada** fallback `data/*.json`. Jika DB gagal: tampilkan error state jujur, jangan data palsu. | Lampiran 8.5.2 |
 | D11 | Auth | `bcrypt` cost 12, JWT `jose` HS256 (30 hari) di cookie `httpOnly`, `secure`, `sameSite=lax`. OTP tidak pernah ada di response. Akun Google tidak bisa login via form password. | Bagian 8 lama |
 | D12 | Lampiran feature | Fitur diluar daftar ini (mis. Projects/Artifacts/Code di Companion) **dilarang** dibuat. | Scope creep lama |
+| D13 | Maskot | Maskot resmi axolotl hijau dengan insang daun adalah aset brand final & terlindungi. Wajib mematuhi aturan dimensi (maks 197px uniform, 348px hero), larangan AI regenerate/trace/crop, dan pemetaan pose. Lengkap di `design-system/zyba/mascot.md`. | Instruksi pengguna + design-system/zyba/mascot.md |
 
 ---
 

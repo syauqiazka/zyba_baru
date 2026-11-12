@@ -47,6 +47,27 @@ body {
   box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px rgba(242, 136, 75, 0.4);
 }
 
+/* Animasi Napas Maskot ZYBA (transform only: translateY & scale) */
+@keyframes mascotBreathe {
+  0%, 100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1, 1.015);
+  }
+}
+
+.animate-mascot-breathe {
+  animation: mascotBreathe 4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mascot-breathe {
+    animation: none !important;
+  }
+}
+
 /* Custom scrollbar bergaya kertas halus */
 ::-webkit-scrollbar {
   width: 6px;

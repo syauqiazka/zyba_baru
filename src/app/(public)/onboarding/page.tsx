@@ -14,7 +14,11 @@ import {
   Lock,
   Mail,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { Mascot } from "@/components/ui/Mascot";
+import { MASCOT_NAME } from "@/lib/brand";
 import { BreathingOrb } from "@/components/wellness/BreathingOrb";
 import {
   KinaIllustration,
@@ -54,8 +58,33 @@ const PERSONA_PREVIEWS = [
   },
 ];
 
+const ONBOARDING_SLIDES = [
+  {
+    id: "welcome",
+    pose: "default" as const,
+    badge: "Langkah Awal",
+    title: "Selamat Datang di Ruang Aman ZYBA",
+    desc: `Kenalkan, aku ${MASCOT_NAME}. Aku hadir menemani perjalanan kesehatan pikiran dan jiwamu secara sadar, tanpa tekanan.`,
+  },
+  {
+    id: "growth",
+    pose: "happy" as const,
+    badge: "Kemenangan Kecil",
+    title: "Rayakan Setiap Langkah Kecilmu",
+    desc: "Tidak ada target streak yang membebani. Setiap jeda nafas dan check-in jujur adalah wujud kepedulian tulus untuk dirimu.",
+  },
+  {
+    id: "listen",
+    pose: "listening" as const,
+    badge: "Selalu Hadir",
+    title: "Selalu Siap Mendengar Kapan Pun",
+    desc: "Saat pikiran terasa riuh dan harimu berat, kami selalu di sini untuk menyimak ceritamu dalam ruang hening yang aman.",
+  },
+];
+
 export default function OnboardingPage() {
   const router = useRouter();
+  const [activeSlide, setActiveSlide] = useState(0);
   const [selectedPersona, setSelectedPersona] = useState(0);
 
   // Form states
@@ -209,12 +238,74 @@ export default function OnboardingPage() {
               </p>
             </div>
 
-            {/* Living Interactive Breathing Orb */}
-            <div className="rounded-3xl border border-brown-900/10 bg-white/60 p-6 md:p-8 backdrop-blur-md shadow-sm">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brown-700/60 block mb-2 text-center">
-                Momen Jeda Hening
-              </span>
-              <BreathingOrb size="md" />
+            {/* Mascot Interactive Onboarding Carousel (default / happy / listening) */}
+            <div className="rounded-3xl border border-brown-900/10 bg-white/70 p-6 md:p-8 backdrop-blur-md shadow-sm relative overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <div className="shrink-0 flex items-center justify-center">
+                  <Mascot
+                    pose={ONBOARDING_SLIDES[activeSlide].pose}
+                    size={160}
+                    animate={true}
+                    decorative={true}
+                  />
+                </div>
+                <div className="flex-1 text-center sm:text-left space-y-2">
+                  <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-orange-950 bg-orange-100/80 px-2.5 py-0.5 rounded-full border border-orange-500/20">
+                    {ONBOARDING_SLIDES[activeSlide].badge}
+                  </span>
+                  <h3 className="font-serif text-lg md:text-xl font-bold text-brown-900">
+                    {ONBOARDING_SLIDES[activeSlide].title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-brown-700 leading-relaxed">
+                    {ONBOARDING_SLIDES[activeSlide].desc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Carousel Indicators & Controls */}
+              <div className="mt-6 pt-4 border-t border-brown-900/10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {ONBOARDING_SLIDES.map((slide, idx) => (
+                    <button
+                      key={slide.id}
+                      type="button"
+                      onClick={() => setActiveSlide(idx)}
+                      className={`h-2 rounded-full transition-all ${
+                        activeSlide === idx
+                          ? "w-6 bg-orange-500"
+                          : "w-2 bg-brown-900/20 hover:bg-brown-900/40"
+                      }`}
+                      aria-label={`Lihat slide ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveSlide((prev) =>
+                        prev === 0 ? ONBOARDING_SLIDES.length - 1 : prev - 1
+                      )
+                    }
+                    className="p-1.5 rounded-lg border border-brown-900/15 text-brown-800 hover:bg-brown-900/5 transition-colors"
+                    aria-label="Slide sebelumnya"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveSlide((prev) =>
+                        (prev + 1) % ONBOARDING_SLIDES.length
+                      )
+                    }
+                    className="p-1.5 rounded-lg border border-brown-900/15 text-brown-800 hover:bg-brown-900/5 transition-colors"
+                    aria-label="Slide berikutnya"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Interactive Persona Aura Selector */}

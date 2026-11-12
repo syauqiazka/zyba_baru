@@ -6,6 +6,7 @@ import { useCompanion } from "@/components/companion/CompanionContext";
 import { PERSONAS, PersonaId } from "@/backend/ai/personas";
 import { PersonaAvatar } from "@/components/companion/PersonaAvatars";
 import { ChatInput } from "@/components/companion/ChatInput";
+import { Mascot } from "@/components/ui/Mascot";
 import { Menu, Sparkles, MessageSquareHeart } from "lucide-react";
 
 const STARTER_PROMPTS = [
@@ -82,22 +83,20 @@ export default function CompanionLandingPage() {
         >
           <Menu className="w-5 h-5" />
         </button>
-        <span className="text-xs font-serif font-bold text-charcoal-900">
-          Zyba Companion
-        </span>
+        <div className="flex items-center gap-2">
+          <Mascot pose="default" size={40} animate={false} decorative={true} />
+          <span className="text-xs font-serif font-bold text-charcoal-900">
+            Zyba Companion
+          </span>
+        </div>
         <div className="w-8" />
       </div>
 
       {/* Main Scrollable Empty State Area */}
       <div className="flex-1 overflow-y-auto px-4 py-8 max-w-3xl mx-auto w-full flex flex-col items-center justify-center text-center">
-        {/* Active Persona Spotlight Avatar */}
-        <div className="relative mb-4 group cursor-pointer">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-2 shadow-sm border border-botanical-500/15 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-            <PersonaAvatar id={selectedPersona} size={92} animate />
-          </div>
-          <span className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-botanical-500 border-2 border-white flex items-center justify-center text-white text-[10px]">
-            ✓
-          </span>
+        {/* Mascot Listening Pose in Empty State */}
+        <div className="mb-4 flex flex-col items-center">
+          <Mascot pose="listening" size={170} animate={true} decorative={true} />
         </div>
 
         {/* Title & Welcoming Tagline */}

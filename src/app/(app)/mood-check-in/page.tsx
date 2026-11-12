@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Check, HeartHandshake, Sparkles, CheckCircle2 } from "lucide-react";
@@ -9,6 +9,7 @@ import { MoodPebble } from "@/components/wellness/MoodPebble";
 import { ChoiceCard, ScaleRating } from "@/components/wellness/ChoiceCard";
 import { CrisisGateBanner } from "@/components/wellness/CrisisGateBanner";
 import { detectRisk } from "@/lib/crisisDetection";
+import { Mascot } from "@/components/ui/Mascot";
 
 const ENERGY_OPTIONS = [
   "Segar",
@@ -47,6 +48,12 @@ export default function MoodCheckInPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [completed, setCompleted] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
+  const [isNight, setIsNight] = useState(false);
+
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    setIsNight(currentHour >= 21 || currentHour < 5);
+  }, []);
 
   // Form states - 15 Pertanyaan Terstruktur
   // Step 1: Mental I
@@ -160,11 +167,11 @@ export default function MoodCheckInPage() {
         )}
 
         <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-10 shadow-sm text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-100 text-orange-950">
-            <CheckCircle2 className="h-7 w-7 text-orange-600 stroke-[2]" />
+          <div className="mx-auto flex items-center justify-center mb-3">
+            <Mascot pose="happy" size={130} animate={true} decorative={true} />
           </div>
 
-          <span className="mt-4 inline-block text-xs font-semibold uppercase tracking-wider text-brown-700/70">
+          <span className="mt-2 inline-block text-xs font-semibold uppercase tracking-wider text-brown-700/70">
             Check-In Selesai
           </span>
           <h1 className="mt-1 font-serif text-2xl md:text-3xl font-bold text-brown-900">
@@ -261,16 +268,28 @@ export default function MoodCheckInPage() {
         {/* STEP 1: Suasana Batin */}
         {step === 1 && (
           <div className="space-y-7">
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
-                Langkah 1: Suasana Batin
-              </span>
-              <h1 className="mt-1 font-serif text-2xl font-bold text-brown-900">
-                Bagaimana suasana hatimu saat ini?
-              </h1>
-              <p className="mt-1 text-xs text-brown-700">
-                Pilih yang paling mendekati perasaanmu hari ini tanpa ragu.
-              </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
+                  Langkah 1: Suasana Batin
+                </span>
+                <h1 className="mt-1 font-serif text-2xl font-bold text-brown-900">
+                  Bagaimana suasana hatimu saat ini?
+                </h1>
+                <p className="mt-1 text-xs text-brown-700">
+                  {isNight
+                    ? "Waktunya mengistirahatkan pikiran. Catat harimu dengan tenang."
+                    : "Pilih yang paling mendekati perasaanmu hari ini tanpa ragu."}
+                </p>
+              </div>
+              <div className="shrink-0 mx-auto sm:mx-0 flex items-center justify-center">
+                <Mascot
+                  pose={isNight ? "sleep" : "default"}
+                  size={96}
+                  animate={true}
+                  decorative={true}
+                />
+              </div>
             </div>
 
             {/* Q1: Mood Pebbles */}

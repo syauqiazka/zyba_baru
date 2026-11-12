@@ -11,6 +11,7 @@ import {
 } from "@/components/companion/ChatMessageBubble";
 import { ChatInput } from "@/components/companion/ChatInput";
 import { CrisisBanner } from "@/components/companion/CrisisBanner";
+import { Mascot } from "@/components/ui/Mascot";
 import { Menu, ArrowLeft, RefreshCw, Sparkles } from "lucide-react";
 import Link from "next/link";
 
@@ -204,13 +205,16 @@ export default function ActiveCompanionChatPage() {
           </div>
         </div>
 
-        {/* Quota Badge in Header */}
-        <div className="flex items-center gap-2">
+        {/* Quota Badge & Companion Header Mascot Avatar */}
+        <div className="flex items-center gap-2.5">
           <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-cream border border-botanical-500/15 text-xs text-charcoal-900/70">
             <Sparkles className="w-3 h-3 text-botanical-500" />
             <span>Sisa kuota:</span>
             <span className="font-bold text-botanical-600">{remainingQuota}</span>
             <span>/ 20</span>
+          </div>
+          <div className="flex items-center" title="Maskot ZYBA">
+            <Mascot pose="default" size={42} animate={false} decorative={true} />
           </div>
         </div>
       </header>

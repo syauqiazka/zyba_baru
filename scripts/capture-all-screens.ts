@@ -178,6 +178,40 @@ async function capture() {
     }
   }
 
+  // Verifikasi prefers-reduced-motion
+  console.log("Memverifikasi prefers-reduced-motion pada maskot...");
+  await setCookie(null);
+  await sendCommand(ws, "Page.navigate", { url: "http://localhost:3005/" });
+  await new Promise((r) => setTimeout(r, 1000));
+  await sendCommand(ws, "Emulation.setEmulatedMedia", {
+    media: "screen",
+    features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+  });
+  const motionCheck = await sendCommand(ws, "Runtime.evaluate", {
+    expression: `
+      (() => {
+        const el = document.querySelector('.animate-mascot-breathe');
+        if (!el) return { found: false, error: "Element not found" };
+        const comp = window.getComputedStyle(el);
+        return {
+          found: true,
+          animation: comp.animation,
+          animationName: comp.animationName
+        };
+      })()
+    `,
+    returnByValue: true,
+  });
+  console.log("Reduced motion evaluation result:", JSON.stringify(motionCheck?.result?.value));
+  if (
+    motionCheck?.result?.value?.animationName === "none" ||
+    motionCheck?.result?.value?.animation?.includes("none")
+  ) {
+    console.log("[VERIFIED] prefers-reduced-motion: reduce mematikan animasi maskot (animationName: none)");
+  } else {
+    console.warn("[CHECK] Animation result:", motionCheck?.result?.value);
+  }
+
   ws.close();
   console.log("All overhauled screenshots captured successfully!");
   process.exit(0);

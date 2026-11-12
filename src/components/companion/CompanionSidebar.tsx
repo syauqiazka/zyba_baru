@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { PersonaAvatar } from "./PersonaAvatars";
 import { PersonaId } from "@/backend/ai/personas";
+import { Mascot } from "@/components/ui/Mascot";
 
 export interface ConversationItem {
   id: string;
@@ -154,11 +155,22 @@ export function CompanionSidebar({
           </div>
 
           {filteredConversations.length === 0 ? (
-            <div className="p-4 text-center">
-              <MessageSquare className="w-6 h-6 text-charcoal-900/20 mx-auto mb-2" />
-              <p className="text-xs text-charcoal-900/50">
-                {searchQuery ? "Tidak ditemukan" : "Belum ada riwayat curhat"}
-              </p>
+            <div className="p-4 text-center flex flex-col items-center">
+              {searchQuery ? (
+                <>
+                  <Mascot pose="sad" size={60} animate={false} decorative={true} className="mb-2" />
+                  <p className="text-xs text-charcoal-900/60 leading-relaxed">
+                    Tidak ditemukan curhat dengan kata kunci "{searchQuery}"
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Mascot pose="listening" size={60} animate={false} decorative={true} className="mb-2" />
+                  <p className="text-xs text-charcoal-900/60 leading-relaxed">
+                    Belum ada riwayat curhat. Mulai cerita pertama kamu saat kamu siap.
+                  </p>
+                </>
+              )}
             </div>
           ) : (
             <div className="space-y-0.5">

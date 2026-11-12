@@ -11,6 +11,8 @@ import {
   Heart,
   Users,
 } from "lucide-react";
+import { MascotHero } from "@/components/ui/Mascot";
+import { MASCOT_NAME } from "@/lib/brand";
 import {
   KinaIllustration,
   OllieIllustration,
@@ -59,37 +61,55 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <main className="max-w-6xl mx-auto px-4 py-12 md:py-20 space-y-20">
-        <section className="text-center max-w-3xl mx-auto space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-100/60 px-3.5 py-1 text-xs font-bold text-orange-950">
-            <Sparkles className="h-3.5 w-3.5 text-orange-600" />
-            Gen Z Wellness Support • 100% Bebas Biaya
+      {/* Hero Section (65:35 Composition) */}
+      <main className="max-w-6xl mx-auto px-4 py-10 md:py-16 space-y-20">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Kolom Kiri 65%: Copy & CTA */}
+          <div className="lg:col-span-7 text-center lg:text-left space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-100/60 px-3.5 py-1 text-xs font-bold text-orange-950">
+              <Sparkles className="h-3.5 w-3.5 text-orange-600" />
+              Gen Z Wellness Support • 100% Bebas Biaya
+            </div>
+
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brown-900 leading-[1.12]">
+              Ruang Aman untuk Menyembuhkan Pikiran yang Riuh.
+            </h1>
+
+            <p className="text-base sm:text-lg text-brown-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              Pendamping kesehatan mental, fisik, dan sosial berbasis AI. Dirancang untuk menghadirkan ketenangan linen yang hangat, tanpa tekanan streak membara, dan tanpa biaya langganan.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+              <Link
+                href="/onboarding"
+                className="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-8 text-sm font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none"
+              >
+                <span>Mulai Perjalananmu</span>
+                <ArrowRight className="h-4 w-4 stroke-[2]" />
+              </Link>
+              <Link
+                href="/guidebook"
+                className="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-brown-900/15 bg-white/90 px-6 text-sm font-semibold text-brown-900 hover:bg-brown-900/5 transition-all"
+              >
+                <HeartHandshake className="h-4 w-4 text-brown-700" />
+                <span>Panduan & Hotline Krisis</span>
+              </Link>
+            </div>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-brown-900 leading-[1.12]">
-            Ruang Aman untuk Menyembuhkan Pikiran yang Riuh.
-          </h1>
-
-          <p className="text-base sm:text-lg text-brown-700 leading-relaxed max-w-2xl mx-auto">
-            Pendamping kesehatan mental, fisik, dan sosial berbasis AI. Dirancang untuk menghadirkan ketenangan linen yang hangat, tanpa tekanan streak membara, dan tanpa biaya langganan.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <Link
-              href="/onboarding"
-              className="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-orange-500 px-8 text-sm font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none"
-            >
-              <span>Mulai Perjalananmu</span>
-              <ArrowRight className="h-4 w-4 stroke-[2]" />
-            </Link>
-            <Link
-              href="/guidebook"
-              className="flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-brown-900/15 bg-white/90 px-6 text-sm font-semibold text-brown-900 hover:bg-brown-900/5 transition-all"
-            >
-              <HeartHandshake className="h-4 w-4 text-brown-700" />
-              <span>Panduan & Hotline Krisis</span>
-            </Link>
+          {/* Kolom Kanan 35%: Maskot Resmi Hero (Bebas tanpa kotak pembatas) */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center">
+            <MascotHero
+              size={348}
+              priority={true}
+              decorative={false}
+              className="relative z-10"
+            />
+            <div className="mt-4 text-center">
+              <span className="text-xs font-medium text-brown-700">
+                Temui <strong className="font-bold text-brown-900">{MASCOT_NAME}</strong>, sahabat mindful ZYBA kamu
+              </span>
+            </div>
           </div>
         </section>
 
