@@ -18,3 +18,4 @@ try {
         Stop-Process -Id $chromeProcess.Id -Force
     }
 }
+

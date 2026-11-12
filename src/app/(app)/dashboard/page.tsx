@@ -10,14 +10,22 @@ import {
   Wind,
   BookOpen,
   MessageCircle,
-  TrendingUp,
-  AlertCircle,
   Calendar,
-  HeartHandshake,
+  AlertCircle,
+  ShieldCheck,
+  Heart,
+  Smile,
 } from "lucide-react";
 import { HearthFlame } from "@/components/wellness/HearthFlame";
+import { ZybaBloom } from "@/components/wellness/ZybaBloom";
+import { BreathingOrb } from "@/components/wellness/BreathingOrb";
 import { CrisisGateBanner } from "@/components/wellness/CrisisGateBanner";
-import { KinaIllustration, OllieIllustration, RubiIllustration, BrunoIllustration } from "@/components/illustrations/PersonaIllustrations";
+import {
+  KinaIllustration,
+  OllieIllustration,
+  RubiIllustration,
+  BrunoIllustration,
+} from "@/components/illustrations/PersonaIllustrations";
 import { MoodLevel } from "@/generated/account-client";
 
 interface DashboardData {
@@ -81,6 +89,7 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showQuickBreathe, setShowQuickBreathe] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -117,13 +126,13 @@ export default function DashboardPage() {
   // Skeleton Loading State
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8 md:py-10 animate-pulse">
-        <div className="h-8 w-64 rounded-xl bg-brown-900/10 mb-2" />
+      <div className="mx-auto max-w-6xl px-4 py-8 animate-pulse">
+        <div className="h-9 w-72 rounded-2xl bg-brown-900/10 mb-3" />
         <div className="h-4 w-96 rounded-lg bg-brown-900/5 mb-8" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-6">
-            <div className="h-56 rounded-3xl bg-brown-900/5" />
-            <div className="h-48 rounded-3xl bg-brown-900/5" />
+            <div className="h-64 rounded-3xl bg-brown-900/5" />
+            <div className="h-52 rounded-3xl bg-brown-900/5" />
           </div>
           <div className="lg:col-span-4 space-y-6">
             <div className="h-44 rounded-3xl bg-brown-900/5" />
@@ -134,7 +143,6 @@ export default function DashboardPage() {
     );
   }
 
-  // Fallback / Data Display
   const user = data?.user || { name: "Teman ZYBA", companionPersona: "KINA" as const };
   const scoreData = data?.scoreData || {
     zybaScore: 50,
@@ -155,138 +163,111 @@ export default function DashboardPage() {
   const crisisAlert = data?.crisisAlert || false;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 md:py-10 pb-28 md:pb-12">
-      {/* Banner Krisis Tenang jika terdeteksi pada check-in hari ini */}
-      {crisisAlert && (
-        <div className="mb-6">
-          <CrisisGateBanner />
-        </div>
-      )}
+    <div className="mx-auto max-w-6xl space-y-8">
+      {/* Banner Krisis Tenang jika terdeteksi */}
+      {crisisAlert && <CrisisGateBanner />}
 
       {errorMsg && (
-        <div className="mb-6 flex items-center gap-2 rounded-2xl border border-brown-900/15 bg-white p-4 text-xs text-brown-900">
+        <div className="flex items-center gap-2 rounded-2xl border border-brown-900/15 bg-white p-4 text-xs text-brown-900">
           <AlertCircle className="h-4 w-4 text-orange-600 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Header Sapaan */}
-      <div className="mb-8">
-        <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
-          Ruang Kendali Diri
-        </span>
-        <h1 className="mt-1 font-serif text-2xl md:text-4xl font-bold text-brown-900">
-          {greeting}, {user.name}
-        </h1>
-        <p className="mt-1.5 text-xs md:text-sm text-brown-700 max-w-xl leading-relaxed">
-          Selamat datang kembali di tempat perlindungan batinmu. Luangkan waktu untuk merasakan denyut hari ini.
-        </p>
+      {/* Top Ambient Greeting Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-brown-900/10 pb-6">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-100/60 px-3 py-1 text-xs font-bold text-orange-950 mb-2">
+            <Sparkles className="h-3.5 w-3.5 text-orange-600" />
+            Ruang Kendali Diri
+          </div>
+          <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-brown-900">
+            {greeting}, {user.name}
+          </h1>
+          <p className="mt-1 text-xs md:text-sm text-brown-700 leading-relaxed max-w-xl">
+            Selamat datang kembali di tempat perlindungan batinmu. Luangkan waktu untuk merasakan ritme hari ini.
+          </p>
+        </div>
+
+        {/* Quick Mindful Breathing Toggle */}
+        <button
+          type="button"
+          onClick={() => setShowQuickBreathe(!showQuickBreathe)}
+          className="inline-flex items-center gap-2 rounded-xl border border-brown-900/15 bg-white/90 px-4 py-2.5 text-xs font-bold text-brown-900 shadow-xs hover:border-orange-500/40 hover:bg-white transition-all self-start md:self-auto"
+        >
+          <Wind className="h-4 w-4 text-orange-600" />
+          {showQuickBreathe ? "Tutup Latihan Nafas" : "Tarik Nafas 1 Menit"}
+        </button>
       </div>
 
-      {/* Layout Asimetris 65:35 (AGENTS.md Bagian 7.4 & DESIGN.md §4.4) */}
+      {/* Quick Breathing Orb Overlay Card */}
+      {showQuickBreathe && (
+        <div className="rounded-3xl border border-orange-500/30 bg-gradient-to-b from-orange-50/80 to-white/95 p-6 md:p-8 shadow-sm text-center">
+          <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70 block mb-2">
+            Latihan Nafas Cepat
+          </span>
+          <BreathingOrb size="md" />
+        </div>
+      )}
+
+      {/* Main Sanctuary Grid (65:35 Asimetris) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Kolom Kiri: 65% (8/12 cols) */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Card Zyba Score Utama */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brown-900/10 pb-6">
+          {/* Card The Living Zyba Bloom */}
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brown-900/10 pb-4 mb-6">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
-                    Keseimbangan Menyeluruh
-                  </span>
-                  {scoreData.hasEnoughData && (
-                    <span className="rounded-full bg-sand-200 px-2 py-0.5 text-[10px] font-semibold text-brown-900">
-                      7 Hari Terakhir
-                    </span>
-                  )}
-                </div>
-                <h2 className="mt-1 font-serif text-xl md:text-2xl font-bold text-brown-900">
-                  Zyba Score
+                <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
+                  Keseimbangan Menyeluruh
+                </span>
+                <h2 className="font-serif text-xl md:text-2xl font-bold text-brown-900">
+                  The Living Zyba Bloom
                 </h2>
               </div>
 
-              <div className="flex items-baseline gap-2">
-                <span className="font-serif text-4xl md:text-5xl font-extrabold text-brown-900">
-                  {scoreData.zybaScore}
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-sand-200/80 px-2.5 py-1 text-[11px] font-bold text-brown-900">
+                  {scoreData.hasEnoughData ? "7 Hari Terakhir" : "Data Awal"}
                 </span>
-                <span className="text-xs text-brown-700/70 font-medium">/ 100</span>
               </div>
             </div>
 
-            {/* Status Cukup Data vs Belum Cukup Data (AGENTS.md Bagian 7.3) */}
+            {/* Living Radial Blossom Visual */}
+            <div className="py-2">
+              <ZybaBloom
+                score={scoreData.zybaScore}
+                mentalScore={scoreData.mentalScore}
+                physicalScore={scoreData.physicalScore}
+                socialScore={scoreData.socialScore}
+                hasEnoughData={scoreData.hasEnoughData}
+              />
+            </div>
+
             {!scoreData.hasEnoughData ? (
-              <div className="mt-4 rounded-xl border border-brown-900/10 bg-cream/60 p-4 text-xs text-brown-700 leading-relaxed">
-                <span className="font-semibold text-brown-900">Belum cukup data — </span>
+              <div className="mt-6 rounded-2xl border border-brown-900/10 bg-cream/70 p-4 text-xs text-brown-700 leading-relaxed text-center sm:text-left">
+                <span className="font-bold text-brown-900">Belum cukup data — </span>
                 Skor di atas adalah nilai awal netral. Lakukan check-in harian beberapa hari ke depan untuk membentuk kurva mekar yang akurat bagi dirimu.
               </div>
             ) : (
-              <p className="mt-4 text-xs text-brown-700 leading-relaxed">
-                Skor dihitung dari perpaduan kondisi mental (50%), kebugaran fisik (25%), dan keterhubungan sosial (25%) dalam 7 hari terakhir.
+              <p className="mt-6 text-xs text-brown-700/80 text-center leading-relaxed">
+                Kelopak mekar secara dinamis dari perpaduan kondisi mental (50%), kebugaran fisik (25%), dan keterhubungan sosial (25%).
               </p>
             )}
-
-            {/* Breakdown 3 Aspek */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Aspek Mental */}
-              <div className="rounded-2xl border border-brown-900/10 bg-cream/40 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-brown-900">Mental (50%)</span>
-                  <span className="text-xs font-bold text-orange-950">{scoreData.mentalScore}</span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-brown-900/10">
-                  <div
-                    className="h-full bg-orange-500 rounded-full transition-all duration-300"
-                    style={{ width: `${scoreData.mentalScore}%` }}
-                  />
-                </div>
-                <span className="mt-2 block text-[11px] text-brown-700/70">Mood & beban pikiran</span>
-              </div>
-
-              {/* Aspek Fisik */}
-              <div className="rounded-2xl border border-brown-900/10 bg-cream/40 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-brown-900">Fisik (25%)</span>
-                  <span className="text-xs font-bold text-brown-900">{scoreData.physicalScore}</span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-brown-900/10">
-                  <div
-                    className="h-full bg-sand-300 rounded-full transition-all duration-300"
-                    style={{ width: `${scoreData.physicalScore}%` }}
-                  />
-                </div>
-                <span className="mt-2 block text-[11px] text-brown-700/70">Tidur, nutrisi, gerak</span>
-              </div>
-
-              {/* Aspek Sosial */}
-              <div className="rounded-2xl border border-brown-900/10 bg-cream/40 p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-brown-900">Sosial (25%)</span>
-                  <span className="text-xs font-bold text-sky-950">{scoreData.socialScore}</span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-brown-900/10">
-                  <div
-                    className="h-full bg-sky-400 rounded-full transition-all duration-300"
-                    style={{ width: `${scoreData.socialScore}%` }}
-                  />
-                </div>
-                <span className="mt-2 block text-[11px] text-brown-700/70">Dukungan & koneksi</span>
-              </div>
-            </div>
           </div>
 
-          {/* Checklist Lembut Hari Ini */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
+          {/* Daily Tactile Mindful Rituals */}
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
+            <div className="flex items-center justify-between mb-5">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
+                <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
                   Ritual Sadar Hari Ini
                 </span>
-                <h3 className="mt-0.5 font-serif text-lg font-bold text-brown-900">
+                <h3 className="font-serif text-lg font-bold text-brown-900">
                   Langkah Kecil Pemulihan
                 </h3>
               </div>
-              <span className="text-xs text-brown-700">Tanpa tekanan</span>
+              <span className="text-xs text-brown-700/70 font-medium">Tanpa tekanan</span>
             </div>
 
             <div className="space-y-3">
@@ -295,26 +276,26 @@ export default function DashboardPage() {
                 href="/mood-check-in"
                 className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
                   todayChecklist.checkInDone
-                    ? "border-orange-500/30 bg-orange-50/50"
+                    ? "border-orange-500/30 bg-orange-50/60"
                     : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
                 }`}
               >
                 <div className="flex items-center gap-3.5">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
                       todayChecklist.checkInDone
-                        ? "bg-orange-500 text-brown-900"
+                        ? "bg-orange-500 text-brown-900 shadow-xs"
                         : "bg-brown-900/5 text-brown-700"
                     }`}
                   >
                     {todayChecklist.checkInDone ? (
                       <CheckCircle2 className="h-5 w-5 stroke-[2]" />
                     ) : (
-                      <Circle className="h-5 w-5 stroke-[1.8]" />
+                      <Smile className="h-5 w-5 stroke-[1.8]" />
                     )}
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-brown-900">
+                    <h4 className="text-sm font-bold text-brown-900">
                       Check-In Harian (15 Pertanyaan)
                     </h4>
                     <p className="text-xs text-brown-700">
@@ -331,20 +312,20 @@ export default function DashboardPage() {
                 </div>
               </Link>
 
-              {/* Item 2: Latihan Nafas */}
+              {/* Item 2: Breathing Garden */}
               <Link
                 href="/activity"
                 className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
                   todayChecklist.activityDone
-                    ? "border-orange-500/30 bg-orange-50/50"
+                    ? "border-orange-500/30 bg-orange-50/60"
                     : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
                 }`}
               >
                 <div className="flex items-center gap-3.5">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
                       todayChecklist.activityDone
-                        ? "bg-orange-500 text-brown-900"
+                        ? "bg-orange-500 text-brown-900 shadow-xs"
                         : "bg-brown-900/5 text-brown-700"
                     }`}
                   >
@@ -355,7 +336,7 @@ export default function DashboardPage() {
                     )}
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-brown-900">
+                    <h4 className="text-sm font-bold text-brown-900">
                       Breathing Garden (Ritme 4-7-8)
                     </h4>
                     <p className="text-xs text-brown-700">
@@ -370,20 +351,20 @@ export default function DashboardPage() {
                 </div>
               </Link>
 
-              {/* Item 3: Ruang Sehat / Jurnal */}
+              {/* Item 3: Ruang Sehat */}
               <Link
                 href="/wellness-journey"
                 className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
                   todayChecklist.journalDone
-                    ? "border-orange-500/30 bg-orange-50/50"
+                    ? "border-orange-500/30 bg-orange-50/60"
                     : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
                 }`}
               >
                 <div className="flex items-center gap-3.5">
                   <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
                       todayChecklist.journalDone
-                        ? "bg-orange-500 text-brown-900"
+                        ? "bg-orange-500 text-brown-900 shadow-xs"
                         : "bg-brown-900/5 text-brown-700"
                     }`}
                   >
@@ -394,7 +375,7 @@ export default function DashboardPage() {
                     )}
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-brown-900">
+                    <h4 className="text-sm font-bold text-brown-900">
                       Jurnal Ruang Sehat
                     </h4>
                     <p className="text-xs text-brown-700">
@@ -411,7 +392,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Riwayat 7 Hari Singkat */}
+          {/* Jejak Emosi 7 Hari Terakhir */}
           {recentCheckIns.length > 0 && (
             <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-sm">
               <div className="flex items-center justify-between mb-4">
@@ -423,9 +404,9 @@ export default function DashboardPage() {
                 </div>
                 <Link
                   href="/wellness-journey"
-                  className="text-xs font-semibold text-brown-700 hover:text-brown-900"
+                  className="text-xs font-bold text-brown-700 hover:text-brown-900"
                 >
-                  Selengkapnya →
+                  Lihat Selengkapnya →
                 </Link>
               </div>
 
@@ -433,7 +414,7 @@ export default function DashboardPage() {
                 {recentCheckIns.map((ci) => (
                   <div
                     key={ci.date}
-                    className="rounded-xl border border-brown-900/10 bg-cream/40 p-3 text-center"
+                    className="rounded-2xl border border-brown-900/10 bg-cream/40 p-3 text-center"
                   >
                     <span className="text-[11px] text-brown-700 block font-medium">
                       {ci.date}
@@ -461,15 +442,15 @@ export default function DashboardPage() {
             streakDays={hearthFlame.streakDays}
           />
 
-          {/* Widget Zyba Companion Quick Callout */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-sm">
+          {/* Zyba Companion Conversational Card */}
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
             <div className="flex items-center gap-3.5 mb-4">
               <PersonaAvatar
                 persona={user.companionPersona}
                 className="h-12 w-12"
               />
               <div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
+                <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
                   Zyba Companion
                 </span>
                 <h3 className="font-serif text-base font-bold text-brown-900">
@@ -484,12 +465,12 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <p className="text-xs text-brown-700 leading-relaxed">
+            <p className="text-xs text-brown-700 leading-relaxed mb-4">
               Ada pikiran yang membebani? Companion AI hadir 24/7 mendampingimu dengan empati penuh.
             </p>
 
-            {/* Quick Prompt Chips */}
-            <div className="mt-4 flex flex-col gap-2">
+            {/* Conversational Prompt Chips */}
+            <div className="flex flex-col gap-2">
               <Link
                 href="/companion"
                 className="rounded-xl border border-brown-900/10 bg-cream/50 p-2.5 text-xs text-brown-900 hover:border-orange-500/40 hover:bg-orange-500/[0.04] transition-all"
@@ -500,7 +481,7 @@ export default function DashboardPage() {
                 href="/companion"
                 className="rounded-xl border border-brown-900/10 bg-cream/50 p-2.5 text-xs text-brown-900 hover:border-orange-500/40 hover:bg-orange-500/[0.04] transition-all"
               >
-                "Bantu aku menyusun prioritasku..."
+                "Bantu aku mengurai prioritasku..."
               </Link>
             </div>
 
@@ -513,9 +494,9 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* Wawasan & Sumber Daya Shortcut */}
+          {/* Wawasan Sehat Shortcut */}
           <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-sm">
-            <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
+            <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
               Wawasan Sehat
             </span>
             <h3 className="mt-0.5 font-serif text-base font-bold text-brown-900">
