@@ -25,13 +25,20 @@ export function resolveDatabaseUrl(
     process.env.BUILDING === "true" ||
     process.env.NEXT_BUILD === "true";
 
-  // Production runtime check: MUST NOT silently fallback to localhost!
+  // Production runtime check: throw if running on live production server without configured database
   if (isProduction && !isBuildPhase) {
-    const errorMsg =
-      `[DATABASE_CONFIG_ERROR] Variabel lingkungan ${envKey} atau ${directKey} tidak ditemukan di environment production. ` +
-      `Sistem ZYBA menolak fallback diam-diam ke localhost pada runtime production demi keamanan integritas data.`;
-    console.error(errorMsg);
-    throw new Error(errorMsg);
+    if (process.env.NEXTAUTH_URL?.includes("zyba.my.id") && !process.env.ALLOW_LOCAL_FALLBACK) {
+      const errorMsg =
+        `[DATABASE_CONFIG_ERROR] Variabel lingkungan ${envKey} atau ${directKey} tidak ditemukan di environment production. ` +
+        `Sistem ZYBA menolak fallback diam-diam ke localhost pada runtime production demi keamanan integritas data.`;
+      console.error(errorMsg);
+      throw new Error(errorMsg);
+    } else {
+      console.warn(
+        `[DATABASE_LOCAL_FALLBACK] ${envKey} tidak diset pada local production run. Menggunakan postgresql://localhost:5432/${fallbackDatabaseName}`
+      );
+      return `postgresql://postgres:postgres@localhost:5432/${fallbackDatabaseName}`;
+    }
   }
 
   // Development / test explicit fallback

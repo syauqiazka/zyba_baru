@@ -1,10 +1,22 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 export const AUTH_COOKIE_NAME = "zyba_token";
 
 export function getAuthTokenFromCookies(): string | undefined {
   const cookieStore = cookies();
-  return cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  if (token) return token;
+
+  try {
+    const authHeader = headers().get("authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      return authHeader.substring(7).trim();
+    }
+  } catch {
+    // Ignore header reading errors in edge contexts
+  }
+
+  return undefined;
 }
 
 export function setAuthCookie(token: string) {

@@ -135,6 +135,7 @@ model DailyAssessment {
   sleepRating     Int?
   energyTags      String[]
   reflection      String?
+  answers         Json?
   flaggedForRisk  Boolean   @default(false)
   calculatedScore Int?
 

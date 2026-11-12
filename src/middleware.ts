@@ -34,7 +34,9 @@ async function verifyEdgeToken(token: string): Promise<TokenPayload | null> {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+  const token =
+    request.cookies.get(AUTH_COOKIE_NAME)?.value ||
+    request.headers.get("authorization")?.replace("Bearer ", "").trim();
   const session = token ? await verifyEdgeToken(token) : null;
 
   // Daftar rute terproteksi aplikasi (app)
