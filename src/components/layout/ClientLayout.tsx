@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { SanctuaryNav } from "@/components/navigation/SanctuaryNav";
+import { SanctuarySidebar } from "@/components/navigation/SanctuarySidebar";
 import { BottomSanctuary } from "@/components/navigation/BottomSanctuary";
 
 interface ClientLayoutProps {
@@ -12,24 +12,38 @@ interface ClientLayoutProps {
 export function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
   const hideMobileDock = pathname === "/mood-check-in";
+  const [userName, setUserName] = useState("Teman ZYBA");
+
+  useEffect(() => {
+    // Ambil nama user untuk ditampilkan di sidebar
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user?.name) {
+          setUserName(data.user.name);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
-    <div className="min-h-screen bg-cream text-brown-900 selection:bg-orange-200">
-      {/* Modern Floating Sanctuary Island Header (Desktop >= 768px) */}
-      <SanctuaryNav />
+    <div className="min-h-screen bg-[#FAF7F0] text-brown-900 selection:bg-orange-200">
+      {/* 1. Left Sidebar on Desktop (>= 768px) */}
+      <SanctuarySidebar userName={userName} />
 
-      {/* Main Content: Full-width expansive sanctuary canvas with clean vertical rhythm */}
-      <main className={`w-full min-h-screen pt-4 md:pt-24 px-4 sm:px-6 transition-all ${
-        hideMobileDock ? "pb-24 md:pb-12" : "pb-28 md:pb-12"
-      }`}>
-        <div className="max-w-[1200px] mx-auto w-full">
+      {/* 2. Main Content Canvas: Offset by sidebar width on desktop */}
+      <main
+        className={`w-full min-h-screen transition-all md:pl-64 ${
+          hideMobileDock ? "pt-4 md:pt-8 px-4 sm:px-8 pb-24 md:pb-12" : "pt-4 md:pt-8 px-4 sm:px-8 pb-28 md:pb-12"
+        }`}
+      >
+        <div className="max-w-[1240px] mx-auto w-full">
           {children}
         </div>
       </main>
 
-      {/* Floating Bottom Sanctuary Dock (Mobile < 768px, hidden on focused flows) */}
+      {/* 3. Floating Bottom Sanctuary Dock (Mobile < 768px) */}
       {!hideMobileDock && <BottomSanctuary />}
     </div>
   );
 }
-
