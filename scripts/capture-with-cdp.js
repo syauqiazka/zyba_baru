@@ -76,3 +76,4 @@ capture().catch((err) => {
   console.error("Error capturing:", err);
   process.exit(1);
 });
+
