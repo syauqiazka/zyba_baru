@@ -6,20 +6,25 @@ import {
   Sparkles,
   ArrowRight,
   CheckCircle2,
-  Circle,
   Wind,
   BookOpen,
   MessageCircle,
   Calendar,
   AlertCircle,
-  ShieldCheck,
+  Droplets,
+  Flame,
   Heart,
-  Smile,
+  TrendingUp,
+  Check,
 } from "lucide-react";
 import { HearthFlame } from "@/components/wellness/HearthFlame";
 import { ZybaBloom } from "@/components/wellness/ZybaBloom";
 import { BreathingOrb } from "@/components/wellness/BreathingOrb";
 import { CrisisGateBanner } from "@/components/wellness/CrisisGateBanner";
+import { BotanicalBanner } from "@/components/wellness/BotanicalBanner";
+import { SanctuaryGarden } from "@/components/wellness/SanctuaryGarden";
+import { RitualProgressCard } from "@/components/wellness/RitualProgressCard";
+import { WeeklyRhythmBars } from "@/components/wellness/WeeklyRhythmBars";
 import {
   KinaIllustration,
   OllieIllustration,
@@ -63,14 +68,6 @@ interface DashboardData {
   crisisAlert: boolean;
 }
 
-function getTimeGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour >= 4 && hour < 11) return "Selamat pagi";
-  if (hour >= 11 && hour < 15) return "Selamat siang";
-  if (hour >= 15 && hour < 18) return "Selamat sore";
-  return "Selamat malam";
-}
-
 function PersonaAvatar({ persona, className = "h-12 w-12" }: { persona: string; className?: string }) {
   switch (persona) {
     case "OLLIE":
@@ -90,6 +87,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [showQuickBreathe, setShowQuickBreathe] = useState(false);
+  const [gardenWatered, setGardenWatered] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -121,18 +119,20 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const greeting = getTimeGreeting();
-
   // Skeleton Loading State
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8 animate-pulse">
-        <div className="h-9 w-72 rounded-2xl bg-brown-900/10 mb-3" />
-        <div className="h-4 w-96 rounded-lg bg-brown-900/5 mb-8" />
+      <div className="mx-auto max-w-6xl px-4 py-8 animate-pulse space-y-6">
+        <div className="h-44 rounded-3xl bg-brown-900/10" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="h-24 rounded-2xl bg-brown-900/5" />
+          <div className="h-24 rounded-2xl bg-brown-900/5" />
+          <div className="h-24 rounded-2xl bg-brown-900/5" />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-6">
             <div className="h-64 rounded-3xl bg-brown-900/5" />
-            <div className="h-52 rounded-3xl bg-brown-900/5" />
+            <div className="h-64 rounded-3xl bg-brown-900/5" />
           </div>
           <div className="lg:col-span-4 space-y-6">
             <div className="h-44 rounded-3xl bg-brown-900/5" />
@@ -163,7 +163,7 @@ export default function DashboardPage() {
   const crisisAlert = data?.crisisAlert || false;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
+    <div className="mx-auto max-w-6xl space-y-7 pb-10">
       {/* Banner Krisis Tenang jika terdeteksi */}
       {crisisAlert && <CrisisGateBanner />}
 
@@ -174,48 +174,97 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Top Ambient Greeting Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-brown-900/10 pb-6">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-100/60 px-3 py-1 text-xs font-bold text-orange-950 mb-2">
-            <Sparkles className="h-3.5 w-3.5 text-orange-600" />
-            Ruang Kendali Diri
-          </div>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-brown-900">
-            {greeting}, {user.name}
-          </h1>
-          <p className="mt-1 text-xs md:text-sm text-brown-700 leading-relaxed max-w-xl">
-            Selamat datang kembali di tempat perlindungan batinmu. Luangkan waktu untuk merasakan ritme hari ini.
-          </p>
-        </div>
+      {/* 1. Botanical Sanctuary Banner (Inspired by Ref 1) */}
+      <BotanicalBanner
+        userName={user.name}
+        onQuickBreathe={() => setShowQuickBreathe(!showQuickBreathe)}
+      />
 
-        {/* Quick Mindful Breathing Toggle */}
-        <button
-          type="button"
-          onClick={() => setShowQuickBreathe(!showQuickBreathe)}
-          className="inline-flex items-center gap-2 rounded-xl border border-brown-900/15 bg-white/90 px-4 py-2.5 text-xs font-bold text-brown-900 shadow-xs hover:border-orange-500/40 hover:bg-white transition-all self-start md:self-auto"
-        >
-          <Wind className="h-4 w-4 text-orange-600" />
-          {showQuickBreathe ? "Tutup Latihan Nafas" : "Tarik Nafas 1 Menit"}
-        </button>
-      </div>
-
-      {/* Quick Breathing Orb Overlay Card */}
+      {/* Quick Mindful Breathing Modal / Card */}
       {showQuickBreathe && (
         <div className="rounded-3xl border border-orange-500/30 bg-gradient-to-b from-orange-50/80 to-white/95 p-6 md:p-8 shadow-sm text-center">
           <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70 block mb-2">
-            Latihan Nafas Cepat
+            Latihan Nafas Cepat (4-4-6)
           </span>
           <BreathingOrb size="md" />
         </div>
       )}
 
-      {/* Main Sanctuary Grid (65:35 Asimetris) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* 2. Top 3 Quick-Stat Pastel Cards (Inspired by Ref 1 & 3) */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Card 1: Ritual Selesai */}
+        <div className="relative overflow-hidden rounded-2xl border border-brown-900/10 bg-[#EBF3EC] p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800/80">
+                Langkah Selesai
+              </span>
+              <div className="mt-1 flex items-baseline gap-2">
+                <span className="font-serif text-2xl sm:text-3xl font-extrabold text-emerald-950">
+                  {todayChecklist.checkInDone ? "3" : "2"}
+                </span>
+                <span className="text-xs font-semibold text-emerald-800/70">
+                  dari 5 ritual hari ini
+                </span>
+              </div>
+            </div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/80 text-emerald-700 shadow-xs">
+              <Check className="h-5 w-5 stroke-[2.5]" />
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Keseimbangan Batin (Zyba Score) */}
+        <div className="relative overflow-hidden rounded-2xl border border-brown-900/10 bg-[#FDF2EC] p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-orange-800/80">
+                Skor Harmoni
+              </span>
+              <div className="mt-1 flex items-baseline gap-2">
+                <span className="font-serif text-2xl sm:text-3xl font-extrabold text-orange-950">
+                  {scoreData.zybaScore}
+                </span>
+                <span className="text-xs font-semibold text-orange-800/70">
+                  {scoreData.hasEnoughData ? "Kondisi Stabil" : "Nilai Awal"}
+                </span>
+              </div>
+            </div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/80 text-orange-600 shadow-xs">
+              <Sparkles className="h-5 w-5 stroke-[2]" />
+            </div>
+          </div>
+        </div>
+
+        {/* Card 3: Kehangatan Diri (Hearth Flame) */}
+        <div className="relative overflow-hidden rounded-2xl border border-brown-900/10 bg-[#F7F3EB] p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800/80">
+                Kehangatan Diri
+              </span>
+              <div className="mt-1 flex items-baseline gap-2">
+                <span className="font-serif text-2xl sm:text-3xl font-extrabold text-amber-950">
+                  {hearthFlame.litToday ? "Menyala" : "Teduh"}
+                </span>
+                <span className="text-xs font-semibold text-amber-800/70">
+                  {hearthFlame.streakDays > 0 ? `${hearthFlame.streakDays} hari hadir` : "Siap dinyalakan"}
+                </span>
+              </div>
+            </div>
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/80 text-amber-700 shadow-xs">
+              <Flame className="h-5 w-5 stroke-[2]" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Main Bento Sanctuary Grid (65:35 Asymmetrical Grid) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
         {/* Kolom Kiri: 65% (8/12 cols) */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className="lg:col-span-8 space-y-7">
           {/* Card The Living Zyba Bloom */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_4px_24px_rgba(44,34,30,0.03)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-brown-900/10 pb-4 mb-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
@@ -256,186 +305,23 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Daily Tactile Mindful Rituals */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
-                  Ritual Sadar Hari Ini
-                </span>
-                <h3 className="font-serif text-lg font-bold text-brown-900">
-                  Langkah Kecil Pemulihan
-                </h3>
-              </div>
-              <span className="text-xs text-brown-700/70 font-medium">Tanpa tekanan</span>
-            </div>
+          {/* Ritual & Kebiasaan Sadar Hari Ini (Goals & Scheduled Habits - Ref 1 & 3) */}
+          <RitualProgressCard />
 
-            <div className="space-y-3">
-              {/* Item 1: Check-In */}
-              <Link
-                href="/mood-check-in"
-                className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
-                  todayChecklist.checkInDone
-                    ? "border-orange-500/30 bg-orange-50/60"
-                    : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
-                }`}
-              >
-                <div className="flex items-center gap-3.5">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                      todayChecklist.checkInDone
-                        ? "bg-orange-500 text-brown-900 shadow-xs"
-                        : "bg-brown-900/5 text-brown-700"
-                    }`}
-                  >
-                    {todayChecklist.checkInDone ? (
-                      <CheckCircle2 className="h-5 w-5 stroke-[2]" />
-                    ) : (
-                      <Smile className="h-5 w-5 stroke-[1.8]" />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-brown-900">
-                      Check-In Harian (15 Pertanyaan)
-                    </h4>
-                    <p className="text-xs text-brown-700">
-                      {todayChecklist.checkInDone
-                        ? "Sudah diisi hari ini. Lilin kehangatanmu menyala."
-                        : "Luangkan 2 menit untuk mendengar kabar dirimu."}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 text-xs font-bold text-brown-900">
-                  {todayChecklist.checkInDone ? "Lihat Catatan" : "Mulai"}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
-
-              {/* Item 2: Breathing Garden */}
-              <Link
-                href="/activity"
-                className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
-                  todayChecklist.activityDone
-                    ? "border-orange-500/30 bg-orange-50/60"
-                    : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
-                }`}
-              >
-                <div className="flex items-center gap-3.5">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                      todayChecklist.activityDone
-                        ? "bg-orange-500 text-brown-900 shadow-xs"
-                        : "bg-brown-900/5 text-brown-700"
-                    }`}
-                  >
-                    {todayChecklist.activityDone ? (
-                      <CheckCircle2 className="h-5 w-5 stroke-[2]" />
-                    ) : (
-                      <Wind className="h-5 w-5 stroke-[1.8]" />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-brown-900">
-                      Breathing Garden (Ritme 4-7-8)
-                    </h4>
-                    <p className="text-xs text-brown-700">
-                      Tarik nafas 4 detik, tahan 7 detik, hembuskan perlahan 8 detik.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 text-xs font-bold text-brown-900">
-                  {todayChecklist.activityDone ? "Ulangi" : "Bernafas"}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
-
-              {/* Item 3: Ruang Sehat */}
-              <Link
-                href="/wellness-journey"
-                className={`flex items-center justify-between rounded-2xl border p-4 transition-all duration-200 ${
-                  todayChecklist.journalDone
-                    ? "border-orange-500/30 bg-orange-50/60"
-                    : "border-brown-900/10 bg-white hover:border-orange-500/40 hover:bg-orange-500/[0.03]"
-                }`}
-              >
-                <div className="flex items-center gap-3.5">
-                  <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                      todayChecklist.journalDone
-                        ? "bg-orange-500 text-brown-900 shadow-xs"
-                        : "bg-brown-900/5 text-brown-700"
-                    }`}
-                  >
-                    {todayChecklist.journalDone ? (
-                      <CheckCircle2 className="h-5 w-5 stroke-[2]" />
-                    ) : (
-                      <BookOpen className="h-5 w-5 stroke-[1.8]" />
-                    )}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-brown-900">
-                      Jurnal Ruang Sehat
-                    </h4>
-                    <p className="text-xs text-brown-700">
-                      Tuliskan pikiran bebas tanpa takut dihakimi siapa pun.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1 text-xs font-bold text-brown-900">
-                  {todayChecklist.journalDone ? "Buka Jurnal" : "Tulis"}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          {/* Jejak Emosi 7 Hari Terakhir */}
-          {recentCheckIns.length > 0 && (
-            <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-brown-700" />
-                  <h3 className="font-serif text-base font-bold text-brown-900">
-                    Jejak Emosi Terakhir
-                  </h3>
-                </div>
-                <Link
-                  href="/wellness-journey"
-                  className="text-xs font-bold text-brown-700 hover:text-brown-900"
-                >
-                  Lihat Selengkapnya →
-                </Link>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {recentCheckIns.map((ci) => (
-                  <div
-                    key={ci.date}
-                    className="rounded-2xl border border-brown-900/10 bg-cream/40 p-3 text-center"
-                  >
-                    <span className="text-[11px] text-brown-700 block font-medium">
-                      {ci.date}
-                    </span>
-                    <span className="mt-1 inline-block text-xs font-bold text-brown-900">
-                      {ci.mood}
-                    </span>
-                    {ci.score && (
-                      <span className="mt-0.5 block text-[10px] text-brown-700/70">
-                        Skor: {ci.score}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Weekly Rhythm Bars (Ref 1 & 3) */}
+          <WeeklyRhythmBars />
         </div>
 
         {/* Kolom Kanan: 35% (4/12 cols) */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-4 space-y-7">
+          {/* Taman Batin (Plant Your Progress - Ref 1) */}
+          <SanctuaryGarden
+            daysWatered={todayChecklist.checkInDone || gardenWatered ? 5 : 4}
+            totalGoal={7}
+            isWateredToday={todayChecklist.checkInDone || gardenWatered}
+            onWater={() => setGardenWatered(true)}
+          />
+
           {/* Hearth Flame Sanctuary Card */}
           <HearthFlame
             litToday={hearthFlame.litToday}
@@ -443,7 +329,7 @@ export default function DashboardPage() {
           />
 
           {/* Zyba Companion Conversational Card */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-[0_4px_24px_rgba(44,34,30,0.04)]">
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-[0_4px_24px_rgba(44,34,30,0.03)]">
             <div className="flex items-center gap-3.5 mb-4">
               <PersonaAvatar
                 persona={user.companionPersona}
@@ -466,7 +352,7 @@ export default function DashboardPage() {
             </div>
 
             <p className="text-xs text-brown-700 leading-relaxed mb-4">
-              Ada pikiran yang membebani? Companion AI hadir 24/7 mendampingimu dengan empati penuh.
+              Ada pikiran yang membebani? Companion AI hadir 24/7 mendampingimu dengan empati penuh tanpa menghakimi.
             </p>
 
             {/* Conversational Prompt Chips */}
@@ -481,13 +367,13 @@ export default function DashboardPage() {
                 href="/companion"
                 className="rounded-xl border border-brown-900/10 bg-cream/50 p-2.5 text-xs text-brown-900 hover:border-orange-500/40 hover:bg-orange-500/[0.04] transition-all"
               >
-                "Bantu aku mengurai prioritasku..."
+                "Bantu aku mengurai benang kusut prioritasku..."
               </Link>
             </div>
 
             <Link
               href="/companion"
-              className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 text-xs font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
+              className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 text-xs font-bold text-brown-900 shadow-xs hover:bg-orange-600 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
             >
               <MessageCircle className="h-4 w-4" />
               Buka Percakapan
@@ -495,7 +381,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Wawasan Sehat Shortcut */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-sm">
+          <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 shadow-xs">
             <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70">
               Wawasan Sehat
             </span>
