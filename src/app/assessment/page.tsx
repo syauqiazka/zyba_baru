@@ -14,46 +14,10 @@ import {
   Moon,
   Zap,
 } from "lucide-react";
-import {
-  KinaIllustration,
-  OllieIllustration,
-  RubiIllustration,
-  BrunoIllustration,
-} from "@/components/illustrations/PersonaIllustrations";
+import { Mascot } from "@/components/ui/Mascot";
 import { MoodLevel } from "@/generated/account-client";
 import { ChoiceCard, ScaleRating } from "@/components/wellness/ChoiceCard";
 import { MoodPebble } from "@/components/wellness/MoodPebble";
-
-const PERSONAS = [
-  {
-    id: "KINA",
-    name: "Kina",
-    role: "Pendengar Hangat & Empatik",
-    desc: "Mendengarkan keluh kesahmu tanpa menghakimi. Menemani saat kamu butuh kehangatan.",
-    illustration: KinaIllustration,
-  },
-  {
-    id: "OLLIE",
-    name: "Ollie",
-    role: "Refleksi Terstruktur & Solutif",
-    desc: "Membantumu mengurai benang kusut overthinking dan menyusun aksi kecil bermakna.",
-    illustration: OllieIllustration,
-  },
-  {
-    id: "RUBI",
-    name: "Rubi",
-    role: "Penyemangat Ceria & Reflektif",
-    desc: "Mengingatkanmu pada hal-hal kecil yang layak disyukuri di tengah kesibukan.",
-    illustration: RubiIllustration,
-  },
-  {
-    id: "BRUNO",
-    name: "Bruno",
-    role: "Jangkar Tenang & Teduh",
-    desc: "Memberimu rasa aman saat dunia terasa terlalu berisik dan luar biasa membebani.",
-    illustration: BrunoIllustration,
-  },
-];
 
 const GOAL_OPTIONS = [
   { value: "Mengurangi Stres & Overthinking", label: "Mengurangi Stres & Overthinking" },
@@ -69,7 +33,7 @@ export default function AssessmentPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   // Dimension States
-  const [persona, setPersona] = useState<"KINA" | "OLLIE" | "RUBI" | "BRUNO">("KINA");
+  const [persona] = useState<string>("ZIBI");
   const [username, setUsername] = useState("");
   const [goal, setGoal] = useState("Mengurangi Stres & Overthinking");
   const [initialMood, setInitialMood] = useState<MoodLevel>(MoodLevel.NEUTRAL);
@@ -171,52 +135,50 @@ export default function AssessmentPage() {
         )}
 
         <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-10 shadow-[0_8px_32px_rgba(44,34,30,0.06)] backdrop-blur-xl">
-          {/* DIMENSI 1: Persona Pendamping */}
+          {/* DIMENSI 1: Maskot Pendamping */}
           {step === 1 && (
-            <div className="space-y-6">
+            <div className="space-y-6 text-center">
               <div>
                 <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70 block mb-1">
-                  Dimensi 1: Ruang Suara
+                  Dimensi 1: Sahabat Pendamping
                 </span>
                 <h1 className="font-serif text-2xl md:text-3xl font-bold text-brown-900">
-                  Pilih Persona Pendamping ZYBA-mu
+                  Temui Zibi, Sahabat Mindful-mu
                 </h1>
-                <p className="mt-1 text-xs md:text-sm text-brown-700 leading-relaxed">
-                  Setiap persona memiliki karakter unik untuk menemanimu. Kamu bisa mengubahnya kapan saja di pengaturan.
+                <p className="mt-1 text-xs md:text-sm text-brown-700 leading-relaxed max-w-lg mx-auto">
+                  Zibi adalah maskot suaka ZYBA yang akan selalu ada menemanimu curhat, mendengar keluh kesahmu tanpa penghakiman, dan mendampingi harimu.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                {PERSONAS.map((p) => {
-                  const isSelected = persona === p.id;
-                  const Icon = p.illustration;
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => setPersona(p.id as any)}
-                      className={`flex items-start gap-3.5 rounded-2xl border p-4 text-left transition-all ${
-                        isSelected
-                          ? "border-2 border-orange-500 bg-orange-100/70 text-brown-900 shadow-sm ring-2 ring-orange-500/20 scale-102"
-                          : "border-brown-900/10 bg-white text-brown-700 hover:border-orange-500/40 hover:bg-orange-500/[0.02]"
-                      }`}
-                    >
-                      <Icon className="h-12 w-12 shrink-0 mt-0.5" />
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-bold text-brown-900">{p.name}</span>
-                          {isSelected && <Check className="h-3.5 w-3.5 text-orange-600 stroke-[2.5]" />}
-                        </div>
-                        <span className="text-[11px] font-semibold text-orange-950 block mt-0.5">
-                          {p.role}
-                        </span>
-                        <p className="mt-1.5 text-xs text-brown-700/80 leading-relaxed">
-                          {p.desc}
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
+              <div className="py-2 flex flex-col items-center">
+                <Mascot pose="happy" size={160} animate={true} decorative={false} />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+                <div className="rounded-2xl border border-brown-900/10 bg-cream/60 p-4">
+                  <span className="text-xs font-bold text-brown-900 block mb-1">
+                    Pendengar Setia
+                  </span>
+                  <p className="text-[11px] text-brown-700 leading-relaxed">
+                    Mendengarkan apa pun perasaanmu dengan empati dan kelembutan.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-brown-900/10 bg-cream/60 p-4">
+                  <span className="text-xs font-bold text-brown-900 block mb-1">
+                    Bebas Penghakiman
+                  </span>
+                  <p className="text-[11px] text-brown-700 leading-relaxed">
+                    Ruang aman 100% privat untuk meluapkan lelah tanpa takut dinilai.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-brown-900/10 bg-cream/60 p-4">
+                  <span className="text-xs font-bold text-brown-900 block mb-1">
+                    Selalu Hadir 24/7
+                  </span>
+                  <p className="text-[11px] text-brown-700 leading-relaxed">
+                    Kapan pun kamu butuh ruang bernafas, Zibi siap menyambutmu.
+                  </p>
+                </div>
               </div>
             </div>
           )}

@@ -28,7 +28,7 @@
 
 | Step | Nama Tahap | Konten / Input | Validasi & Keamanan |
 |---|---|---|---|
-| **1** | Avatar & Profil | Username (opsional unik), nama panggilan, pilihan avatar SVG persona | Nama min 2 karakter |
+| **1** | Profil & Maskot | Username (opsional unik), nama panggilan, sambutan Maskot Zibi | Nama min 2 karakter |
 | **2** | Kata Sandi | Input password dengan strength meter | Hanya jika registrasi via OAuth tanpa password |
 | **3** | Verifikasi OTP | Masukkan 6 digit kode OTP jika belum diverifikasi | Dibatasi percobaan (max 5 kali), timer cooldown 60s |
 | **4** | Proteksi Biometrik | Aktivasi Fingerprint/WebAuthn opsional | Tombol "Lewati untuk sekarang" jelas |

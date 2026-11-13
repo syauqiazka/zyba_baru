@@ -20,43 +20,6 @@ import {
 import { Mascot } from "@/components/ui/Mascot";
 import { MASCOT_NAME } from "@/lib/brand";
 import { BreathingOrb } from "@/components/wellness/BreathingOrb";
-import {
-  KinaIllustration,
-  OllieIllustration,
-  RubiIllustration,
-  BrunoIllustration,
-} from "@/components/illustrations/PersonaIllustrations";
-
-const PERSONA_PREVIEWS = [
-  {
-    id: "KINA",
-    name: "Kina",
-    role: "Pendengar Hangat",
-    quote: "Ceritakan apa pun yang terasa berat hari ini. Aku ada di sini mendengarmu.",
-    illustration: KinaIllustration,
-  },
-  {
-    id: "OLLIE",
-    name: "Ollie",
-    role: "Refleksi Terstruktur",
-    quote: "Mari kita urai kerumitan pikiranmu perlahan, langkah demi langkah.",
-    illustration: OllieIllustration,
-  },
-  {
-    id: "RUBI",
-    name: "Rubi",
-    role: "Penyemangat Ceria",
-    quote: "Bahkan di hari paling mendung, selalu ada secercah hangat yang bisa kita syukuri!",
-    illustration: RubiIllustration,
-  },
-  {
-    id: "BRUNO",
-    name: "Bruno",
-    role: "Jangkar Tenang",
-    quote: "Tarik nafas dalam-dalam. Bersamaku, kamu aman untuk berhenti sejenak.",
-    illustration: BrunoIllustration,
-  },
-];
 
 const ONBOARDING_SLIDES = [
   {
@@ -85,7 +48,6 @@ const ONBOARDING_SLIDES = [
 export default function OnboardingPage() {
   const router = useRouter();
   const [activeSlide, setActiveSlide] = useState(0);
-  const [selectedPersona, setSelectedPersona] = useState(0);
 
   // Form states
   const [mode, setMode] = useState<"register" | "login">("register");
@@ -100,9 +62,6 @@ export default function OnboardingPage() {
   const [step, setStep] = useState<"form" | "otp">("form");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [registeredEmail, setRegisteredEmail] = useState("");
-
-  const activePersona = PERSONA_PREVIEWS[selectedPersona];
-  const PersonaIcon = activePersona.illustration;
 
   // Password strength check
   const hasMinLength = password.length >= 8;
@@ -308,43 +267,20 @@ export default function OnboardingPage() {
               </div>
             </div>
 
-            {/* Interactive Persona Aura Selector */}
+            {/* Sahabat Mindful: Zibi */}
             <div className="rounded-3xl border border-brown-900/10 bg-white/80 p-6 shadow-sm">
               <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70 block mb-3">
-                Pilih Pendamping Suaramu
+                Sahabat Mindful ZYBA
               </span>
 
-              {/* 4 Persona Chips */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-                {PERSONA_PREVIEWS.map((p, idx) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setSelectedPersona(idx)}
-                    className={`flex items-center gap-2.5 rounded-2xl border p-2.5 text-left transition-all ${
-                      selectedPersona === idx
-                        ? "border-2 border-orange-500 bg-orange-100 text-brown-900 font-bold shadow-xs scale-102"
-                        : "border-brown-900/10 bg-white text-brown-700 hover:border-orange-500/40"
-                    }`}
-                  >
-                    <p.illustration className="h-8 w-8 shrink-0" />
-                    <div className="overflow-hidden">
-                      <div className="text-xs font-bold truncate">{p.name}</div>
-                      <div className="text-[10px] text-brown-700/70 truncate">{p.role}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Persona Quote Callout */}
-              <div className="flex items-start gap-3 rounded-2xl border border-brown-900/10 bg-cream/60 p-3.5">
-                <PersonaIcon className="h-10 w-10 shrink-0" />
+              <div className="flex items-center gap-4 rounded-2xl border border-brown-900/10 bg-cream/60 p-4">
+                <Mascot pose="happy" size={54} animate={false} decorative={true} className="shrink-0" />
                 <div>
-                  <div className="text-xs font-bold text-brown-900">
-                    {activePersona.name} ({activePersona.role})
+                  <div className="text-sm font-bold text-brown-900">
+                    {MASCOT_NAME} &bull; Axolotl Suaka
                   </div>
-                  <p className="mt-0.5 text-xs italic text-brown-700 leading-relaxed">
-                    "{activePersona.quote}"
+                  <p className="mt-1 text-xs italic text-brown-700 leading-relaxed">
+                    &quot;Ceritakan apa pun yang terasa berat hari ini. Aku ada di sini mendengarmu tanpa penghakiman.&quot;
                   </p>
                 </div>
               </div>

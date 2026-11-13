@@ -52,7 +52,7 @@ Aset maskot adalah potongan berlatar transparan dari lembar karakter resmi (*cha
    - Dilarang di Guidebook krisis.
    - Dilarang di modal kuota habis (jangan membuat ekspresi sedih untuk menekan user).
    - Dilarang memakai pose "kesal" atau "terkejut" pada konteks krisis atau stres.
-6. **Empat Persona Companion Berbeda:** Persona hewan Companion (Kina, Ollie, Rubi, Bruno) di `AGENTS.md` D5 adalah entitas terpisah. Maskot ZYBA bukan salah satu persona tersebut.
+6. **Maskot ZYBA Sebagai Satu-Satunya Persona AI Companion:** Seluruh persona hewan terpisah lama (Kina, Ollie, Rubi, Bruno) telah resmi dihapus. Maskot resmi ZYBA (Zibi) adalah satu-satunya entitas, wajah, dan kepribadian dalam fitur AI Companion ZYBA.
 7. **Bebas Tanpa Kotak Pembatas (Box-Free Integration):** Maskot Zibi dilarang dikurung di dalam kotak persegi/rounded kecil, kartu dengan border pembatas, atau background box buatan. Maskot harus berdiri dan tampil bebas langsung di atas kanvas/layout alami agar tampak hidup dan organik.
 
 ---
@@ -69,8 +69,8 @@ Aset maskot adalah potongan berlatar transparan dari lembar karakter resmi (*cha
 
 1. **Landing Hero:** `MascotHero` di kolom kanan dengan komposisi 65:35.
 2. **Onboarding Carousel:** Pose `default`, `happy`, dan `listening` per slide.
-3. **Companion Empty State:** Pose `listening` di atas heading "Cerita apa hari ini?".
-4. **Companion Header:** Pose `default` ukuran 40-48px tanpa animasi.
+3. **Companion Empty State:** Pose `listening` di atas heading "Cerita apa hari ini bersama Zibi?".
+4. **Companion Header & Chat:** Pose `default` ukuran 36-44px sebagai avatar pendamping AI.
 5. **Check-In Harian:** Pose `default` (siang) / `sleep` (malam).
 6. **Error / Empty State Non-Krisis:** Pose `sad` dengan copy ramah dan empatik.
 

@@ -22,7 +22,7 @@ interface ChatMessageBubbleProps {
 
 export function ChatMessageBubble({
   message,
-  currentPersona = "KINA",
+  currentPersona = "ZIBI",
 }: ChatMessageBubbleProps) {
   const isUser = message.role === "user";
   const persona = message.persona || currentPersona;
@@ -131,8 +131,8 @@ export function ChatMessageBubble({
                 <button
                   onClick={handleSpeak}
                   title={isPlayingTTS ? "Hentikan pembacaan" : "Dengarkan respons suara"}
-                  className={`p-1.5 rounded-lg text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream transition-colors ${
-                    isPlayingTTS ? "text-botanical-600 bg-botanical-100 animate-pulse" : ""
+                  className={`p-1.5 rounded-lg text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500 ${
+                    isPlayingTTS ? "text-botanical-600 bg-botanical-100 animate-pulse motion-reduce:animate-none" : ""
                   }`}
                   aria-label={isPlayingTTS ? "Hentikan suara" : "Dengarkan respons suara"}
                 >
@@ -147,7 +147,7 @@ export function ChatMessageBubble({
                 <button
                   onClick={handleCopy}
                   title="Salin teks"
-                  className="p-1.5 rounded-lg text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream transition-colors"
+                  className="p-1.5 rounded-lg text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
                   aria-label="Salin teks respons"
                 >
                   {copied ? (

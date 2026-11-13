@@ -71,7 +71,7 @@ const ITEMS: RecommendedItem[] = [
   },
   {
     id: "rec-5",
-    title: "Teman Cerita Kina",
+    title: "Teman Cerita Zibi",
     category: "Companion",
     desc: "Curhat hal kecil yang mengganjal hari ini.",
     href: "/companion",

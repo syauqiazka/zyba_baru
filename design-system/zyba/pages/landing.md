@@ -24,7 +24,7 @@
 ---
 
 ## 3. Komposisi Tiga Viewport
-- **Desktop (1280px):** Layout hero terpusat dengan padding lapang, visual representasi persona SVG, dan kartu pilar refleksi.
+- **Desktop (1280px):** Layout hero terpusat dengan padding lapang, visual representasi Maskot Zibi, dan kartu pilar refleksi.
 - **Tablet (768px):** Grid 2 kolom seimbang, tipografi judul display yang tegas namun hangat.
 - **Mobile (375px):** Vertikal stack, tombol aksi lebar (min-h 48px), indikator titik slide carousel yang dapat disentuh.
 

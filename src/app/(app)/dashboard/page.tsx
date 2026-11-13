@@ -15,7 +15,7 @@ interface DashboardData {
     name: string;
     username?: string | null;
     avatarUrl?: string | null;
-    companionPersona: "KINA" | "OLLIE" | "RUBI" | "BRUNO";
+    companionPersona?: string;
   };
   scoreData: {
     zybaScore: number;
@@ -95,7 +95,7 @@ export default function DashboardPage() {
     );
   }
 
-  const user = data?.user || { name: "Syauqi", companionPersona: "KINA" as const };
+  const user = data?.user || { name: "Syauqi", companionPersona: "ZIBI" };
   const scoreData = data?.scoreData || {
     zybaScore: 78,
     mentalScore: 75,

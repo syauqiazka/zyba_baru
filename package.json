@@ -13,7 +13,8 @@
     "db:push:community": "prisma db push --schema=prisma/community/schema.prisma",
     "db:generate:all": "prisma generate --schema=prisma/account/schema.prisma && prisma generate --schema=prisma/companion/schema.prisma && prisma generate --schema=prisma/community/schema.prisma",
     "test:contrast": "node scripts/test-contrast.js",
-    "test:scoring": "tsx tests/scoring.test.ts"
+    "test:scoring": "tsx tests/scoring.test.ts",
+    "test:companion": "tsx tests/companion-quota.test.ts"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",

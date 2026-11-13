@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { getAuthTokenFromCookies } from "@/lib/authCookies";
 import { verifyToken } from "@/lib/jwt";
 import { companionRepo } from "@/backend/db/companionRepo";
-import { checkMessageQuota, incrementMessageQuota } from "@/backend/ai/quota";
+import {
+  checkTokenQuota,
+  consumeTokens,
+  estimateTokens,
+} from "@/backend/ai/quota";
 import { generateCompanionResponse, ChatMessageContext } from "@/backend/ai/aiProvider";
 import { detectRisk } from "@/lib/crisisDetection";
 import { PersonaId } from "@/backend/ai/personas";
@@ -22,7 +26,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { content, persona = "KINA", modelPreference } = body;
+    const { content, modelPreference } = body;
     let conversationId = body.conversationId;
 
     if (!content || typeof content !== "string" || !content.trim()) {
@@ -31,14 +35,20 @@ export async function POST(req: Request) {
 
     const trimmedContent = content.trim();
 
-    // 1. PENEGAKAN KUOTA HARIAN (Server-Side Enforcement - 20 Pesan/Hari)
-    const quota = await checkMessageQuota(session.userId);
+    // 1. PENEGAKAN KUOTA TOKEN & COOLDOWN 5 JAM
+    const quota = await checkTokenQuota(session.userId);
     if (!quota.allowed) {
       return NextResponse.json(
         {
-          error: "QUOTA_EXCEEDED",
-          message: "Kuota curhat harianmu (20 pesan) telah habis untuk hari ini. Beristirahatlah sejenak dan kembali esok hari ya.",
-          quota,
+          error: quota.isCooldown ? "COOLDOWN_ACTIVE" : "QUOTA_EXCEEDED",
+          message: quota.isCooldown
+            ? `Batas 15.000 token telah tercapai. Demi keseimbangan pikiranmu dari AI dan layar, sesi curhat akan dibuka kembali dalam ${Math.ceil(
+                quota.cooldownRemainingSec / 60
+              )} menit.`
+            : "Batas 15.000 token telah tercapai. Silakan jeda sejenak.",
+          tokenQuota: quota,
+          cooldownUntil: quota.cooldownUntil,
+          cooldownRemainingSec: quota.cooldownRemainingSec,
         },
         { status: 403 }
       );
@@ -78,8 +88,8 @@ export async function POST(req: Request) {
       content: m.content || "",
     }));
 
-    // 6. Jalankan AI Multi-Provider Chained Fallback
-    const personaKey = (persona as PersonaId) || "KINA";
+    // 6. Jalankan AI Multi-Provider Chained Fallback (Persona tunggal: ZIBI)
+    const personaKey: PersonaId = "ZIBI";
     const aiResponse = await generateCompanionResponse(
       personaKey,
       context,
@@ -96,15 +106,25 @@ export async function POST(req: Request) {
       flaggedForRisk: risk.flagged,
     });
 
-    // 8. Naikkan kuota harian
-    const newCount = await incrementMessageQuota(session.userId);
-    const remaining = Math.max(0, 20 - newCount);
+    // 8. Hitung konsumsi token (input + output) & mutasi kuota
+    const promptTokens = estimateTokens(trimmedContent);
+    const outputTokens = estimateTokens(aiResponse.content);
+    const totalConsumed = promptTokens + outputTokens;
+    const updatedQuota = await consumeTokens(session.userId, totalConsumed);
 
     return NextResponse.json({
       conversationId,
       message: assistantMessage,
-      remainingQuota: remaining,
-      maxQuota: 20,
+      tokenQuota: updatedQuota,
+      tokensUsed: updatedQuota.tokensUsed,
+      remainingTokens: updatedQuota.remainingTokens,
+      tokenLimit: updatedQuota.tokenLimit,
+      isCooldown: updatedQuota.isCooldown,
+      cooldownUntil: updatedQuota.cooldownUntil,
+      cooldownRemainingSec: updatedQuota.cooldownRemainingSec,
+      // Backward compatibility:
+      remainingQuota: updatedQuota.remainingTokens,
+      maxQuota: updatedQuota.tokenLimit,
       flaggedForRisk: risk.flagged,
     });
   } catch (error: any) {

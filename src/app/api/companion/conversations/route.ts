@@ -23,8 +23,16 @@ export async function GET() {
 
     return NextResponse.json({
       conversations,
-      remainingQuota: quota.remaining,
-      maxQuota: quota.maxQuota,
+      tokenQuota: quota,
+      remainingTokens: quota.remainingTokens,
+      tokenLimit: quota.tokenLimit,
+      tokensUsed: quota.tokensUsed,
+      isCooldown: quota.isCooldown,
+      cooldownUntil: quota.cooldownUntil,
+      cooldownRemainingSec: quota.cooldownRemainingSec,
+      // Backward compatibility
+      remainingQuota: quota.remainingTokens,
+      maxQuota: quota.tokenLimit,
     });
   } catch (error: any) {
     console.error("Gagal mengambil riwayat percakapan:", error);

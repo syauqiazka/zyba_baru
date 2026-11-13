@@ -11,12 +11,12 @@ import { QuotaModal } from "@/components/companion/QuotaModal";
 function CompanionLayoutContent({ children }: { children: React.ReactNode }) {
   const {
     conversations,
-    remainingQuota,
     deleteConversation,
     isMobileSidebarOpen,
     setIsMobileSidebarOpen,
     isQuotaModalOpen,
     setIsQuotaModalOpen,
+    cooldownRemainingSec,
   } = useCompanion();
 
   return (
@@ -24,7 +24,6 @@ function CompanionLayoutContent({ children }: { children: React.ReactNode }) {
       {/* Sidebar rendered once */}
       <CompanionSidebar
         conversations={conversations}
-        remainingQuota={remainingQuota}
         onDeleteConversation={deleteConversation}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
@@ -35,10 +34,11 @@ function CompanionLayoutContent({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* Quota Exceeded Modal */}
+      {/* Quota Exceeded & Cooldown Modal */}
       <QuotaModal
         isOpen={isQuotaModalOpen}
         onClose={() => setIsQuotaModalOpen(false)}
+        cooldownRemainingSec={cooldownRemainingSec}
       />
     </div>
   );

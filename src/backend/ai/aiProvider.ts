@@ -25,7 +25,7 @@ export async function generateCompanionResponse(
   messages: ChatMessageContext[],
   preferredProvider?: string
 ): Promise<AIResponse> {
-  const persona = PERSONAS[personaId] || PERSONAS.KINA;
+  const persona = PERSONAS[personaId] || PERSONAS.ZIBI;
   const systemPrompt = persona.systemPrompt;
 
   const providers = [
@@ -246,25 +246,11 @@ async function callOpenRouter(systemPrompt: string, messages: ChatMessageContext
 
 // Local Empathetic Fallback
 function generateLocalFallback(personaId: PersonaId, messages: ChatMessageContext[]): AIResponse {
-  const lastUserMsg = messages[messages.length - 1]?.content || "";
-
-  let content = "Aku mendengarkanmu. Terima kasih sudah mau bercerita dan meluangkan waktu untuk menyapa dirimu sendiri hari ini. Ceritakan lebih banyak saat kamu sudah siap ya.";
-
-  if (personaId === "OLLIE") {
-    content = "Aku mendengar apa yang kamu rasakan. Mari kita urai perlahan satu per satu. Dari hal yang kamu ceritakan tadi, apa bagian yang paling membebani energimu saat ini?";
-  } else if (personaId === "RUBI") {
-    content = "Hei, kamu hebat sudah bisa melewati hari ini sampai titik ini! Terkadang hari memang terasa berat, tapi ingat kalau kamu tidak harus menyelesaikan semuanya sendirian. Bagaimana perasaanmu sekarang?";
-  } else if (personaId === "BRUNO") {
-    content = "Nafas perlahan... Tarik nafas 4 detik, lalu hembuskan. Dunia di luar bisa menunggu sejenak. Aku tetap di sini menemanimu.";
-  } else {
-    // Kina
-    content = "Aku paham betul perasaanmu... Sangat manusiawi untuk merasa begitu. Terima kasih sudah mempercayakan cerita ini kepadaku. Ada hal lain yang mengganjal di hatimu?";
-  }
-
   return {
-    content,
+    content:
+      "Aku mendengarkanmu. Terima kasih sudah mau bercerita dan meluangkan waktu untuk menyapa dirimu sendiri hari ini bersama Zibi. Tarik nafas perlahan... Ceritakan apa pun yang sedang kamu rasakan saat kamu sudah siap ya.",
     provider: "LOCAL_FALLBACK",
-    modelUsed: "zyba-empathetic-rule",
+    modelUsed: "zibi-mindful-rule",
   };
 }
 

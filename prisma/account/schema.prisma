@@ -21,7 +21,7 @@ model User {
   location     String?
   bio          String?
 
-  companionPersona CompanionPersona @default(KINA)
+  companionPersona CompanionPersona @default(ZIBI)
   role             UserRole         @default(USER)
 
   isSuspended      Boolean          @default(false)
@@ -62,10 +62,7 @@ model User {
 
 // FASE 4: ganti CommunicationStyle → CompanionPersona
 enum CompanionPersona {
-  KINA // dulu CASUAL
-  OLLIE // dulu FORMAL
-  RUBI // dulu FUN
-  BRUNO // baru
+  ZIBI
 }
 
 model NotificationPref {

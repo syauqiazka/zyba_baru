@@ -10,17 +10,12 @@ import {
   ShieldCheck,
   MessageCircle,
 } from "lucide-react";
-import {
-  KinaIllustration,
-  OllieIllustration,
-  RubiIllustration,
-  BrunoIllustration,
-} from "@/components/illustrations/PersonaIllustrations";
+import { Mascot } from "@/components/ui/Mascot";
 
 interface SketchHeaderCardProps {
   userName: string;
   avatarUrl?: string | null;
-  companionPersona: "KINA" | "OLLIE" | "RUBI" | "BRUNO";
+  companionPersona?: string;
   zybaScore: number;
   sleepScore?: number;
   stressLevel?: number;
@@ -29,18 +24,8 @@ interface SketchHeaderCardProps {
   onQuickBreathe?: () => void;
 }
 
-function PersonaMiniAvatar({ persona }: { persona: string }) {
-  switch (persona) {
-    case "OLLIE":
-      return <OllieIllustration className="h-6 w-6" />;
-    case "RUBI":
-      return <RubiIllustration className="h-6 w-6" />;
-    case "BRUNO":
-      return <BrunoIllustration className="h-6 w-6" />;
-    case "KINA":
-    default:
-      return <KinaIllustration className="h-6 w-6" />;
-  }
+function PersonaMiniAvatar({ persona }: { persona?: string } = {}) {
+  return <Mascot pose="default" size={24} animate={false} decorative={true} />;
 }
 
 export function SketchHeaderCard({
@@ -62,14 +47,7 @@ export function SketchHeaderCard({
       ? "Selamat sore"
       : "Selamat malam";
 
-  const personaName =
-    companionPersona === "OLLIE"
-      ? "Ollie"
-      : companionPersona === "RUBI"
-      ? "Rubi"
-      : companionPersona === "BRUNO"
-      ? "Bruno"
-      : "Kina";
+  const personaName = "Zibi";
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-brown-900/8 bg-white p-5 sm:p-7 shadow-[0_4px_24px_rgba(27,36,30,0.03)]">
@@ -138,7 +116,7 @@ export function SketchHeaderCard({
           </div>
         </div>
 
-        {/* ROW 2: Baris 4 Kartu Metrik (Skor Kesejahteraan, Kualitas Tidur, Tingkat Stres, Curhat ke Kina ->) */}
+        {/* ROW 2: Baris 4 Kartu Metrik (Skor Kesejahteraan, Kualitas Tidur, Tingkat Stres, Curhat ke Zibi ->) */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-1 border-t border-brown-900/8">
           {/* 1. Skor Kesejahteraan (Zyba Score) */}
           <div className="rounded-2xl border border-brown-900/8 bg-[#F5F8F5] p-3.5 sm:p-4 shadow-2xs transition-all hover:bg-white hover:border-emerald-500/20">
@@ -209,7 +187,7 @@ export function SketchHeaderCard({
             </span>
           </div>
 
-          {/* 4. Curhat ke Kina -> (Sesuai Sketsa User, Soft Peach Pastel Card) */}
+          {/* 4. Curhat ke Zibi -> (Sesuai Sketsa User, Soft Peach Pastel Card) */}
           <Link
             href="/companion"
             className="group rounded-2xl border border-[#F9D5C5] bg-[#FDF1EB] p-3.5 sm:p-4 shadow-2xs transition-all hover:bg-[#FCEAE2] flex flex-col justify-between"

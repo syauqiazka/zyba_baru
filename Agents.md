@@ -106,10 +106,10 @@ Dokumen lama saling bertentangan di beberapa titik. Untuk rebuild, keputusan ber
 | D2 | Achievement vs Badge | **Dihapus total.** Tidak ada model Achievement, Badge, UserAchievement, UserBadge, atau route `/achievements`. Seluruh pencapaian ditiadakan agar fokus pada mindful wellness tanpa beban gamifikasi. | Instruksi pengguna (penyederhanaan produk) |
 | D3 | Pembayaran & Premium | **Dihapus total.** Tidak ada Zyba Plus, subscription, payment midtrans/manual/QRIS, maupun verifikasi admin pembayaran. Seluruh fitur ZYBA 100% gratis untuk semua pengguna. | Instruksi pengguna (bebas bayar-bayaran) |
 | D4 | TTS | Primer **ElevenLabs** (hasil di-cache ke `ttsAudioUrl`), fallback **Web Speech API**. Edge TTS tidak dipakai. STT: Groq Whisper. | `.env` + kolom `tts*` di schema companion |
-| D5 | Persona Companion | Kina, Ollie, Rubi, Bruno. Representasi visual = **ilustrasi SVG sendiri**, bukan emoji. | Anti-slop |
+| D5 | Persona Companion | **Satu persona tunggal resmi: Maskot ZYBA (Zibi)**. Persona hewan lama (Kina, Ollie, Rubi, Bruno) resmi dihapus total. Representasi visual menggunakan aset gambar resmi maskot ZYBA. | Instruksi pengguna + design-system/zyba/mascot.md |
 | D6 | Storage | Filesystem server: `public/uploads/` dan `public/uploads/avatars/`. Tidak ada Vercel Blob. Upload via API route (`multipart/form-data`), validasi tipe + ukuran. | Lampiran E.3 |
 | D7 | Email | Brevo REST API via HTTPS (443). Tidak ada SMTP. | `.env` |
-| D8 | Kuota Free | 20 pesan/hari, ditegakkan server lewat `DailyMessageQuota` (companion DB). | Schema companion |
+| D8 | Kuota Token & Jeda | Batas **15.000 token per siklus** chat (ditegakkan server). Saat batas tercapai, sistem mengaktifkan **jeda batin (cooldown) selama 5 jam** agar pengguna tidak bergantung berlebih pada AI. | Instruksi pengguna + design-system/zyba/pages/companion.md |
 | D9 | Rate limit | `RateLimitBucket` (companion DB), per user + per endpoint. | Schema companion |
 | D10 | Data lokal fallback | **Tidak ada** fallback `data/*.json`. Jika DB gagal: tampilkan error state jujur, jangan data palsu. | Lampiran 8.5.2 |
 | D11 | Auth | `bcrypt` cost 12, JWT `jose` HS256 (30 hari) di cookie `httpOnly`, `secure`, `sameSite=lax`. OTP tidak pernah ada di response. Akun Google tidak bisa login via form password. | Bagian 8 lama |
@@ -234,8 +234,8 @@ Ringkasan: sapaan (nama dari user nyata), Zyba Score + breakdown 3 aspek, stres,
 - STT: Web Speech API `id-ID` via `useSTT` (live) dan/atau unggah audio → Groq Whisper; status jujur ("Mendengarkan…", error izin mic). Voice note **wajib ditranskrip dulu** lalu `detectRisk()`.
 - Lampiran: aktif hanya jika backend upload sudah ada; kalau belum, tombol `aria-disabled` + tooltip jujur.
 - TTS: tombol putar selalu terlihat di mobile; ElevenLabs di-cache, fallback Web Speech.
-- Persona: system prompt di `src/backend/ai/personas.ts`. **Semua persona** tunduk pada aturan krisis yang sama; persona tidak boleh melunakkan respons terhadap sinyal bahaya diri.
-- Kuota: `checkMessageQuota` server-side sebelum memanggil provider → error `QUOTA_EXCEEDED` (403) → modal "Kuota chat harian habis". Sisa kuota ditampilkan halus untuk Free.
+- Persona: Karakter Maskot ZYBA (Zibi) sebagai satu-satunya persona pendamping di `src/backend/ai/personas.ts`. Tunduk mutlak pada aturan krisis; tidak boleh melunakkan respons terhadap sinyal bahaya diri. Persona switcher ditiadakan.
+- Kuota: `checkTokenQuota` server-side sebelum memanggil provider → jika token $\ge$ 15.000, aktifkan cooldown 5 jam → error `COOLDOWN_ACTIVE` (403) → modal/banner "Jeda Batin 5 Jam" dengan hitung mundur langsung. Saldo token ditampilkan transparan di antarmuka.
 - Banner krisis: di atas jendela chat, tenang, tidak auto-dismiss, dapat ditutup manual.
 
 ### 7.6 Zyba Community
@@ -295,7 +295,7 @@ Setiap fase menjalankan Pipeline Bagian 2 dan ditutup dengan Protokol Bagian 0.
 | **P0 Fondasi** | Repo baru/branch bersih, pnpm, Tailwind token dari DESIGN.md, 3 schema + client, `db:generate:all`, `ClientLayout` (Zen Dock + Bottom Pill), komponen UI dasar, tes kontras token | `pnpm build` lulus; dock benar di 375/768/1280; token = PALETTE_LOCK |
 | **P1 Auth & Onboarding** | Signup/login/OTP Brevo/Google, JWT, middleware gate, `/assessment` 8 step, landing | Tidak bisa akses `(app)` sebelum onboarding selesai (tes otomatis); OTP tak ada di response |
 | **P2 Check-In, Skor, Dashboard** | 15 pertanyaan, scoring + unit test, dashboard data nyata, Hearth Flame | Skor berubah setelah check-in baru (tes); tidak ada dummy |
-| **P3 Companion** | Layout+sidebar, chat, multi-provider+fallback, persona, STT/TTS, kuota, crisis banner | Kuota 20 ditegakkan lewat panggilan API langsung; crisis banner muncul pada input uji |
+| **P3 Companion** | Layout+sidebar, chat, multi-provider+fallback, persona Maskot Zibi, STT/TTS, kuota, crisis banner | Kuota 20 ditegakkan lewat panggilan API langsung; crisis banner muncul pada input uji; persona tunggal maskot |
 | **P4 Community** | Feed, compose+modal, komentar, like, bookmark, follow, DM+Ably, report, admin moderasi | Modal "+" benar-benar tampil (tes klik); DM realtime antar dua akun |
 | **P5 Activity & Resources** | Planner+breathing, seed artikel wawasan, audio relaksasi, bebas kuncian bayar | Artikel Bahasa Indonesia penuh, breathing garden teruji |
 | **P6 Settings & Admin** | Semua sub-settings, ekspor JSON, hapus akun 3 DB, admin moderasi laporan | Hapus akun membersihkan ketiga DB (tes otomatis) |

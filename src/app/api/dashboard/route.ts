@@ -103,7 +103,7 @@ export async function GET() {
     }
 
     const userName = user?.name || session.name || "Teman ZYBA";
-    const userPersona = user?.companionPersona || "KINA";
+    const userPersona = user?.companionPersona || "ZIBI";
 
     // 6. Hitung skor dinamis
     const scoreResult = calculateZybaScore({

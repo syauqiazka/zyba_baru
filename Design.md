@@ -263,7 +263,7 @@ Nyala lilin SVG tenang untuk konsistensi harian. Tanpa angka streak membara, tan
 
 - Ikon: **hanya Lucide**, stroke 1.8, ukuran konsisten (16/20/24).
 - Maskot ZYBA: Axolotl hijau dengan insang daun adalah aset brand resmi yang final, memakai warna aslinya, dan dikecualikan dari palet terkunci (aturan lengkap di `design-system/zyba/mascot.md`). Dilarang trace ke SVG atau upscale AI.
-- Ilustrasi persona Companion (empat persona): **SVG buatan sendiri** dengan palet terkunci. Persona: Kina (kelinci), Ollie (burung hantu), Rubi (rubah), Bruno (beruang), dibedakan oleh bentuk, bukan warna baru.
+- Persona Companion (Tunggal): Maskot ZYBA (Zibi) adalah satu-satunya persona pendamping AI resmi (seluruh persona lama Kina, Ollie, Rubi, Bruno telah dihapus). Representasi visual menggunakan aset gambar resmi Maskot ZYBA.
 - **Dilarang emoji** sebagai ikon, avatar, atau dekorasi.
 
 ---

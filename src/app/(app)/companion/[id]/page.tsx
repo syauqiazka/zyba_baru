@@ -23,11 +23,14 @@ export default function ActiveCompanionChatPage() {
   const {
     selectedPersona,
     setSelectedPersona,
-    remainingQuota,
+    remainingTokens,
+    tokenLimit,
+    isCooldown,
+    cooldownRemainingSec,
+    updateTokenQuota,
     refreshConversations,
     setIsMobileSidebarOpen,
     setIsQuotaModalOpen,
-    decrementQuota,
   } = useCompanion();
 
   const [messages, setMessages] = useState<ChatMessageItem[]>([]);
@@ -64,9 +67,7 @@ export default function ActiveCompanionChatPage() {
         if (!isMounted || !data) return;
         setMessages(data.messages || []);
         if (data.title) setConversationTitle(data.title);
-        if (data.persona && PERSONAS[data.persona as PersonaId]) {
-          setSelectedPersona(data.persona as PersonaId);
-        }
+        setSelectedPersona("ZIBI");
 
         // Check if any message is flagged for risk
         const riskFound = data.messages?.some((m: any) => m.flaggedForRisk);
@@ -88,8 +89,8 @@ export default function ActiveCompanionChatPage() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSendMessage = async (text: string, persona: PersonaId) => {
-    if (remainingQuota <= 0) {
+  const handleSendMessage = async (text: string, persona: PersonaId = "ZIBI") => {
+    if (isCooldown) {
       setIsQuotaModalOpen(true);
       return;
     }
@@ -112,7 +113,7 @@ export default function ActiveCompanionChatPage() {
         body: JSON.stringify({
           conversationId,
           content: text,
-          persona,
+          persona: "ZIBI",
         }),
       });
 
@@ -126,7 +127,9 @@ export default function ActiveCompanionChatPage() {
       }
 
       const data = await res.json();
-      decrementQuota();
+      if (data.tokenQuota) {
+        updateTokenQuota(data.tokenQuota);
+      }
 
       // Check if crisis flagged
       if (data.message?.flaggedForRisk) {
@@ -159,7 +162,7 @@ export default function ActiveCompanionChatPage() {
     }
   };
 
-  const personaConfig = PERSONAS[selectedPersona] || PERSONAS.KINA;
+  const personaConfig = PERSONAS.ZIBI;
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-cream">
@@ -169,7 +172,7 @@ export default function ActiveCompanionChatPage() {
           {/* Mobile & Tablet drawer button */}
           <button
             onClick={() => setIsMobileSidebarOpen(true)}
-            className="lg:hidden p-1.5 rounded-lg text-charcoal-900/70 hover:text-charcoal-900 hover:bg-cream"
+            className="lg:hidden p-1.5 rounded-lg text-charcoal-900/70 hover:text-charcoal-900 hover:bg-cream focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
             aria-label="Buka daftar percakapan"
           >
             <Menu className="w-5 h-5" />
@@ -177,7 +180,7 @@ export default function ActiveCompanionChatPage() {
 
           <Link
             href="/companion"
-            className="hidden sm:inline-flex items-center justify-center p-1.5 rounded-lg text-charcoal-900/40 hover:text-charcoal-900 hover:bg-cream"
+            className="hidden sm:inline-flex items-center justify-center p-1.5 rounded-lg text-charcoal-900/40 hover:text-charcoal-900 hover:bg-cream focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
             title="Kembali ke Ringkasan"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -205,16 +208,26 @@ export default function ActiveCompanionChatPage() {
           </div>
         </div>
 
-        {/* Quota Badge & Companion Header Mascot Avatar */}
+        {/* Token Quota Badge & Companion Header Mascot */}
         <div className="flex items-center gap-2.5">
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-cream border border-botanical-500/15 text-xs text-charcoal-900/70">
-            <Sparkles className="w-3 h-3 text-botanical-500" />
-            <span>Sisa kuota:</span>
-            <span className="font-bold text-botanical-600">{remainingQuota}</span>
-            <span>/ 20</span>
-          </div>
-          <div className="flex items-center" title="Maskot ZYBA">
-            <Mascot pose="default" size={42} animate={false} decorative={true} />
+          <button
+            onClick={() => setIsQuotaModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream hover:bg-botanical-100/50 border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+            title="Klik untuk melihat detail kuota token & jeda batin"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-botanical-500" />
+            {isCooldown ? (
+              <span className="font-bold text-amber-700 font-mono text-[11px]">
+                Jeda ({Math.floor(cooldownRemainingSec / 3600)}j {Math.floor((cooldownRemainingSec % 3600) / 60)}m)
+              </span>
+            ) : (
+              <span className="text-[11px] font-mono">
+                <strong className="text-botanical-700">{remainingTokens.toLocaleString("id-ID")}</strong> / {tokenLimit.toLocaleString("id-ID")} Token
+              </span>
+            )}
+          </button>
+          <div className="flex items-center" title="Maskot ZYBA - Zibi">
+            <Mascot pose={isCooldown ? "sleep" : "listening"} size={38} animate={false} decorative={true} />
           </div>
         </div>
       </header>
@@ -276,8 +289,6 @@ export default function ActiveCompanionChatPage() {
         onSendMessage={handleSendMessage}
         isLoading={isTyping}
         selectedPersona={selectedPersona}
-        onSelectPersona={setSelectedPersona}
-        remainingQuota={remainingQuota}
       />
     </div>
   );

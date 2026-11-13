@@ -34,8 +34,8 @@ async function runCompanionTests() {
     method: "POST",
     headers,
     body: JSON.stringify({
-      initialMessage: "Halo Kina, aku merasa sedikit cemas hari ini.",
-      persona: "KINA",
+      initialMessage: "Halo Zibi, aku merasa sedikit cemas hari ini.",
+      persona: "ZIBI",
     }),
   });
   console.log(`Status: ${createRes.status}`);
@@ -55,7 +55,7 @@ async function runCompanionTests() {
     body: JSON.stringify({
       conversationId: convId,
       content: "Terima kasih sudah mendengarkan. Menurutmu apa yang sebaiknya kulakukan?",
-      persona: "KINA",
+      persona: "ZIBI",
     }),
   });
   console.log(`Status: ${chatRes.status}`);
@@ -76,7 +76,7 @@ async function runCompanionTests() {
     body: JSON.stringify({
       conversationId: convId,
       content: "Aku merasa putus asa dan ingin mengakhiri hidup saja...",
-      persona: "KINA",
+      persona: "ZIBI",
     }),
   });
   console.log(`Status: ${crisisRes.status}`);

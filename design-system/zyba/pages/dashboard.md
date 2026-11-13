@@ -12,7 +12,7 @@ Pusat refleksi harian pengguna: menyajikan kondisi kesehatan mental, fisik, dan 
     - Refleksi singkat & tren 7 hari terakhir.
   - **Kolom Kanan / Samping (35%):**
     - **Hearth Flame Sanctuary:** Lilin SVG yang menyala tenang. Menampilkan konsistensi harian dengan kehangatan ramah.
-    - **Zyba Companion Quick Callout:** Kartu dialog ringkas persona (Kina, Ollie, Rubi, Bruno) dengan chip pemantik refleksi langsung menuju `/companion`.
+    - **Zyba Companion Quick Callout:** Kartu dialog ringkas Maskot Zibi dengan chip pemantik refleksi langsung menuju `/companion`.
     - **Wawasan & Sumber Daya:** Rekomendasi bacaan atau audio santai langsung menuju `/resources`.
 - **Adaptasi Mobile (<768px):** Kolom bertumpuk secara alami (Sapaan → Hearth Flame mini → Zyba Score → CTA Check-In → Checklist → Companion Widget).
 
@@ -22,7 +22,7 @@ Pusat refleksi harian pengguna: menyajikan kondisi kesehatan mental, fisik, dan 
   - TIDAK ADA streak api merah yang membara atau menakut-nakuti.
   - TIDAK ADA hitung mundur (countdown) waktu kedaluwarsa.
   - TIDAK ADA copy yang menyalahkan ("Kamu lupa kemarin!", "Streakmu hilang!").
-  - TIDAK ADA emoji sebagai icon atau avatar; gunakan Lucide stroke 1.8 dan SVG persona.
+  - TIDAK ADA emoji sebagai icon atau avatar; gunakan Lucide stroke 1.8 dan representasi visual Maskot Zibi.
   - Teks di atas tombol oranye wajib `text-brown-900` (WCAG AA 5.46:1).
 
 ## 4. Matriks State
@@ -39,7 +39,7 @@ Pusat refleksi harian pengguna: menyajikan kondisi kesehatan mental, fisik, dan 
   "user": {
     "name": "Syauqi",
     "avatarUrl": null,
-    "companionPersona": "KINA"
+    "companionPersona": "ZIBI"
   },
   "scoreData": {
     "zybaScore": 76,

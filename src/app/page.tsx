@@ -11,14 +11,8 @@ import {
   Heart,
   Users,
 } from "lucide-react";
-import { MascotHero } from "@/components/ui/Mascot";
+import { MascotHero, Mascot } from "@/components/ui/Mascot";
 import { MASCOT_NAME } from "@/lib/brand";
-import {
-  KinaIllustration,
-  OllieIllustration,
-  RubiIllustration,
-  BrunoIllustration,
-} from "@/components/illustrations/PersonaIllustrations";
 
 export default function HomePage() {
   return (
@@ -113,59 +107,35 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 4 Companion Persona Showcase */}
+        {/* AI Companion Spotlight: Zibi */}
         <section className="rounded-3xl border border-brown-900/10 bg-white/80 p-8 md:p-12 shadow-sm">
-          <div className="text-center max-w-xl mx-auto mb-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70 block mb-1">
-              Empat Persona Pendamping
-            </span>
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-brown-900">
-              Temukan Suara yang Paling Memahamimu
-            </h2>
-            <p className="mt-2 text-xs md:text-sm text-brown-700">
-              Setiap pendamping memiliki kehangatan dan perspektif unik yang selalu siap mendengar 24/7.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Kina */}
-            <div className="rounded-2xl border border-brown-900/10 bg-cream/50 p-5 text-center">
-              <KinaIllustration className="h-16 w-16 mx-auto mb-3" />
-              <h3 className="font-serif text-base font-bold text-brown-900">Kina</h3>
-              <span className="text-[11px] font-bold text-orange-950 block mt-0.5">Pendengar Hangat</span>
-              <p className="mt-2 text-xs text-brown-700 leading-relaxed">
-                Empatik dan menenangkan. Cocok saat kamu hanya ingin didengarkan tanpa nasihat yang menggurui.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-brown-700/70 block mb-1">
+                AI Companion Empatik
+              </span>
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-brown-900">
+                Temui {MASCOT_NAME}, Sahabat yang Selalu Mendengar
+              </h2>
+              <p className="mt-3 text-sm text-brown-700 leading-relaxed">
+                Tidak ada lagi rasa kesepian atau takut dihakimi. {MASCOT_NAME} hadir sebagai pendamping batin yang hangat, sabar, dan siap diajak curhat kapan pun kamu butuh ruang tenang 24/7.
               </p>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/onboarding"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-brown-900 px-6 py-3 text-xs font-bold text-cream hover:bg-brown-900/90 transition-all shadow-xs"
+                >
+                  <span>Mulai Curhat Bersama {MASCOT_NAME}</span>
+                  <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+                </Link>
+              </div>
             </div>
-
-            {/* Ollie */}
-            <div className="rounded-2xl border border-brown-900/10 bg-cream/50 p-5 text-center">
-              <OllieIllustration className="h-16 w-16 mx-auto mb-3" />
-              <h3 className="font-serif text-base font-bold text-brown-900">Ollie</h3>
-              <span className="text-[11px] font-bold text-orange-950 block mt-0.5">Refleksi Terstruktur</span>
-              <p className="mt-2 text-xs text-brown-700 leading-relaxed">
-                Membantu mengurai pikiran kusut menjadi langkah aksi kecil yang tenang dan terarah.
-              </p>
-            </div>
-
-            {/* Rubi */}
-            <div className="rounded-2xl border border-brown-900/10 bg-cream/50 p-5 text-center">
-              <RubiIllustration className="h-16 w-16 mx-auto mb-3" />
-              <h3 className="font-serif text-base font-bold text-brown-900">Rubi</h3>
-              <span className="text-[11px] font-bold text-orange-950 block mt-0.5">Penyemangat Ceria</span>
-              <p className="mt-2 text-xs text-brown-700 leading-relaxed">
-                Penuh energi positif dan mengajakmu merayakan pencapaian kecil yang sering terabaikan.
-              </p>
-            </div>
-
-            {/* Bruno */}
-            <div className="rounded-2xl border border-brown-900/10 bg-cream/50 p-5 text-center">
-              <BrunoIllustration className="h-16 w-16 mx-auto mb-3" />
-              <h3 className="font-serif text-base font-bold text-brown-900">Bruno</h3>
-              <span className="text-[11px] font-bold text-orange-950 block mt-0.5">Jangkar Tenang</span>
-              <p className="mt-2 text-xs text-brown-700 leading-relaxed">
-                Teduh, kokoh, dan selalu mengingatkanmu untuk bernafas saat situasi terasa terlalu berat.
-              </p>
+            <div className="flex justify-center items-center">
+              <div className="relative p-6 rounded-3xl bg-cream/70 border border-brown-900/10 w-full max-w-sm text-center">
+                <Mascot pose="listening" size={170} animate={true} decorative={true} className="mx-auto mb-3" />
+                <p className="font-serif text-base font-bold text-brown-900">{MASCOT_NAME} &bull; Axolotl Suaka</p>
+                <p className="text-xs text-brown-700 mt-1">&quot;Di sini aman. Ceritakan apa pun yang sedang kamu rasakan...&quot;</p>
+              </div>
             </div>
           </div>
         </section>

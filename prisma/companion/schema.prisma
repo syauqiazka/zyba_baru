@@ -61,6 +61,20 @@ model DailyMessageQuota {
   @@map("daily_message_quotas")
 }
 
+model CompanionTokenQuota {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  tokensUsed    Int       @default(0)
+  tokenLimit    Int       @default(15000)
+  cooldownUntil DateTime?
+  lastActiveAt  DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("companion_token_quotas")
+}
+
 
 model RateLimitBucket {
   id           String   @id
