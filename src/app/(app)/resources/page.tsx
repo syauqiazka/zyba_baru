@@ -180,7 +180,7 @@ export default function ResourcesPage() {
       const matchTitle = a.title.toLowerCase().includes(q);
       const matchSnippet = a.snippet.toLowerCase().includes(q);
       const matchBody = a.body.toLowerCase().includes(q);
-      const matchTag = a.tags?.some((t) => t.toLowerCase().includes(q));
+      const matchTag = Boolean(a.tags && Array.isArray(a.tags) && a.tags.some((t: string) => t.toLowerCase().includes(q)));
       if (!matchTitle && !matchSnippet && !matchBody && !matchTag) return false;
     }
     return true;
@@ -321,7 +321,7 @@ export default function ResourcesPage() {
 
             {/* Category Pills (Persis Foto 2) */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-              {(currentArticle.tags || [currentArticle.categoryLabel]).map((tag, idx) => (
+              {(currentArticle.tags || [currentArticle.categoryLabel]).map((tag: string, idx: number) => (
                 <span
                   key={idx}
                   className="px-3.5 py-1 rounded-full text-xs font-bold bg-white border border-brown-900/10 text-brown-800 shadow-2xs"
@@ -385,12 +385,12 @@ export default function ResourcesPage() {
                   fontSize === "large" ? "text-lg" : "text-base"
                 }`}
               >
-                {currentArticle.body.split("\n\n").map((par, pIdx) => {
+                {currentArticle.body.split("\n\n").map((par: string, pIdx: number) => {
                   // Cek apakah paragraf adalah poin bernomor
                   if (par.startsWith("1.") || par.startsWith("-")) {
                     return (
                       <div key={pIdx} className="space-y-4 my-6 pl-1">
-                        {par.split("\n").map((line, lIdx) => (
+                        {par.split("\n").map((line: string, lIdx: number) => (
                           <div key={lIdx} className="flex items-start gap-3.5">
                             <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                               {lIdx + 1}

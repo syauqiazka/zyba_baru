@@ -136,7 +136,7 @@ const DEFAULT_SOURCES: ArticleSourceItem[] = [
 // Fallback in-memory data artikel yang dikonversi dari SEED_RESOURCES
 function getSeedArticlesAsArticles(): ArticleItem[] {
   return SEED_RESOURCES.map((r, index) => {
-    let cat = ArticleCategory.MENTAL_HEALTH;
+    let cat: ArticleCategory = ArticleCategory.MENTAL_HEALTH;
     if (r.category === "stres") cat = ArticleCategory.EMOTIONAL_WELLNESS;
     else if (r.category === "tidur") cat = ArticleCategory.SLEEP_AND_REST;
     else if (r.category === "sosial") cat = ArticleCategory.RELATIONSHIPS;
