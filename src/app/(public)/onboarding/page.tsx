@@ -14,7 +14,6 @@ import {
   Lock,
   Mail,
   User,
-  CheckCircle2,
   ChevronUp,
 } from "lucide-react";
 import gsap from "gsap";
@@ -178,23 +177,23 @@ export default function OnboardingPage() {
 
               <div className="space-y-2 text-xs text-white/80">
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Akses Zibi Companion AI 24/7 tanpa batas paywall</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Jurnal reflektif pribadi dengan enkripsi aman</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Breathing Garden 4-7-8 & kurva tren kebugaran batin</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Tanpa streak api yang menekan rasa bersalah</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Komunitas empati dengan opsi unggahan anonim</span>
                 </div>
               </div>

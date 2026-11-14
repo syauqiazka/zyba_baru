@@ -37,6 +37,14 @@ interface DashboardData {
     activityDone: boolean;
     journalDone: boolean;
   };
+  trackerData?: {
+    monthly: Array<{ month: string; val: number; checkInsCount?: number; active: boolean }>;
+    weekly: Array<{ day: string; date: string; val: number; active: boolean }>;
+    weeklyCheckedCount: number;
+    currentMonthRate: number;
+    currentMonthName?: string;
+    year?: string;
+  };
   recentCheckIns: Array<{
     date: string;
     mood: MoodLevel;
@@ -152,19 +160,23 @@ export default function DashboardPage() {
       {/* Hearth Flame Konsistensi Batin (Anti-Slop Lilin Tenang) */}
       <HearthFlame
         litToday={hearthFlame.litToday}
-        streakDays={hearthFlame.streakDays || 44}
+        streakDays={hearthFlame.streakDays || 0}
       />
 
-      {/* 2. MIDDLE SECTION: 2 Kolom (Persis Sketsa User: Checklist Harian di kiri, Monthly Tracker di kanan) */}
+      {/* 2. MIDDLE SECTION: 2 Kolom (Checklist Harian di kiri, Monthly Tracker di kanan) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* Kolom Kiri: Checklist Harian (lg:col-span-6) */}
+        {/* Kolom Kiri: Checklist Harian Riil & Interaktif */}
         <div className="lg:col-span-6">
-          <DailyChecklistCard initialCheckInDone={todayChecklist.checkInDone} />
+          <DailyChecklistCard
+            initialCheckInDone={todayChecklist.checkInDone}
+            activityDone={todayChecklist.activityDone}
+            journalDone={todayChecklist.journalDone}
+          />
         </div>
 
-        {/* Kolom Kanan: Monthly / Weekly Tracker (lg:col-span-6) */}
+        {/* Kolom Kanan: Monthly / Weekly Tracker Riil */}
         <div className="lg:col-span-6">
-          <MonthlyTrackerCard />
+          <MonthlyTrackerCard trackerData={data?.trackerData} />
         </div>
       </div>
 

@@ -1,83 +1,125 @@
 "use client";
 
-import React, { useState } from "react";
-import { Check, Sparkles, Plus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Check, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 interface ChecklistItem {
   id: string;
   title: string;
   category: string;
-  done: boolean;
+  link?: string;
 }
+
+const CHECKLIST_ITEMS: ChecklistItem[] = [
+  {
+    id: "c-1",
+    title: "Check-in mood & kondisi batin harian",
+    category: "Batin",
+    link: "/mood-check-in",
+  },
+  {
+    id: "c-2",
+    title: "Minum air putih 2000 ml",
+    category: "Hidrasi",
+  },
+  {
+    id: "c-3",
+    title: "Tarik nafas hening 1 menit (Breathing Garden)",
+    category: "Nafas",
+    link: "/activity",
+  },
+  {
+    id: "c-4",
+    title: "Peregangan tubuh & leher 5 menit",
+    category: "Raga",
+  },
+  {
+    id: "c-5",
+    title: "Makan siang sadar tanpa menatap layar",
+    category: "Fokus",
+  },
+  {
+    id: "c-6",
+    title: "Jalan santai / gerak fisik 15 menit",
+    category: "Aktivitas",
+  },
+  {
+    id: "c-7",
+    title: "Curhat singkat ke Companion AI",
+    category: "Refleksi",
+    link: "/companion",
+  },
+  {
+    id: "c-8",
+    title: "Tuliskan 1 hal kecil yang disyukuri",
+    category: "Syukur",
+    link: "/wellness-journey",
+  },
+];
 
 interface DailyChecklistCardProps {
   initialCheckInDone?: boolean;
+  activityDone?: boolean;
+  journalDone?: boolean;
 }
 
-export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklistCardProps) {
-  const [items, setItems] = useState<ChecklistItem[]>([
-    {
-      id: "c-1",
-      title: "Check-in mood & kondisi batin harian",
-      category: "Batin",
-      done: initialCheckInDone,
-    },
-    {
-      id: "c-2",
-      title: "Minum air putih 2000 ml",
-      category: "Hidrasi",
-      done: true,
-    },
-    {
-      id: "c-3",
-      title: "Tarik nafas hening 1 menit",
-      category: "Nafas",
-      done: true,
-    },
-    {
-      id: "c-4",
-      title: "Peregangan tubuh & leher 5 menit",
-      category: "Raga",
-      done: false,
-    },
-    {
-      id: "c-5",
-      title: "Makan siang sadar tanpa menatap layar",
-      category: "Fokus",
-      done: true,
-    },
-    {
-      id: "c-6",
-      title: "Jalan santai / gerak fisik 15 menit",
-      category: "Aktivitas",
-      done: false,
-    },
-    {
-      id: "c-7",
-      title: "Curhat singkat ke Companion AI",
-      category: "Refleksi",
-      done: false,
-    },
-    {
-      id: "c-8",
-      title: "Tuliskan 1 hal kecil yang disyukuri",
-      category: "Syukur",
-      done: false,
-    },
-  ]);
+export function DailyChecklistCard({
+  initialCheckInDone = false,
+  activityDone = false,
+  journalDone = false,
+}: DailyChecklistCardProps) {
+  const [customDone, setCustomDone] = useState<Record<string, boolean>>({});
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const toggleItem = (id: string) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
-    );
+  // Load state riil checklist hari ini dari localStorage (aman SSR, reset tiap hari berganti)
+  useEffect(() => {
+    try {
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Jakarta",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date());
+      const storageKey = `zyba_daily_checklist_${today}`;
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setCustomDone(JSON.parse(saved));
+      }
+    } catch {}
+    setIsLoaded(true);
+  }, []);
+
+  const isItemDone = (id: string): boolean => {
+    if (id === "c-1") return initialCheckInDone || Boolean(customDone[id]);
+    if (id === "c-3") return activityDone || Boolean(customDone[id]);
+    if (id === "c-8") return journalDone || Boolean(customDone[id]);
+    return Boolean(customDone[id]);
   };
 
-  const completedCount = items.filter((i) => i.done).length;
-  const progressPercent = Math.round((completedCount / items.length) * 100);
+  const toggleItem = (id: string) => {
+    setCustomDone((prev) => {
+      const nextVal = !isItemDone(id);
+      const updated = { ...prev, [id]: nextVal };
+      try {
+        const today = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "Asia/Jakarta",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        }).format(new Date());
+        localStorage.setItem(`zyba_daily_checklist_${today}`, JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const completedCount = CHECKLIST_ITEMS.filter((i) => isItemDone(i.id)).length;
+  const progressPercent = Math.round((completedCount / CHECKLIST_ITEMS.length) * 100);
 
   return (
     <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-5 sm:p-6 shadow-[0_4px_20px_rgba(44,34,30,0.03)] flex flex-col justify-between h-full">
-      {/* Top Header (Sesuai Sketsa: "Checklist Harian") */}
+      {/* Top Header */}
       <div>
         <div className="flex items-center justify-between mb-2">
           <div>
@@ -90,12 +132,12 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
           </div>
           <span className="inline-flex items-center gap-1 rounded-full border border-emerald-600/20 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800">
             <Sparkles className="h-3 w-3 text-emerald-600" />
-            {completedCount} / {items.length} Selesai
+            {completedCount} / {CHECKLIST_ITEMS.length} Selesai
           </span>
         </div>
 
         <p className="text-xs text-brown-700 leading-relaxed mb-4">
-          Langkah kecil untuk merawat keseimbangan diri. Tanpa tekanan, sesuaikan dengan kapasitasmu.
+          Langkah kecil untuk merawat keseimbangan diri. Tanpa tekanan, sesuaikan dengan kapasitasmu hari ini.
         </p>
 
         {/* Visual Progress Bar */}
@@ -106,53 +148,56 @@ export function DailyChecklistCard({ initialCheckInDone = false }: DailyChecklis
           />
         </div>
 
-        {/* 8 Checklist Items (Sesuai Sketsa Bulatan 'o') */}
+        {/* 8 Checklist Items (Interaktif & Riil) */}
         <div className="space-y-2.5">
-          {items.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => toggleItem(item.id)}
-              className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all duration-200 ${
-                item.done
-                  ? "border-[#C8E4CD] bg-[#EAF4EC]"
-                  : "border-brown-900/8 bg-[#F5F8F5] hover:border-emerald-500/30 hover:bg-[#EAF4EC]/50"
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                {/* Circular Checkbox (Sesuai Sketsa Bulat 'o') */}
-                <div
-                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
-                    item.done
-                      ? "border-[#3E7B54] bg-[#3E7B54] text-white"
-                      : "border-brown-900/30 bg-white hover:border-[#3E7B54]"
-                  }`}
-                >
-                  {item.done && <Check className="h-3 w-3 stroke-[3]" />}
+          {CHECKLIST_ITEMS.map((item) => {
+            const done = isItemDone(item.id);
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => toggleItem(item.id)}
+                className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all duration-200 ${
+                  done
+                    ? "border-[#C8E4CD] bg-[#EAF4EC]"
+                    : "border-brown-900/8 bg-[#F5F8F5] hover:border-emerald-500/30 hover:bg-[#EAF4EC]/50"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {/* Circular Checkbox */}
+                  <div
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                      done
+                        ? "border-[#3E7B54] bg-[#3E7B54] text-white"
+                        : "border-brown-900/30 bg-white hover:border-[#3E7B54]"
+                    }`}
+                  >
+                    {done && <Check className="h-3 w-3 stroke-[3]" />}
+                  </div>
+
+                  <span
+                    className={`text-xs leading-tight ${
+                      done
+                        ? "line-through text-brown-700/60 font-normal"
+                        : "font-semibold text-brown-900"
+                    }`}
+                  >
+                    {item.title}
+                  </span>
                 </div>
 
                 <span
-                  className={`text-xs leading-tight ${
-                    item.done
-                      ? "line-through text-brown-700/60 font-normal"
-                      : "font-semibold text-brown-900"
+                  className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                    done
+                      ? "bg-white text-[#28583B] shadow-2xs"
+                      : "bg-white/80 text-brown-700 shadow-2xs"
                   }`}
                 >
-                  {item.title}
+                  {item.category}
                 </span>
-              </div>
-
-              <span
-                className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                  item.done
-                    ? "bg-white text-[#28583B] shadow-2xs"
-                    : "bg-white/80 text-brown-700 shadow-2xs"
-                }`}
-              >
-                {item.category}
-              </span>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
       </div>
 

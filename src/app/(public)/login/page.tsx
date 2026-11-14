@@ -10,7 +10,7 @@ import {
   EyeOff,
   Sparkles,
   ArrowRight,
-  CheckCircle2,
+  Check,
   Lock,
   ChevronUp,
 } from "lucide-react";
@@ -116,23 +116,23 @@ function LoginFormContent() {
 
               <div className="space-y-2.5 text-xs text-white/80">
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Akses Zibi Companion AI 24/7 tanpa batas waktu</span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Jurnal reflektif suaka terenkripsi penuh</span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Breathing Garden 4-7-8 & latihan relaksasi terpadu</span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>100% Bebas Biaya Selamanya (Bebas Paywall)</span>
                 </div>
                 <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
                   <span>Komunitas hangat dengan opsi unggahan anonim</span>
                 </div>
               </div>

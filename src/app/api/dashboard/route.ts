@@ -41,6 +41,7 @@ export async function GET() {
     let initialAssessment: any = null;
     let todayActivity: any = null;
     let todayJournal: any = null;
+    let allYearAssessments: any[] = [];
 
     try {
       user = await accountDb.user.findUnique({
@@ -74,6 +75,15 @@ export async function GET() {
         where: { userId: session.userId },
         orderBy: { date: "desc" },
         take: 7,
+      });
+
+      // 2b. Semua assessment di tahun berjalan untuk analitik bulanan & mingguan
+      allYearAssessments = await accountDb.dailyAssessment.findMany({
+        where: {
+          userId: session.userId,
+          date: { startsWith: todayDate.slice(0, 4) },
+        },
+        select: { date: true, calculatedScore: true },
       });
 
       // 3. Initial baseline
@@ -117,6 +127,46 @@ export async function GET() {
     let flameStreak = user?.streakDays || 0;
     if (litToday && flameStreak === 0) flameStreak = 1;
 
+    // 8. Analitik Kehadiran Riil (Monthly & Weekly Tracker)
+    const currentYear = todayDate.slice(0, 4);
+    const now = new Date();
+    const currentMonthIdx = now.getMonth();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+    // 12 Bulan Riil
+    const monthlyTracker = monthNames.map((month, idx) => {
+      const monthPrefix = `${currentYear}-${String(idx + 1).padStart(2, "0")}`;
+      const daysInMonth = new Date(parseInt(currentYear), idx + 1, 0).getDate();
+      const checkInsCount = allYearAssessments.filter((a) => a.date.startsWith(monthPrefix)).length;
+      const val = Math.min(100, Math.round((checkInsCount / daysInMonth) * 100));
+      return {
+        month,
+        val,
+        checkInsCount,
+        active: idx === currentMonthIdx,
+      };
+    });
+
+    // 7 Hari Minggu Berjalan (Senin - Minggu)
+    const dayOfWeek = (now.getDay() + 6) % 7; // 0 = Senin, 6 = Minggu
+    const weeklyTracker = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"].map((day, i) => {
+      const d = new Date(now);
+      d.setDate(now.getDate() - dayOfWeek + i);
+      const dateStr = d.toISOString().slice(0, 10);
+      const hasChecked = allYearAssessments.some((a) => a.date === dateStr);
+      return {
+        day,
+        date: String(d.getDate()),
+        val: hasChecked ? 100 : 0,
+        active: dateStr === todayDate,
+      };
+    });
+
+    const weeklyCheckedCount = weeklyTracker.filter((w) => w.val > 0).length;
+    const currentMonthCheckedCount = monthlyTracker[currentMonthIdx]?.checkInsCount || 0;
+    const dayOfMonth = now.getDate();
+    const monthlyRate = dayOfMonth > 0 ? Math.round((currentMonthCheckedCount / dayOfMonth) * 100) : 0;
+
     return NextResponse.json({
       user: {
         name: userName,
@@ -142,6 +192,14 @@ export async function GET() {
         checkInDone: litToday,
         activityDone: !!todayActivity,
         journalDone: !!todayJournal,
+      },
+      trackerData: {
+        monthly: monthlyTracker,
+        weekly: weeklyTracker,
+        weeklyCheckedCount,
+        currentMonthRate: monthlyRate,
+        currentMonthName: monthNames[currentMonthIdx],
+        year: currentYear,
       },
       recentCheckIns: recentAssessments.map((d) => ({
         date: d.date,
