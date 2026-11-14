@@ -89,3 +89,18 @@ model RateLimitBucket {
   @@map("rate_limit_buckets")
 }
 
+model UserCompanionMemory {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  summary         String   @default("")
+  learnedTopics   String[] @default([])
+  emotionalTrends String[] @default([])
+  helpfulMethods  String[] @default([])
+  interactionCount Int     @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@map("user_companion_memories")
+}
+

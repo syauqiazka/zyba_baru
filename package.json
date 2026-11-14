@@ -14,10 +14,15 @@
     "db:generate:all": "prisma generate --schema=prisma/account/schema.prisma && prisma generate --schema=prisma/companion/schema.prisma && prisma generate --schema=prisma/community/schema.prisma",
     "test:contrast": "node scripts/test-contrast.js",
     "test:scoring": "tsx tests/scoring.test.ts",
-    "test:companion": "tsx tests/companion-quota.test.ts"
+    "test:companion": "tsx tests/companion-quota.test.ts",
+    "test:community": "tsx tests/community.test.ts",
+    "test:dm": "tsx tests/ably-dm.test.ts",
+    "test:wellness": "tsx tests/wellness-suite.test.ts",
+    "test:phase6": "tsx tests/phase6-settings-admin.test.ts"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
+    "ably": "^2.30.0",
     "bcryptjs": "^2.4.3",
     "jose": "^5.9.6",
     "lucide-react": "^0.453.0",

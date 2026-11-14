@@ -21,11 +21,13 @@
   --color-mood-overjoyed: #8FAE5D;
 }
 
+html,
 body {
   background-color: var(--color-cream);
   color: var(--color-brown-900);
   font-family: var(--font-dm-sans), sans-serif;
   overflow-x: hidden;
+  max-width: 100vw;
   -webkit-tap-highlight-color: transparent;
 }
 

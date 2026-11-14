@@ -117,30 +117,35 @@ export function CompanionSidebar({
           isOpenMobile ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Top Header: Brand & Back Link */}
-        <div className="p-4 border-b border-botanical-500/10 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center">
-              <Mascot pose="default" size={32} animate={false} decorative={true} />
+        {/* Top Header: Return to Main Sanctuary & Brand */}
+        <div className="p-3.5 border-b border-botanical-500/10 space-y-2">
+          {/* Prominent Back to Main App Button */}
+          <Link
+            href="/dashboard"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-charcoal-900 bg-cream/70 hover:bg-cream border border-botanical-500/15 transition-all shadow-2xs group"
+          >
+            <div className="flex items-center gap-2">
+              <ArrowLeft className="w-4 h-4 text-botanical-600 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Menu Utama ZYBA</span>
             </div>
-            <div>
-              <span className="font-serif text-sm font-bold text-charcoal-900 block leading-tight">
-                ZYBA Companion
-              </span>
-              <span className="text-[10px] text-charcoal-900/50 block">
-                Sahabat Mindful &bull; Zibi
-              </span>
-            </div>
-          </div>
+            <span className="text-[10px] text-charcoal-900/40 font-normal">Dashboard &rarr;</span>
+          </Link>
 
-          <div className="flex items-center gap-1">
-            <Link
-              href="/dashboard"
-              className="p-1.5 rounded-lg text-charcoal-900/40 hover:text-botanical-600 hover:bg-cream transition-colors text-[11px] font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
-              title="Kembali ke Dashboard ZYBA"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-center">
+                <Mascot pose="default" size={32} animate={false} decorative={true} />
+              </div>
+              <div>
+                <span className="font-serif text-sm font-bold text-charcoal-900 block leading-tight">
+                  ZYBA Companion
+                </span>
+                <span className="text-[10px] text-charcoal-900/50 block">
+                  Sahabat Mindful &bull; Zibi
+                </span>
+              </div>
+            </div>
+
             <button
               onClick={onCloseMobile}
               aria-label="Tutup menu percakapan"

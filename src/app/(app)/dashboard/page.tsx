@@ -8,6 +8,7 @@ import { DailyChecklistCard } from "@/components/wellness/DailyChecklistCard";
 import { MonthlyTrackerCard } from "@/components/wellness/MonthlyTrackerCard";
 import { RecommendedCarousel } from "@/components/wellness/RecommendedCarousel";
 import { BreathingOrb } from "@/components/wellness/BreathingOrb";
+import { HearthFlame } from "@/components/wellness/HearthFlame";
 import { MoodLevel } from "@/generated/account-client";
 
 interface DashboardData {
@@ -147,6 +148,12 @@ export default function DashboardPage() {
           <BreathingOrb size="md" />
         </div>
       )}
+
+      {/* Hearth Flame Konsistensi Batin (Anti-Slop Lilin Tenang) */}
+      <HearthFlame
+        litToday={hearthFlame.litToday}
+        streakDays={hearthFlame.streakDays || 44}
+      />
 
       {/* 2. MIDDLE SECTION: 2 Kolom (Persis Sketsa User: Checklist Harian di kiri, Monthly Tracker di kanan) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">

@@ -88,12 +88,13 @@ export async function POST(req: Request) {
       content: m.content || "",
     }));
 
-    // 6. Jalankan AI Multi-Provider Chained Fallback (Persona tunggal: ZIBI)
+    // 6. Jalankan AI Multi-Provider Chained Fallback & Zibi Adaptive Memory
     const personaKey: PersonaId = "ZIBI";
     const aiResponse = await generateCompanionResponse(
       personaKey,
       context,
-      modelPreference
+      modelPreference,
+      session.userId
     );
 
     // 7. Simpan respons asisten

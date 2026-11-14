@@ -63,6 +63,10 @@ model User {
 // FASE 4: ganti CommunicationStyle → CompanionPersona
 enum CompanionPersona {
   ZIBI
+  KINA
+  OLLIE
+  RUBI
+  BRUNO
 }
 
 model NotificationPref {
@@ -236,4 +240,104 @@ model ModerationLog {
   @@index([targetUserId, createdAt])
   @@index([adminId, createdAt])
   @@map("moderation_logs")
+}
+
+// ----------------------------------------------------
+// AUTOMATED HEALTH & WELLNESS ARTICLE SYSTEM (FASE P8)
+// ----------------------------------------------------
+
+enum ArticleCategory {
+  MENTAL_HEALTH
+  SELF_CARE
+  MINDFULNESS
+  PHYSICAL_WELLNESS
+  SLEEP_AND_REST
+  EMOTIONAL_WELLNESS
+  RELATIONSHIPS
+  PERSONAL_DEVELOPMENT
+}
+
+enum ArticleStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+  ARCHIVED
+}
+
+model ArticleSource {
+  id              String           @id @default(cuid())
+  name            String
+  url             String           @unique
+  websiteUrl      String?
+  defaultCategory ArticleCategory?
+  isActive        Boolean          @default(true)
+  lastSyncAt      DateTime?
+  lastStatus      String?          // "SUCCESS", "ERROR", "TIMEOUT"
+  lastError       String?
+  totalFetched    Int              @default(0)
+  totalApproved   Int              @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  articles        Article[]
+  syncLogs        ArticleSyncLog[]
+
+  @@map("article_sources")
+}
+
+model Article {
+  id              String          @id @default(cuid())
+  sourceId        String?
+  source          ArticleSource?  @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  sourceName      String          // mis. "WHO", "Kemenkes RI", "APA"
+  sourceUrl       String          // URL artikel asli
+  canonicalUrl    String          @unique // URL kanonikal untuk deteksi duplikasi
+  externalId      String?         // GUID dari RSS
+  
+  title           String
+  slug            String          @unique
+  excerpt         String          // Ringkasan original hasil kurasi/ekstraksi
+  content         String?         // Cuplikan konten / paragraf inti (bukan salinan ilegal full text)
+  category        ArticleCategory @default(MENTAL_HEALTH)
+  thumbnail       String?         // URL thumbnail resmi jika diizinkan
+  publishedAt     DateTime        @default(now())
+  fetchedAt       DateTime        @default(now())
+  
+  status          ArticleStatus   @default(PENDING)
+  relevanceScore  Int             @default(0) // 0 - 100
+  relevanceReason String?
+  language        String          @default("id") // "id" | "en"
+  readingTime     Int             @default(3) // estimasi menit baca
+  
+  reviewedBy      String?         // Admin user ID jika sudah direview
+  reviewedAt      DateTime?
+  reviewNotes     String?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([category, status])
+  @@index([status, publishedAt])
+  @@index([canonicalUrl])
+  @@index([slug])
+  @@map("articles")
+}
+
+model ArticleSyncLog {
+  id                String          @id @default(cuid())
+  sourceId          String?
+  source            ArticleSource?  @relation(fields: [sourceId], references: [id], onDelete: SetNull)
+  sourceName        String?
+  status            String          // "SUCCESS" | "PARTIAL" | "FAILED"
+  articlesFound     Int             @default(0)
+  articlesProcessed Int             @default(0)
+  articlesRejected  Int             @default(0)
+  articlesApproved  Int             @default(0)
+  errorMessage      String?
+  durationMs        Int             @default(0)
+  triggeredBy       String          @default("CRON") // "CRON" | "MANUAL_ADMIN"
+  createdAt         DateTime        @default(now())
+
+  @@index([createdAt])
+  @@map("article_sync_logs")
 }

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="warmOasis" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDFBF7"/>
+      <stop offset="60%" stop-color="#F5EFE6"/>
+      <stop offset="100%" stop-color="#EAE0D0"/>
+    </linearGradient>
+    <radialGradient id="heartGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F28C6E" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#F5EFE6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#warmOasis)"/>
+
+  <!-- Centered Warm Sanctuary Glow -->
+  <circle cx="400" cy="250" r="220" fill="url(#heartGlow)"/>
+
+  <!-- Organic Arch Shape in Center -->
+  <path d="M260,420 L260,220 A140,140 0 0,1 540,220 L540,420 Z" fill="#E2EBE5" opacity="0.65"/>
+  <path d="M280,420 L280,230 A120,120 0 0,1 520,230 L520,420 Z" fill="#D3E2D8" opacity="0.75"/>
+
+  <!-- Botanical Tendrils Framing Both Sides -->
+  <!-- Left Vines -->
+  <path d="M0,0 Q180,120 160,320 T60,500" stroke="#3E7B54" stroke-width="4" fill="none" opacity="0.8"/>
+  <ellipse cx="110" cy="90" rx="18" ry="32" fill="#3E7B54" transform="rotate(-35 110 90)"/>
+  <ellipse cx="160" cy="170" rx="16" ry="28" fill="#4E9969" transform="rotate(25 160 170)"/>
+  <ellipse cx="140" cy="270" rx="20" ry="34" fill="#2E5C3E" transform="rotate(-40 140 270)"/>
+  <ellipse cx="90" cy="380" rx="18" ry="30" fill="#3E7B54" transform="rotate(30 90 380)"/>
+
+  <!-- Right Vines -->
+  <path d="M800,0 Q620,100 640,300 T740,500" stroke="#3E7B54" stroke-width="4" fill="none" opacity="0.8"/>
+  <ellipse cx="690" cy="80" rx="18" ry="32" fill="#3E7B54" transform="rotate(35 690 80)"/>
+  <ellipse cx="640" cy="180" rx="16" ry="28" fill="#4E9969" transform="rotate(-25 640 180)"/>
+  <ellipse cx="660" cy="280" rx="20" ry="34" fill="#2E5C3E" transform="rotate(40 660 280)"/>
+  <ellipse cx="710" cy="390" rx="18" ry="30" fill="#3E7B54" transform="rotate(-30 710 390)"/>
+
+  <!-- Center Botanical Teacup on Pedestal -->
+  <rect x="340" y="360" width="120" height="70" rx="12" fill="#C9B8A4"/>
+  <ellipse cx="400" cy="360" rx="55" ry="12" fill="#DFCFC0"/>
+  <!-- Teacup -->
+  <ellipse cx="400" cy="330" rx="35" ry="10" fill="#FFFFFF"/>
+  <path d="M370,300 L430,300 L420,330 L380,330 Z" fill="#FFFFFF"/>
+  <path d="M430,308 Q445,315 425,325" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+  <!-- Gentle Heart-shaped Steam Vapor -->
+  <path d="M400,285 C370,250 360,220 400,195 C440,220 430,250 400,285 Z" fill="#F28C6E" opacity="0.55"/>
+  <path d="M400,280 C378,252 370,228 400,208 C430,228 422,252 400,280 Z" fill="#FDE047" opacity="0.7"/>
+
+  <!-- Warm Floating Botanical Petals -->
+  <ellipse cx="320" cy="240" rx="8" ry="14" fill="#F28C6E" opacity="0.5" transform="rotate(25 320 240)"/>
+  <ellipse cx="480" cy="230" rx="9" ry="15" fill="#F28C6E" opacity="0.45" transform="rotate(-35 480 230)"/>
+  <ellipse cx="350" cy="170" rx="7" ry="12" fill="#F28C6E" opacity="0.4" transform="rotate(-15 350 170)"/>
+  <ellipse cx="450" cy="160" rx="8" ry="13" fill="#F28C6E" opacity="0.4" transform="rotate(20 450 160)"/>
+</svg>

@@ -31,7 +31,16 @@ async function capture() {
     userId: "user-test-completed",
     email: "syauqi@zyba.id",
     name: "Syauqi",
-    role: "USER",
+    role: "ADMIN",
+    onboardingCompleted: true,
+  });
+
+  const tokenAdmin = await createToken({
+    sub: "user-test-completed",
+    userId: "user-test-completed",
+    email: "syauqi@zyba.id",
+    name: "Syauqi Admin",
+    role: "ADMIN",
     onboardingCompleted: true,
   });
 
@@ -44,7 +53,7 @@ async function capture() {
     onboardingCompleted: false,
   });
 
-  const tabsRes = await fetch("http://127.0.0.1:9222/json");
+  const tabsRes = await fetch("http://127.0.0.1:9225/json");
   const tabs = (await tabsRes.json()) as any[];
   const pageTab = tabs.find((t) => t.type === "page");
   if (!pageTab) {
@@ -113,6 +122,14 @@ async function capture() {
     { url: "http://localhost:3005/dashboard", slug: "dashboard", auth: "completed" },
     { url: "http://localhost:3005/mood-check-in", slug: "mood-check-in", auth: "completed" },
     { url: "http://localhost:3005/companion", slug: "companion", auth: "completed" },
+    { url: "http://localhost:3005/community", slug: "community", auth: "completed" },
+    { url: "http://localhost:3005/activity", slug: "activity", auth: "completed" },
+    { url: "http://localhost:3005/wellness-journey", slug: "wellness-journey", auth: "completed" },
+    { url: "http://localhost:3005/resources", slug: "resources", auth: "completed" },
+    { url: "http://localhost:3005/resources?article=res-1", slug: "resources-article-detail", auth: "completed" },
+    { url: "http://localhost:3005/settings", slug: "settings", auth: "completed" },
+    { url: "http://localhost:3005/admin", slug: "admin", auth: "admin" },
+    { url: "http://localhost:3005/admin?tab=articles", slug: "admin-articles", auth: "admin" },
   ];
 
   const viewports = [
@@ -125,6 +142,8 @@ async function capture() {
     console.log(`Setting auth for ${p.slug} (${p.auth})...`);
     if (p.auth === "completed") {
       await setCookie(tokenCompleted);
+    } else if (p.auth === "admin") {
+      await setCookie(tokenAdmin);
     } else if (p.auth === "incomplete") {
       await setCookie(tokenIncomplete);
     } else {
@@ -138,7 +157,7 @@ async function capture() {
     for (let i = 0; i < 20; i++) {
       await new Promise((r) => setTimeout(r, 300));
       const isLoaded = await sendCommand(ws, "Runtime.evaluate", {
-        expression: "Boolean(document.querySelector('h1') || document.querySelector('h2')) && !Boolean(document.querySelector('.animate-pulse:not(svg)'))",
+        expression: "Boolean(document.querySelector('h1') || document.querySelector('h2')) && !Boolean(document.querySelector('.animate-pulse:not(svg)')) && !Boolean(document.querySelector('.animate-spin'))",
         returnByValue: true,
       });
       if (isLoaded?.result?.value) {
@@ -161,6 +180,11 @@ async function capture() {
         mobile: vp.mobile,
       });
 
+      // Pastikan posisi scroll kembali ke (0, 0) agar tidak ada offset horizontal
+      await sendCommand(ws, "Runtime.evaluate", {
+        expression: "window.scrollTo(0, 0)",
+      });
+
       await new Promise((r) => setTimeout(r, 500));
 
       const { data } = await sendCommand(ws, "Page.captureScreenshot", {
@@ -175,6 +199,95 @@ async function capture() {
       fs.writeFileSync(outPath, buffer);
       fs.writeFileSync(artPath, buffer);
       console.log(`Captured: ${fileName}`);
+    }
+
+    // Khusus Community: Uji klik tombol "+" mengambang untuk membuka floating compose card (AGENTS.md 7.6)
+    if (p.slug === "community") {
+      console.log("Menguji klik tombol floating compose '+'...");
+      const clickResult = await sendCommand(ws, "Runtime.evaluate", {
+        expression: `
+          (() => {
+            const btn = document.querySelector('#floating-compose-button');
+            if (!btn) return { success: false, reason: "Tombol floating compose tidak ditemukan" };
+            btn.click();
+            return { success: true };
+          })()
+        `,
+        returnByValue: true,
+      });
+
+      await new Promise((r) => setTimeout(r, 600));
+
+      const cardResult = await sendCommand(ws, "Runtime.evaluate", {
+        expression: `
+          (() => {
+            const card = document.querySelector('#floating-compose-card');
+            return {
+              isRendered: Boolean(card),
+              hasTextarea: Boolean(card?.querySelector('textarea')),
+              hasSubmitBtn: Boolean(card?.querySelector('button[type="submit"]'))
+            };
+          })()
+        `,
+        returnByValue: true,
+      });
+      console.log("Hasil uji klik floating compose card:", JSON.stringify(cardResult?.result?.value));
+      if (cardResult?.result?.value?.isRendered) {
+        console.log("[VERIFIED] Floating compose card berhasil terbuka nyata setelah tombol '+' diklik!");
+        // Capture screenshot saat floating compose card terbuka
+        const { data: composeData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+        const composeFileName = "community-floating-compose-open.png";
+        fs.writeFileSync(path.join(screenshotDir, composeFileName), Buffer.from(composeData, "base64"));
+        fs.writeFileSync(path.join(artifactDir, composeFileName), Buffer.from(composeData, "base64"));
+        console.log(`Captured: ${composeFileName}`);
+      }
+    }
+
+    // Khusus Admin: Tunggu sampai laporan selesai dimuat
+    if (p.slug === "admin") {
+      for (let i = 0; i < 25; i++) {
+        await new Promise((r) => setTimeout(r, 200));
+        const ready = await sendCommand(ws, "Runtime.evaluate", {
+          expression: "Boolean(document.querySelector('#admin-reports-container') || document.querySelector('#admin-reports-empty'))",
+          returnByValue: true,
+        });
+        if (ready?.result?.value) break;
+      }
+      await new Promise((r) => setTimeout(r, 500));
+    }
+
+    // Khusus Settings: Uji buka tab Privasi dan modal hapus akun 3 DB
+    if (p.slug === "settings") {
+      console.log("Menguji navigasi tab Privasi dan pembukaan modal hapus akun 3 DB...");
+      await sendCommand(ws, "Page.navigate", { url: "http://localhost:3005/settings?action=delete" });
+      await new Promise((r) => setTimeout(r, 1200));
+
+      const { data: modalData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+      const modalFileName = "settings-delete-modal-open.png";
+      fs.writeFileSync(path.join(screenshotDir, modalFileName), Buffer.from(modalData, "base64"));
+      fs.writeFileSync(path.join(artifactDir, modalFileName), Buffer.from(modalData, "base64"));
+      console.log(`Captured: ${modalFileName}`);
+    }
+
+    // Khusus Admin: Uji buka modal tindakan moderasi
+    if (p.slug === "admin") {
+      console.log("Menguji pembukaan modal tindakan moderasi admin...");
+      await sendCommand(ws, "Page.navigate", { url: "http://localhost:3005/admin?modal=action" });
+      for (let i = 0; i < 30; i++) {
+        await new Promise((r) => setTimeout(r, 200));
+        const hasModal = await sendCommand(ws, "Runtime.evaluate", {
+          expression: "Boolean(document.querySelector('#modal-admin-action'))",
+          returnByValue: true,
+        });
+        if (hasModal?.result?.value) break;
+      }
+      await new Promise((r) => setTimeout(r, 400));
+
+      const { data: adminModalData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+      const adminModalFileName = "admin-moderation-modal-open.png";
+      fs.writeFileSync(path.join(screenshotDir, adminModalFileName), Buffer.from(adminModalData, "base64"));
+      fs.writeFileSync(path.join(artifactDir, adminModalFileName), Buffer.from(adminModalData, "base64"));
+      console.log(`Captured: ${adminModalFileName}`);
     }
   }
 

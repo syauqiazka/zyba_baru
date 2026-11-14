@@ -236,16 +236,14 @@ export default function CompanionLandingPage() {
       {/* Main Scrollable Canvas */}
       <div className="flex-1 overflow-y-auto px-4 py-6 sm:py-10">
         <div className="max-w-2xl mx-auto w-full flex flex-col items-center text-center">
-          {/* Center Hero Mascot */}
+          {/* Center Hero Mascot (100% Box-Free, Breathing Freely on Canvas) */}
           <div className="relative mb-5 flex items-center justify-center">
-            {/* Soft Botanical Halo */}
-            <div className="absolute w-36 h-36 rounded-full bg-botanical-100/60 -z-10 pointer-events-none" />
-
             <Mascot
               pose={isCooldown ? "sleep" : "listening"}
               size={155}
               animate={true}
               decorative={true}
+              className="drop-shadow-[0_8px_20px_rgba(62,123,84,0.12)]"
             />
           </div>
 

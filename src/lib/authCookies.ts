@@ -1,4 +1,5 @@
 import { cookies, headers } from "next/headers";
+import { verifyToken, VerifiedSession } from "./jwt";
 
 export const AUTH_COOKIE_NAME = "zyba_token";
 
@@ -17,6 +18,12 @@ export function getAuthTokenFromCookies(): string | undefined {
   }
 
   return undefined;
+}
+
+export async function getAuthUser(): Promise<VerifiedSession | null> {
+  const token = getAuthTokenFromCookies();
+  if (!token) return null;
+  return await verifyToken(token);
 }
 
 export function setAuthCookie(token: string) {

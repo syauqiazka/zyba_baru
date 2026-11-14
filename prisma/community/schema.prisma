@@ -13,7 +13,10 @@ datasource db {
 model CommunityPost {
   id               String   @id @default(cuid())
   userId           String   // TANPA @relation — user ada di Account DB
+  title            String?
   content          String?
+  topicTag         String?
+  isAnonymous      Boolean  @default(false)
   imageUrl         String?
   audioUrl         String?
   audioDurationSec Int?
@@ -23,26 +26,29 @@ model CommunityPost {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  comments CommunityComment[]
-  likes    CommunityLike[]
+  comments  CommunityComment[]
+  likes     CommunityLike[]
+  bookmarks CommunityBookmark[]
 
   @@index([userId, createdAt])
   @@index([createdAt])
+  @@index([topicTag])
   @@map("community_posts")
 }
 
 model CommunityComment {
-  id        String        @id @default(cuid())
-  postId    String
-  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId    String        // TANPA @relation
-  content   String?
-  stickerId String?
-  parentId  String?
-  parent    CommunityComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies   CommunityComment[] @relation("CommentReplies")
-  isHidden  Boolean            @default(false)
-  createdAt DateTime           @default(now())
+  id          String        @id @default(cuid())
+  postId      String
+  post        CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId      String        // TANPA @relation
+  content     String?
+  isAnonymous Boolean       @default(false)
+  stickerId   String?
+  parentId    String?
+  parent      CommunityComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     CommunityComment[] @relation("CommentReplies")
+  isHidden    Boolean            @default(false)
+  createdAt   DateTime           @default(now())
 
   @@index([postId, createdAt])
   @@index([userId, createdAt])
@@ -116,10 +122,11 @@ model CommunityFollow {
 }
 
 model CommunityBookmark {
-  id        String   @id @default(cuid())
-  userId    String   // from Account DB
+  id        String        @id @default(cuid())
+  userId    String        // from Account DB
   postId    String
-  createdAt DateTime @default(now())
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
 
   @@unique([userId, postId])
   @@index([userId, createdAt])

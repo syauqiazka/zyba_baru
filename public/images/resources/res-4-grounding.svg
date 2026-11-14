@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mistSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#93B4C8"/>
+      <stop offset="45%" stop-color="#C5D9E2"/>
+      <stop offset="75%" stop-color="#E2DCD3"/>
+      <stop offset="100%" stop-color="#D7E0D8"/>
+    </linearGradient>
+    <linearGradient id="fujiSnow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#EFF6FF"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+    <linearGradient id="mountainBase" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="pagodaRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#B91C1C"/>
+      <stop offset="100%" stop-color="#991B1B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="500" fill="url(#mistSky)"/>
+
+  <!-- Mount Fuji in Distant Background (Center-Left) -->
+  <polygon points="120,420 340,110 390,110 580,420" fill="url(#mountainBase)"/>
+  <!-- Snow Cap on Mountain Peak -->
+  <path d="M340,110 L390,110 L440,210 Q400,230 380,210 Q350,230 320,205 Z" fill="url(#fujiSnow)"/>
+
+  <!-- Low Floating Mist Layer -->
+  <ellipse cx="360" cy="360" rx="380" ry="40" fill="#E2EBE5" opacity="0.6"/>
+  <ellipse cx="280" cy="380" rx="300" ry="35" fill="#E2EBE5" opacity="0.75"/>
+
+  <!-- Distant Pine Forest Silhouettes -->
+  <path d="M0,400 Q180,360 360,390 T800,380 L800,500 L0,500 Z" fill="#2E4438" opacity="0.65"/>
+
+  <!-- Hill in Foreground Right (Where Pagoda Stands) -->
+  <path d="M420,500 Q540,320 800,310 L800,500 Z" fill="#1C2E24"/>
+
+  <!-- Traditional Multi-tiered Pagoda on Right Cliff -->
+  <!-- Level 1 (Top Roof) -->
+  <polygon points="630,220 540,260 720,260" fill="#1F2937"/>
+  <rect x="585" y="260" width="90" height="25" fill="url(#pagodaRed)"/>
+  <rect x="625" y="180" width="10" height="40" fill="#D97706"/>
+  <!-- Level 2 -->
+  <polygon points="630,280 520,320 740,320" fill="#1F2937"/>
+  <rect x="575" y="320" width="110" height="30" fill="url(#pagodaRed)"/>
+  <!-- Level 3 (Base Roof) -->
+  <polygon points="630,345 500,385 760,385" fill="#1F2937"/>
+  <rect x="560" y="385" width="140" height="40" fill="url(#pagodaRed)"/>
+  <!-- Pagoda Columns & Windows -->
+  <rect x="590" y="390" width="20" height="35" fill="#FEF3C7" opacity="0.8"/>
+  <rect x="650" y="390" width="20" height="35" fill="#FEF3C7" opacity="0.8"/>
+
+  <!-- Flowering Cherry Blossom / Autumn Maple Tendrils in Foreground -->
+  <!-- Branch across top right -->
+  <path d="M800,80 Q700,60 620,120 Q560,90 510,130" stroke="#3D291C" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M680,80 Q650,40 600,60" stroke="#3D291C" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Delicate Blossom Clusters (Warm Terracotta / Soft Rose) -->
+  <g fill="#F28C6E" opacity="0.9">
+    <circle cx="510" cy="130" r="9"/>
+    <circle cx="525" cy="120" r="8"/>
+    <circle cx="505" cy="140" r="7"/>
+    <circle cx="570" cy="95" r="9"/>
+    <circle cx="590" cy="100" r="8"/>
+    <circle cx="615" cy="115" r="10"/>
+    <circle cx="640" cy="130" r="9"/>
+    <circle cx="600" cy="60" r="8"/>
+    <circle cx="620" cy="55" r="8"/>
+    <circle cx="710" cy="70" r="11"/>
+    <circle cx="730" cy="85" r="9"/>
+    <circle cx="760" cy="65" r="10"/>
+  </g>
+  <g fill="#FED7AA" opacity="0.9">
+    <circle cx="518" cy="125" r="4"/>
+    <circle cx="580" cy="97" r="4"/>
+    <circle cx="625" cy="122" r="4"/>
+    <circle cx="720" cy="78" r="5"/>
+  </g>
+</svg>

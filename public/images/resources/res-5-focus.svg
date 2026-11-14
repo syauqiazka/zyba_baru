@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wallWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="deskWood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E2D4C0"/>
+      <stop offset="100%" stop-color="#CBB79E"/>
+    </linearGradient>
+    <linearGradient id="softShadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1B241E" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#1B241E" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wall Background -->
+  <rect width="800" height="500" fill="url(#wallWhite)"/>
+
+  <!-- Minimalist Architectural Shadow Shapes -->
+  <polygon points="0,0 280,0 160,500 0,500" fill="#CBD5E1" opacity="0.4"/>
+  <polygon points="520,0 680,0 800,400 800,0" fill="#E2E8F0" opacity="0.6"/>
+
+  <!-- Slim Floating Wall Shelf -->
+  <rect x="220" y="100" width="360" height="12" rx="3" fill="#64748B"/>
+  <!-- Minimalist Ceramics on Shelf -->
+  <ellipse cx="270" cy="98" rx="14" ry="4" fill="#3E7B54"/>
+  <path d="M260,70 L280,70 L284,98 L256,98 Z" fill="#3E7B54"/>
+  <!-- Dried Floral Stems -->
+  <path d="M270,70 Q250,30 230,20" stroke="#713F12" stroke-width="2" fill="none"/>
+  <ellipse cx="230" cy="20" rx="4" ry="8" fill="#D97706" transform="rotate(-30 230 20)"/>
+  <rect x="360" y="60" width="14" height="40" rx="2" fill="#D97706"/>
+  <rect x="378" y="50" width="16" height="50" rx="2" fill="#3E7B54"/>
+  <rect x="398" y="55" width="14" height="45" rx="2" fill="#475569"/>
+
+  <!-- Large Study Table Surface (Perspective) -->
+  <polygon points="60,340 740,340 800,500 0,500" fill="url(#deskWood)"/>
+  <polygon points="60,340 740,340 740,352 60,352" fill="#A89278"/>
+  <rect x="0" y="352" width="800" height="20" fill="url(#softShadow)"/>
+
+  <!-- Laptop / Open Notebook in Center -->
+  <polygon points="280,380 520,380 560,480 240,480" fill="#FFFFFF"/>
+  <line x1="400" y1="380" x2="400" y2="480" stroke="#E2E8F0" stroke-width="3"/>
+  <!-- Ruled Notebook Lines -->
+  <line x1="270" y1="410" x2="380" y2="410" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="265" y1="430" x2="380" y2="430" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="260" y1="450" x2="380" y2="450" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="420" y1="410" x2="530" y2="410" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="420" y1="430" x2="535" y2="430" stroke="#CBD5E1" stroke-width="1.5"/>
+  <line x1="420" y1="450" x2="540" y2="450" stroke="#CBD5E1" stroke-width="1.5"/>
+
+  <!-- Minimalist Brass Fountain Pen -->
+  <polygon points="560,420 590,440 588,443 558,423" fill="#D97706"/>
+
+  <!-- Ceramic Coffee Cup with Saucer (Right) -->
+  <ellipse cx="640" cy="420" rx="30" ry="14" fill="#94A3B8"/>
+  <ellipse cx="640" cy="415" rx="22" ry="10" fill="#F1F5F9"/>
+  <ellipse cx="640" cy="414" rx="18" ry="7" fill="#6B4226"/>
+
+  <!-- Small Succulent Pot (Left) -->
+  <polygon points="150,380 180,380 175,415 155,415" fill="#FFFFFF"/>
+  <ellipse cx="165" cy="380" rx="16" ry="6" fill="#3E7B54"/>
+  <ellipse cx="160" cy="370" rx="8" ry="12" fill="#4B8C64"/>
+  <ellipse cx="170" cy="368" rx="8" ry="12" fill="#5A9E74"/>
+  <ellipse cx="165" cy="362" rx="7" ry="11" fill="#68AF83"/>
+</svg>

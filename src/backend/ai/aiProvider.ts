@@ -5,6 +5,7 @@
  */
 
 import { PERSONAS, PersonaId } from "./personas";
+import { buildAdaptiveZibiPrompt, learnFromUserInteraction } from "./zibiMemory";
 
 export interface ChatMessageContext {
   role: "user" | "assistant" | "system";
@@ -18,15 +19,28 @@ export interface AIResponse {
 }
 
 /**
- * Generate AI response with automated chained fallback
+ * Generate AI response with automated chained fallback & adaptive Zibi learning
  */
 export async function generateCompanionResponse(
   personaId: PersonaId,
   messages: ChatMessageContext[],
-  preferredProvider?: string
+  preferredProvider?: string,
+  userId?: string
 ): Promise<AIResponse> {
   const persona = PERSONAS[personaId] || PERSONAS.ZIBI;
-  const systemPrompt = persona.systemPrompt;
+  let systemPrompt = persona.systemPrompt;
+
+  // Injeksi memori adaptif personal pengguna jika ada userId
+  if (userId) {
+    try {
+      const memoryPrompt = await buildAdaptiveZibiPrompt(userId);
+      if (memoryPrompt) {
+        systemPrompt = `${systemPrompt}\n\n${memoryPrompt}`;
+      }
+    } catch (err) {
+      console.warn("[Zibi-Memory] Gagal membangun prompt adaptif:", err);
+    }
+  }
 
   const providers = [
     { id: "GEMINI", fn: callGemini },
@@ -50,6 +64,13 @@ export async function generateCompanionResponse(
     try {
       const res = await provider.fn(systemPrompt, messages);
       if (res && res.content.trim()) {
+        // Pelajari interaksi ini di latar belakang agar Zibi semakin cerdas
+        if (userId) {
+          const lastUserMsg = messages.filter((m) => m.role === "user").pop()?.content || "";
+          if (lastUserMsg) {
+            learnFromUserInteraction(userId, lastUserMsg, res.content).catch(() => {});
+          }
+        }
         return res;
       }
     } catch (err: any) {
@@ -61,6 +82,12 @@ export async function generateCompanionResponse(
 
   // Jika seluruh provider tidak tersedia (misal offline dev tanpa API key), berikan jawaban ramah persona
   console.warn("[AI-Fallback] Seluruh provider gagal / belum disetup:", errors);
+  if (userId) {
+    const lastUserMsg = messages.filter((m) => m.role === "user").pop()?.content || "";
+    if (lastUserMsg) {
+      learnFromUserInteraction(userId, lastUserMsg).catch(() => {});
+    }
+  }
   return generateLocalFallback(personaId, messages);
 }
 
@@ -69,7 +96,7 @@ async function callGemini(systemPrompt: string, messages: ChatMessageContext[]):
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
 
-  const model = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   // Format riwayat chat untuk Gemini
@@ -115,7 +142,7 @@ async function callGroq(systemPrompt: string, messages: ChatMessageContext[]): P
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return null;
 
-  const model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  const model = process.env.GROQ_MODEL || "openai/gpt-oss-20b";
   const url = "https://api.groq.com/openai/v1/chat/completions";
 
   const chatMessages = [

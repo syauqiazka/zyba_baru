@@ -12,7 +12,10 @@ interface ClientLayoutProps {
 export function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
   const isChatRoute = pathname.startsWith("/companion");
-  const hideMobileDock = pathname === "/mood-check-in" || isChatRoute;
+  const isCommunityRoute = pathname.startsWith("/community");
+  const isResourcesRoute = pathname.startsWith("/resources");
+  const isDedicatedRoute = isChatRoute || isCommunityRoute || isResourcesRoute;
+  const hideMobileDock = pathname === "/mood-check-in" || isDedicatedRoute;
   const [userName, setUserName] = useState("Teman ZYBA");
 
   useEffect(() => {
@@ -27,22 +30,39 @@ export function ClientLayout({ children }: ClientLayoutProps) {
       .catch(() => {});
   }, []);
 
+  // Jika di Companion atau Community: gunakan full layout tersendiri (menghilangkan sidebar ganda)
+  if (isDedicatedRoute) {
+    return (
+      <div
+        className={`w-full bg-[#F5F8F5] text-brown-900 selection:bg-emerald-200 ${
+          isChatRoute ? "h-screen overflow-hidden" : "min-h-screen"
+        }`}
+      >
+        <main
+          className={`w-full p-0 m-0 ${
+            isChatRoute ? "h-full overflow-hidden" : "min-h-screen"
+          }`}
+        >
+          {children}
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#F5F8F5] text-brown-900 selection:bg-emerald-200">
+    <div className="min-h-screen bg-[#F5F8F5] text-brown-900 selection:bg-emerald-200 overflow-x-hidden">
       {/* 1. Left Sidebar on Desktop (>= 768px) */}
       <SanctuarySidebar userName={userName} />
 
-      {/* 2. Main Content Canvas: Offset by sidebar width on desktop */}
+      {/* 2. Main Content Canvas: Offset by sidebar width on desktop via margin */}
       <main
-        className={`w-full min-h-screen transition-all md:pl-64 ${
-          isChatRoute
-            ? "p-2 sm:p-4 md:p-6"
-            : hideMobileDock
-            ? "pt-4 md:pt-8 px-4 sm:px-8 pb-24 md:pb-12"
-            : "pt-4 md:pt-8 px-4 sm:px-8 pb-28 md:pb-12"
+        className={`w-full md:ml-64 md:w-[calc(100%-16rem)] min-h-screen transition-all ${
+          hideMobileDock
+            ? "pt-8 md:pt-12 lg:pt-14 px-5 sm:px-8 lg:px-10 pb-28 md:pb-16"
+            : "pt-8 md:pt-12 lg:pt-14 px-5 sm:px-8 lg:px-10 pb-32 md:pb-16"
         }`}
       >
-        <div className={`mx-auto w-full ${isChatRoute ? "h-full" : "max-w-[1240px]"}`}>
+        <div className="mx-auto w-full max-w-[1240px]">
           {children}
         </div>
       </main>
