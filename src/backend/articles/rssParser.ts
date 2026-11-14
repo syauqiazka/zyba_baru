@@ -70,7 +70,7 @@ export function validateSafeUrl(urlString: string): boolean {
 }
 
 /**
- * Membersihkan string HTML menjadi teks bersih tanpa eksekusi skrip
+ * Membersihkan string HTML menjadi teks bersih tanpa eksekusi skrip dan tanpa sisa tag HTML
  */
 export function sanitizeHtml(html: string): string {
   if (!html) return "";
@@ -80,26 +80,47 @@ export function sanitizeHtml(html: string): string {
   clean = clean.replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "");
   clean = clean.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "");
 
-  // 2. Hapus seluruh tag HTML
-  clean = clean.replace(/<\/?[^>]+(>|$)/g, " ");
-
-  // 3. Decode entitas HTML umum
+  // 2. Decode entitas HTML/XML umum terlebih dahulu
   clean = clean
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"')
+    .replace(/&ndash;/g, "–")
+    .replace(/&mdash;/g, "—")
     .replace(/&nbsp;/g, " ")
+    .replace(/&hellip;/g, "…")
+    .replace(/&bull;/g, "•")
     .replace(/&#8217;/g, "'")
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"')
     .replace(/&#8211;/g, "–")
     .replace(/&#8212;/g, "—");
 
-  // 4. Normalkan spasi berlebih
-  return clean.replace(/\s+/g, " ").trim();
+  // 3. Ubah tag pemisah paragraf dan baris menjadi jeda baris
+  clean = clean
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|h[1-6]|li|blockquote|tr)>/gi, "\n\n")
+    .replace(/<li[^>]*>/gi, "• ");
+
+  // 4. Hapus seluruh sisa tag HTML
+  clean = clean.replace(/<\/?[^>]+(>|$)/g, "");
+
+  // 5. Rapikan baris dan spasi
+  const paragraphs = clean
+    .split(/\n\s*\n/)
+    .map((p) => p.replace(/[ \t]+/g, " ").trim())
+    .filter((p) => p.length > 0);
+
+  return paragraphs.join("\n\n");
 }
+
+export const cleanHtmlToText = sanitizeHtml;
 
 /**
  * Ekstraksi URL thumbnail dari tag XML (media:content, media:thumbnail, enclosure, img tag)

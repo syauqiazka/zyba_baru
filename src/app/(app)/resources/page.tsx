@@ -47,6 +47,36 @@ const DURATION_FILTERS = [
   { id: "long", label: "≥ 5 Menit" },
 ];
 
+function cleanText(val?: string | null): string {
+  if (!val) return "";
+  let text = val
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"')
+    .replace(/&ndash;/g, "–")
+    .replace(/&mdash;/g, "—")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&hellip;/g, "…")
+    .replace(/&bull;/g, "•")
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"')
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|h[1-6]|li|blockquote|tr)>/gi, "\n\n")
+    .replace(/<li[^>]*>/gi, "• ")
+    .replace(/<\/?[^>]+(>|$)/g, "");
+
+  return text.trim();
+}
+
 export default function ResourcesPage() {
   const [articles, setArticles] = useState<any[]>(SEED_RESOURCES);
   const [audioTracks, setAudioTracks] = useState<any[]>(RELAXATION_AUDIO_TRACKS);
@@ -81,12 +111,19 @@ export default function ResourcesPage() {
         if (res.ok) {
           const data = await res.json();
           if (data.articles && data.articles.length > 0) {
-            setArticles(data.articles);
+            const cleaned = data.articles.map((art: any) => ({
+              ...art,
+              title: cleanText(art.title),
+              subtitle: art.subtitle ? cleanText(art.subtitle) : null,
+              snippet: cleanText(art.snippet),
+              body: cleanText(art.body),
+            }));
+            setArticles(cleaned);
             if (typeof window !== "undefined") {
               const urlParams = new URLSearchParams(window.location.search);
               const articleParam = urlParams.get("article");
               if (articleParam) {
-                const found = data.articles.find((a: any) => a.id === articleParam);
+                const found = cleaned.find((a: any) => a.id === articleParam);
                 if (found) {
                   setSelectedArticleId(articleParam);
                 }
@@ -210,8 +247,8 @@ export default function ResourcesPage() {
   return (
     <div className="min-h-screen bg-[#F5F8F5] text-brown-900 pb-24">
       {/* 1. TOP GLOBAL NAVIGATION BAR (Persis seperti Companion & Komunitas) */}
-      <header className="sticky top-0 z-40 w-full bg-[#F5F8F5]/90 backdrop-blur-md border-b border-brown-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <header className="sticky top-0 z-50 w-full bg-[#F5F8F5]/95 backdrop-blur-md border-b border-brown-900/10 shadow-2xs">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between gap-4">
           {/* Sisi Kiri: Tombol Kembali ke Dashboard Utama + Brand ZYBA Wawasan */}
           <div className="flex items-center gap-3">
             <Link
@@ -270,7 +307,7 @@ export default function ResourcesPage() {
       {/* TAMPILAN FOTO 2: HALAMAN BACA DETAIL ARTIKEL (Single Article Full View)    */}
       {/* ========================================================================= */}
       {currentArticle ? (
-        <article className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12">
+        <article className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 pt-8 md:pt-12">
           {/* Sub-Header Navigasi Artikel */}
           <div className="flex items-center justify-between pb-6 border-b border-brown-900/10 mb-8">
             <button
@@ -310,12 +347,12 @@ export default function ResourcesPage() {
             </div>
 
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brown-900 tracking-tight leading-[1.2]">
-              {currentArticle.title}
+              {cleanText(currentArticle.title)}
             </h1>
 
             {currentArticle.subtitle && (
               <p className="text-base sm:text-lg text-brown-700 max-w-2xl mx-auto leading-relaxed">
-                {currentArticle.subtitle}
+                {cleanText(currentArticle.subtitle)}
               </p>
             )}
 
@@ -385,30 +422,34 @@ export default function ResourcesPage() {
                   fontSize === "large" ? "text-lg" : "text-base"
                 }`}
               >
-                {currentArticle.body.split("\n\n").map((par: string, pIdx: number) => {
-                  // Cek apakah paragraf adalah poin bernomor
-                  if (par.startsWith("1.") || par.startsWith("-")) {
+                {cleanText(currentArticle.body)
+                  .split(/\n\s*\n/)
+                  .map((p) => p.trim())
+                  .filter(Boolean)
+                  .map((par: string, pIdx: number) => {
+                    // Cek apakah paragraf adalah poin bernomor atau bullet
+                    if (par.startsWith("1.") || par.startsWith("-") || par.startsWith("•")) {
+                      return (
+                        <div key={pIdx} className="space-y-4 my-6 pl-1">
+                          {par.split("\n").map((line: string, lIdx: number) => (
+                            <div key={lIdx} className="flex items-start gap-3.5">
+                              <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                                {lIdx + 1}
+                              </span>
+                              <p className="text-sm sm:text-base text-brown-800 leading-relaxed flex-1">
+                                {line.replace(/^[0-9]\.\s*/, "").replace(/^[-•]\s*/, "")}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    }
                     return (
-                      <div key={pIdx} className="space-y-4 my-6 pl-1">
-                        {par.split("\n").map((line: string, lIdx: number) => (
-                          <div key={lIdx} className="flex items-start gap-3.5">
-                            <span className="w-6 h-6 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                              {lIdx + 1}
-                            </span>
-                            <p className="text-sm sm:text-base text-brown-800 leading-relaxed flex-1">
-                              {line.replace(/^[0-9]\.\s*/, "").replace(/^-\s*/, "")}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
+                      <p key={pIdx} className="leading-relaxed">
+                        {par}
+                      </p>
                     );
-                  }
-                  return (
-                    <p key={pIdx} className="leading-relaxed">
-                      {par}
-                    </p>
-                  );
-                })}
+                  })}
               </div>
 
               {/* Bagian Penutup / Conclusion */}
@@ -579,9 +620,9 @@ export default function ResourcesPage() {
         /* ========================================================================= */
         /* TAMPILAN FOTO 1: KATALOG UTAMA WAWASAN (Browse Our Resources Layout)       */
         /* ========================================================================= */
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-12 space-y-10">
+        <main className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 pt-8 md:pt-12 space-y-10">
           {/* Hero Header Section (Persis Foto 1) */}
-          <div className="text-center max-w-2xl mx-auto space-y-3 pb-2">
+          <div className="text-center max-w-3xl mx-auto space-y-3 pb-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-200 text-[#3E7B54] text-xs font-bold tracking-wide">
               <Sparkles className="h-3.5 w-3.5" />
               <span>Wawasan & Suaka Batin</span>
@@ -597,11 +638,11 @@ export default function ResourcesPage() {
           </div>
 
           {/* Two-Column Layout (Persis Foto 1: Kolom Kiri Filter & Kolom Kanan Grid Artikel) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-start">
             {/* --------------------------------------------------------------------- */}
             {/* KOLOM KIRI (Sidebar Filter & Kategori, lebar 3.5 kolom / ~280px)      */}
             {/* --------------------------------------------------------------------- */}
-            <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+            <aside className="lg:col-span-4 xl:col-span-3 space-y-6 lg:sticky lg:top-24">
               <div className="rounded-3xl border border-brown-900/10 bg-white p-6 space-y-6 shadow-sm">
                 {/* 1. Input Pencarian Artikel (Persis Foto 1: Label Search Article) */}
                 <div className="space-y-2">
@@ -721,9 +762,9 @@ export default function ResourcesPage() {
             </aside>
 
             {/* --------------------------------------------------------------------- */}
-            {/* KOLOM KANAN (Grid Artikel & Featured Card, lebar 8 kolom)             */}
+            {/* KOLOM KANAN (Grid Artikel & Featured Card, lebar 8-9 kolom)           */}
             {/* --------------------------------------------------------------------- */}
-            <div className="lg:col-span-8 space-y-8">
+            <div className="lg:col-span-8 xl:col-span-9 space-y-8">
               {filteredArticles.length === 0 ? (
                 /* Empty State jika filter/pencarian tidak ditemukan */
                 <div className="rounded-3xl border border-brown-900/10 bg-white p-12 text-center space-y-4 shadow-sm">
@@ -802,8 +843,8 @@ export default function ResourcesPage() {
                     </div>
                   )}
 
-                  {/* B. 2-COLUMN ARTICLE GRID (Foto 1: Gambar langsung di atas, teks langsung di bawah — Bebas kotak bertumpuk) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
+                  {/* B. 2/3-COLUMN ARTICLE GRID (Foto 1: Gambar langsung di atas, teks langsung di bawah — Bebas kotak bertumpuk) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-12">
                     {gridArticles.map((art) => (
                       <article
                         key={art.id}

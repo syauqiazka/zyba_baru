@@ -116,6 +116,7 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+  const [processingArticleId, setProcessingArticleId] = useState<string | null>(null);
 
   // Sources state
   const [sources, setSources] = useState<SourceItem[]>([]);
@@ -208,6 +209,14 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
   // Actions on articles
   const handleArticleAction = async (id: string, action: "APPROVE" | "REJECT" | "ARCHIVE") => {
     try {
+      setProcessingArticleId(id);
+
+      // Optimistic state update
+      const newStatus = action === "APPROVE" ? "PUBLISHED" : action === "REJECT" ? "REJECTED" : "ARCHIVED";
+      setArticles((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status: newStatus as any } : a))
+      );
+
       const res = await fetch("/api/admin/articles", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -226,6 +235,9 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
       }
     } catch {
       onNotify("Gagal memperbarui status artikel.");
+      fetchArticles();
+    } finally {
+      setProcessingArticleId(null);
     }
   };
 
@@ -578,16 +590,22 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           type="button"
+                          disabled={processingArticleId === art.id}
                           onClick={() => handleArticleAction(art.id, "APPROVE")}
-                          className="px-3.5 py-1.5 rounded-xl bg-[#3E7B54] text-white font-bold text-xs hover:bg-[#326343] transition-colors shadow-2xs flex items-center gap-1"
+                          className="px-3.5 py-1.5 rounded-xl bg-[#3E7B54] text-white font-bold text-xs hover:bg-[#326343] transition-colors shadow-2xs flex items-center gap-1.5 disabled:opacity-50"
                         >
-                          <Check className="w-3.5 h-3.5" />
+                          {processingArticleId === art.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Check className="w-3.5 h-3.5" />
+                          )}
                           <span>Setujui</span>
                         </button>
                         <button
                           type="button"
+                          disabled={processingArticleId === art.id}
                           onClick={() => handleArticleAction(art.id, "REJECT")}
-                          className="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-700 font-bold text-xs hover:bg-red-100 transition-colors flex items-center gap-1"
+                          className="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-700 font-bold text-xs hover:bg-red-100 transition-colors flex items-center gap-1.5 disabled:opacity-50"
                         >
                           <X className="w-3.5 h-3.5" />
                           <span>Tolak</span>
@@ -715,22 +733,38 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
 
                   {/* Actions Column */}
                   <div className="flex flex-wrap lg:flex-col items-center lg:items-end gap-2 shrink-0 pt-2 lg:pt-0">
-                    {art.status !== "PUBLISHED" && (
+                    {art.status === "PUBLISHED" ? (
+                      <span className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs flex items-center gap-1.5 w-full justify-center">
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Tayang</span>
+                      </span>
+                    ) : (
                       <button
                         type="button"
+                        disabled={processingArticleId === art.id}
                         onClick={() => handleArticleAction(art.id, "APPROVE")}
-                        className="px-3.5 py-1.5 rounded-xl bg-[#3E7B54] text-white font-bold text-xs hover:bg-[#326343] transition-all shadow-2xs flex items-center gap-1 w-full justify-center"
+                        className="px-3.5 py-1.5 rounded-xl bg-[#3E7B54] text-white font-bold text-xs hover:bg-[#326343] transition-all shadow-2xs flex items-center gap-1.5 w-full justify-center disabled:opacity-50"
                       >
-                        <Check className="w-3.5 h-3.5" />
+                        {processingArticleId === art.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Check className="w-3.5 h-3.5" />
+                        )}
                         <span>Publish</span>
                       </button>
                     )}
 
-                    {art.status !== "REJECTED" && (
+                    {art.status === "REJECTED" ? (
+                      <span className="px-3 py-1.5 rounded-xl bg-rose-50 text-rose-800 border border-rose-200 font-bold text-xs flex items-center gap-1.5 w-full justify-center">
+                        <X className="w-3.5 h-3.5 text-rose-600" />
+                        <span>Ditolak</span>
+                      </span>
+                    ) : (
                       <button
                         type="button"
+                        disabled={processingArticleId === art.id}
                         onClick={() => handleArticleAction(art.id, "REJECT")}
-                        className="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-700 font-bold text-xs hover:bg-red-100 transition-all flex items-center gap-1 w-full justify-center"
+                        className="px-3.5 py-1.5 rounded-xl border border-red-200 bg-red-50 text-red-700 font-bold text-xs hover:bg-red-100 transition-all flex items-center gap-1.5 w-full justify-center disabled:opacity-50"
                       >
                         <X className="w-3.5 h-3.5" />
                         <span>Tolak</span>

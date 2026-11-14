@@ -156,7 +156,7 @@ export function SketchHeaderCard({
                 {sleepScore}%
               </span>
               <span className="text-[10px] font-semibold text-sky-800 bg-[#EDF4F8] px-1.5 py-0.2 rounded-md">
-                7.5 Jam
+                {sleepScore >= 75 ? "Optimal" : sleepScore >= 50 ? "Cukup" : "Perlu Rehat"}
               </span>
             </div>
             <span className="text-[10px] text-brown-700 block mt-0.5">

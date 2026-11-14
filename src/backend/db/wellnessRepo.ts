@@ -36,53 +36,52 @@ export const wellnessRepo = {
         take: 14,
       });
 
-      // Format riwayat untuk grafik
-      const history: WellnessStatItem[] = assessments.map((a) => ({
-        date: a.date,
-        score: a.calculatedScore || Math.round((moodToPoints(a.mood) * 0.6) + (scaleToPoints(a.stressLevel, true) * 0.4)),
-        stressLevel: a.stressLevel || 3,
-        mood: a.mood,
-      }));
+      // Format riwayat nyata dari database
+      const history: WellnessStatItem[] = assessments.map((a) => {
+        let dayLabel = a.date;
+        try {
+          const parsed = new Date(a.date);
+          if (!isNaN(parsed.getTime())) {
+            dayLabel = parsed.toLocaleDateString("id-ID", { weekday: "short", day: "numeric" });
+          }
+        } catch {}
+        return {
+          date: dayLabel,
+          score: a.calculatedScore || Math.round((moodToPoints(a.mood) * 0.6) + (scaleToPoints(a.stressLevel, true) * 0.4)),
+          stressLevel: a.stressLevel || 3,
+          mood: a.mood,
+        };
+      });
 
-      // Breakdown domain
-      const latestAssessment = assessments[assessments.length - 1];
+      const hasData = assessments.length > 0;
+      const latestAssessment = hasData ? assessments[assessments.length - 1] : null;
+      const ans = (latestAssessment?.answers as Record<string, any>) || {};
+
       const mental = latestAssessment
         ? Math.round(moodToPoints(latestAssessment.mood) * 0.5 + scaleToPoints(latestAssessment.stressLevel, true) * 0.5)
-        : 70;
-      const physical = latestAssessment?.sleepRating ? scaleToPoints(latestAssessment.sleepRating) : 75;
-      const social = 68;
+        : null;
+      const physical = latestAssessment?.sleepRating ? scaleToPoints(latestAssessment.sleepRating) : null;
+      const social = ans.connection
+        ? scaleToPoints(Number(ans.connection))
+        : (ans.supported ? scaleToPoints(Number(ans.supported)) : (hasData ? 60 : null));
 
       return {
-        currentScore: user?.zybaScore || 74,
+        hasData,
+        currentScore: user?.zybaScore ?? (hasData ? (latestAssessment?.calculatedScore || 50) : null),
         scoreBreakdown: {
           mental,
           physical,
           social,
         },
-        history: history.length > 0 ? history : [
-          { date: "Sen", score: 68, stressLevel: 3, mood: "NEUTRAL" },
-          { date: "Sel", score: 72, stressLevel: 2, mood: "HAPPY" },
-          { date: "Rab", score: 70, stressLevel: 3, mood: "NEUTRAL" },
-          { date: "Kam", score: 78, stressLevel: 2, mood: "HAPPY" },
-          { date: "Jum", score: 75, stressLevel: 2, mood: "NEUTRAL" },
-          { date: "Sab", score: 82, stressLevel: 1, mood: "OVERJOYED" },
-          { date: "Min", score: user?.zybaScore || 80, stressLevel: 1, mood: "HAPPY" },
-        ],
+        history, // Data riil murni tanpa fabrikasi dummy
       };
     } catch (err) {
       console.warn("[Wellness-Repo] Fallback get stats:", err);
       return {
-        currentScore: 74,
-        scoreBreakdown: { mental: 72, physical: 75, social: 70 },
-        history: [
-          { date: "Sen", score: 70, stressLevel: 3, mood: "NEUTRAL" },
-          { date: "Sel", score: 74, stressLevel: 2, mood: "HAPPY" },
-          { date: "Rab", score: 72, stressLevel: 3, mood: "NEUTRAL" },
-          { date: "Kam", score: 78, stressLevel: 2, mood: "HAPPY" },
-          { date: "Jum", score: 76, stressLevel: 2, mood: "NEUTRAL" },
-          { date: "Sab", score: 80, stressLevel: 1, mood: "HAPPY" },
-          { date: "Min", score: 74, stressLevel: 2, mood: "HAPPY" },
-        ],
+        hasData: false,
+        currentScore: null,
+        scoreBreakdown: { mental: null, physical: null, social: null },
+        history: [],
       };
     }
   },

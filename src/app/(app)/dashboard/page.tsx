@@ -96,20 +96,20 @@ export default function DashboardPage() {
     );
   }
 
-  const user = data?.user || { name: "Syauqi", companionPersona: "ZIBI" };
+  const user = data?.user || { name: "Teman ZYBA", companionPersona: "ZIBI" };
   const scoreData = data?.scoreData || {
-    zybaScore: 78,
-    mentalScore: 75,
-    physicalScore: 80,
-    socialScore: 79,
+    zybaScore: 50,
+    mentalScore: 50,
+    physicalScore: 50,
+    socialScore: 50,
     stressLevel: 2,
-    hasEnoughData: true,
-    sampleDaysCount: 5,
+    hasEnoughData: false,
+    sampleDaysCount: 0,
   };
-  const hearthFlame = data?.hearthFlame || { litToday: true, streakDays: 44 };
+  const hearthFlame = data?.hearthFlame || { litToday: false, streakDays: 0 };
   const todayChecklist = data?.todayChecklist || {
-    checkInDone: true,
-    activityDone: true,
+    checkInDone: false,
+    activityDone: false,
     journalDone: false,
   };
   const crisisAlert = data?.crisisAlert || false;
@@ -132,9 +132,9 @@ export default function DashboardPage() {
         avatarUrl={user.avatarUrl}
         companionPersona={user.companionPersona}
         zybaScore={scoreData.zybaScore}
-        sleepScore={85}
+        sleepScore={scoreData.physicalScore}
         stressLevel={scoreData.stressLevel || 2}
-        streakDays={hearthFlame.streakDays || 44}
+        streakDays={hearthFlame.streakDays || 0}
         litToday={hearthFlame.litToday}
         onQuickBreathe={() => setShowQuickBreathe(!showQuickBreathe)}
       />

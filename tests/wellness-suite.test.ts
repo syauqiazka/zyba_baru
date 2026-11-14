@@ -68,6 +68,25 @@ async function runWellnessSuiteTests() {
 
   // 2. Test Ruang Sehat / Wellness Journey
   console.log("[Test 3] Mengambil data statistik & tren kurva Ruang Sehat...");
+  // Verifikasi kondisi awal: pengguna baru belum memiliki riwayat (tanpa data palsu)
+  const initialStats = await wellnessRepo.getStats(testUserId);
+  if (initialStats.hasData && initialStats.history.length > 0) {
+    throw new Error("Pengguna baru seharusnya tidak memiliki data fabrikasi dummy");
+  }
+
+  // Masukkan penilaian harian riil
+  await accountDb.dailyAssessment.create({
+    data: {
+      userId: testUserId,
+      date: new Date().toISOString().slice(0, 10),
+      mood: "HAPPY",
+      stressLevel: 2,
+      sleepRating: 4,
+      energyTags: ["Segar", "Fokus"],
+      calculatedScore: 78,
+    },
+  }).catch(() => {});
+
   const stats = await wellnessRepo.getStats(testUserId);
   if (!stats.scoreBreakdown || typeof stats.scoreBreakdown.mental !== "number") {
     throw new Error("Breakdown domain mental/fisik/sosial tidak valid");

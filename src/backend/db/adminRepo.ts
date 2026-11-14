@@ -25,58 +25,8 @@ export interface AdminReportItem {
   createdAt: string;
 }
 
-// In-memory seed untuk laporan komunitas ketika DB offline
-const memReports: AdminReportItem[] = [
-  {
-    id: "rep-seed-1",
-    reporterId: "user_seed_dimas",
-    reporterName: "Dimas Anggara",
-    targetType: "POST",
-    targetId: "post_spam_test",
-    postId: "post_spam_test",
-    reportedUserId: "user_spammer_99",
-    reportedUserName: "Akun Promo Ghaib",
-    reason: "spam",
-    reasonLabel: "Spam & Promosi Ilegal",
-    details: "Mengirimkan tautan judi/pinjol berulang kali di kolom komentar refleksi.",
-    contentSnippet: "Klaim bonus pinjaman instan tanpa syarat cair 5 menit langsung wa ke nomor...",
-    status: "PENDING",
-    createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45 menit lalu
-  },
-  {
-    id: "rep-seed-2",
-    reporterId: "user_seed_nadia",
-    reporterName: "Nadia Larasati",
-    targetType: "POST",
-    targetId: "post_distress_test",
-    postId: "post_distress_test",
-    reportedUserId: "user_distress_01",
-    reportedUserName: "Jiwa Terluka",
-    reason: "self_harm",
-    reasonLabel: "Indikasi Tekanan / Menyakiti Diri",
-    details: "Postingan mengekspresikan keputusasaan mendalam dan butuh pendampingan.",
-    contentSnippet: "Rasanya malam ini aku sudah tidak sanggup lagi bernapas di dunia ini...",
-    status: "REVIEWING",
-    createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(), // 2 jam lalu
-  },
-  {
-    id: "rep-seed-3",
-    reporterId: "user_seed_syauqi",
-    reporterName: "Syauqi",
-    targetType: "COMMENT",
-    targetId: "comm_hate_test",
-    postId: "post_seed_1",
-    reportedUserId: "user_troll_12",
-    reportedUserName: "Kritikus Nyinyir",
-    reason: "harassment",
-    reasonLabel: "Pelecehan / Komentar Kasar",
-    details: "Menggunakan kata-kata kasar yang merendahkan proses pulih orang lain.",
-    contentSnippet: "Lemah banget baru masalah sepele gitu aja curhat nangis-nangis di medsos.",
-    status: "ACTION_TAKEN",
-    resolutionNote: "Komentar disembunyikan dan pengguna diberikan peringatan resmi.",
-    createdAt: new Date(Date.now() - 1000 * 60 * 360).toISOString(),
-  },
-];
+// In-memory fallback untuk laporan komunitas ketika DB offline
+const memReports: AdminReportItem[] = [];
 
 function withTimeout<T>(promise: Promise<T>, ms = 2500): Promise<T> {
   return Promise.race([
@@ -106,25 +56,23 @@ export const adminRepo = {
         2500
       );
 
-      if (reports.length > 0) {
-        return reports.map((r) => ({
-          id: r.id,
-          reporterId: r.reporterId,
-          reporterName: "Pengguna Pelapor",
-          targetType: r.targetType,
-          targetId: r.targetId,
-          postId: r.postId,
-          reportedUserId: r.reportedUserId,
-          reportedUserName: "Pengguna Terlapor",
-          reason: r.reason,
-          reasonLabel: formatReason(r.reason),
-          details: r.details,
-          contentSnippet: r.details || "Konten yang dilaporkan dalam komunitas.",
-          status: r.status,
-          resolutionNote: r.resolutionNote,
-          createdAt: r.createdAt.toISOString(),
-        }));
-      }
+      return reports.map((r) => ({
+        id: r.id,
+        reporterId: r.reporterId,
+        reporterName: "Pengguna Pelapor",
+        targetType: r.targetType,
+        targetId: r.targetId,
+        postId: r.postId,
+        reportedUserId: r.reportedUserId,
+        reportedUserName: "Pengguna Terlapor",
+        reason: r.reason,
+        reasonLabel: formatReason(r.reason),
+        details: r.details,
+        contentSnippet: r.details || "Konten yang dilaporkan dalam komunitas.",
+        status: r.status,
+        resolutionNote: r.resolutionNote,
+        createdAt: r.createdAt.toISOString(),
+      }));
     } catch {
       // In-memory fallback
     }

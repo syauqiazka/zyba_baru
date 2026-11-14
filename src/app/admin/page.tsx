@@ -131,14 +131,32 @@ export default function AdminPage() {
     e.preventDefault();
     if (!selectedReport) return;
 
+    const targetReportId = selectedReport.id;
+    const resolvedReason = actionReason.trim() || "Tindakan moderasi administratif standar.";
+    const isDismiss = actionType === "DISMISS_REPORT";
+
     try {
       setSubmittingAction(true);
+
+      // Update optimistik pada daftar laporan lokal
+      setReports((prev) =>
+        prev.map((r) =>
+          r.id === targetReportId
+            ? {
+                ...r,
+                status: isDismiss ? "DISMISSED" : "ACTION_TAKEN",
+                resolutionNote: resolvedReason,
+              }
+            : r
+        )
+      );
+
       const res = await fetch(`/api/admin/reports/${selectedReport.id}/action`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: actionType,
-          reason: actionReason.trim() || "Tindakan moderasi administratif standar.",
+          reason: resolvedReason,
           targetUserId: selectedReport.reportedUserId,
           targetContentId: selectedReport.targetId,
         }),
@@ -155,6 +173,7 @@ export default function AdminPage() {
       fetchReportsAndStats();
     } catch (err: any) {
       alert(err.message || "Terjadi kesalahan saat memproses moderasi");
+      fetchReportsAndStats();
     } finally {
       setSubmittingAction(false);
     }
@@ -421,25 +440,32 @@ export default function AdminPage() {
               <div className="flex items-center gap-3 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-[#2D3E33]/10">
                 {getStatusBadge(report.status)}
 
-                <button
-                  type="button"
-                  id={idx === 0 ? "btn-review-report-first" : undefined}
-                  onClick={() => {
-                    setSelectedReport(report);
-                    setActionReason("");
-                    // Default suggest crisis support if self_harm
-                    if (report.reason === "self_harm") {
-                      setActionType("SUPPORT_CRISIS");
-                      setActionReason("Mengarahkan pengguna ke saluran bantuan krisis kesehatan mental 119.");
-                    } else {
-                      setActionType("HIDE_POST");
+                {report.status === "PENDING" || report.status === "REVIEWING" ? (
+                  <button
+                    type="button"
+                    id={idx === 0 ? "btn-review-report-first" : undefined}
+                    onClick={() => {
+                      setSelectedReport(report);
                       setActionReason("");
-                    }
-                  }}
-                  className="rounded-full bg-[#1B241E] px-4 py-2 text-xs font-medium text-white hover:bg-[#2D3E33] transition-colors"
-                >
-                  Tinjau & Tindak
-                </button>
+                      // Default suggest crisis support if self_harm
+                      if (report.reason === "self_harm") {
+                        setActionType("SUPPORT_CRISIS");
+                        setActionReason("Mengarahkan pengguna ke saluran bantuan krisis kesehatan mental 119.");
+                      } else {
+                        setActionType("HIDE_POST");
+                        setActionReason("");
+                      }
+                    }}
+                    className="rounded-full bg-[#1B241E] px-4 py-2 text-xs font-medium text-white hover:bg-[#2D3E33] transition-colors shadow-2xs"
+                  >
+                    Tinjau & Tindak
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Selesai Ditindak</span>
+                  </span>
+                )}
               </div>
             </div>
           ))}

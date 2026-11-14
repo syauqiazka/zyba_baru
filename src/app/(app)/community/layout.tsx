@@ -42,7 +42,7 @@ function CommunityLayoutContent({ children }: { children: React.ReactNode }) {
       <CommunityHeader />
 
       {/* 3-Column Community Architecture (AGENTS.md 7.6 & Convo reference layout) */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
         <div className="flex gap-6 lg:gap-8 items-start w-full">
           {/* 1. Community Left Sidebar rendered ONCE */}
           <CommunitySidebar

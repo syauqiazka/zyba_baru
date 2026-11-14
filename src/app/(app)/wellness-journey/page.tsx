@@ -23,11 +23,12 @@ import {
 } from "lucide-react";
 
 interface WellnessData {
-  currentScore: number;
+  hasData?: boolean;
+  currentScore: number | null;
   scoreBreakdown: {
-    mental: number;
-    physical: number;
-    social: number;
+    mental: number | null;
+    physical: number | null;
+    social: number | null;
   };
   history: any[];
 }
@@ -202,16 +203,26 @@ export default function WellnessJourneyPage() {
               </div>
             </div>
             <div className="font-mono text-4xl sm:text-5xl font-black text-brown-900 tracking-tight">
-              {wellnessData?.currentScore ?? 74}
-              <span className="text-lg text-brown-700/40 font-normal">/100</span>
+              {wellnessData?.currentScore !== null && wellnessData?.currentScore !== undefined ? (
+                <>
+                  {wellnessData.currentScore}
+                  <span className="text-lg text-brown-700/40 font-normal">/100</span>
+                </>
+              ) : (
+                <span className="text-3xl text-brown-700/40 font-normal">—</span>
+              )}
             </div>
           </div>
           <div className="pt-4 border-t border-brown-900/8 mt-4 space-y-1">
             <span className="text-sm font-serif font-bold text-[#3E7B54] block">
-              {getScoreVerdict(wellnessData?.currentScore ?? 74)}
+              {wellnessData?.currentScore !== null && wellnessData?.currentScore !== undefined
+                ? getScoreVerdict(wellnessData.currentScore)
+                : "Belum Ada Evaluasi"}
             </span>
             <span className="text-xs text-brown-700/60 block">
-              Rerata rolling 7 hari terakhir
+              {wellnessData?.hasData
+                ? "Rerata rolling 7 hari terakhir"
+                : "Lakukan check-in harian untuk menghitung skormu"}
             </span>
           </div>
         </div>
@@ -230,18 +241,22 @@ export default function WellnessJourneyPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <div className="flex items-baseline justify-between gap-1">
-                <span className="text-xs font-semibold text-brown-700/80 whitespace-nowrap">
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-xs font-semibold text-brown-700/80 truncate">
                   Skor Batin
                 </span>
                 <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
-                  {wellnessData?.scoreBreakdown.mental ?? 72}/100
+                  {wellnessData?.scoreBreakdown?.mental !== null && wellnessData?.scoreBreakdown?.mental !== undefined
+                    ? `${wellnessData.scoreBreakdown.mental}/100`
+                    : "—"}
                 </span>
               </div>
               <div className="w-full h-2 rounded-full bg-cream overflow-hidden">
                 <div
                   className="h-full bg-[#3E7B54] rounded-full transition-all duration-500"
-                  style={{ width: `${wellnessData?.scoreBreakdown.mental ?? 72}%` }}
+                  style={{
+                    width: `${wellnessData?.scoreBreakdown?.mental !== null && wellnessData?.scoreBreakdown?.mental !== undefined ? wellnessData.scoreBreakdown.mental : 0}%`,
+                  }}
                 />
               </div>
             </div>
@@ -259,18 +274,22 @@ export default function WellnessJourneyPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <div className="flex items-baseline justify-between gap-1">
-                <span className="text-xs font-semibold text-brown-700/80 whitespace-nowrap">
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-xs font-semibold text-brown-700/80 truncate">
                   Tidur & Energi
                 </span>
                 <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
-                  {wellnessData?.scoreBreakdown.physical ?? 75}/100
+                  {wellnessData?.scoreBreakdown?.physical !== null && wellnessData?.scoreBreakdown?.physical !== undefined
+                    ? `${wellnessData.scoreBreakdown.physical}/100`
+                    : "—"}
                 </span>
               </div>
               <div className="w-full h-2 rounded-full bg-cream overflow-hidden">
                 <div
                   className="h-full bg-orange-500 rounded-full transition-all duration-500"
-                  style={{ width: `${wellnessData?.scoreBreakdown.physical ?? 75}%` }}
+                  style={{
+                    width: `${wellnessData?.scoreBreakdown?.physical !== null && wellnessData?.scoreBreakdown?.physical !== undefined ? wellnessData.scoreBreakdown.physical : 0}%`,
+                  }}
                 />
               </div>
             </div>
@@ -288,18 +307,22 @@ export default function WellnessJourneyPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <div className="flex items-baseline justify-between gap-1">
-                <span className="text-xs font-semibold text-brown-700/80 whitespace-nowrap">
-                  Koneksi Sosial
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-xs font-semibold text-brown-700/80 truncate">
+                  Koneksi Komunitas
                 </span>
                 <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
-                  {wellnessData?.scoreBreakdown.social ?? 70}/100
+                  {wellnessData?.scoreBreakdown?.social !== null && wellnessData?.scoreBreakdown?.social !== undefined
+                    ? `${wellnessData.scoreBreakdown.social}/100`
+                    : "—"}
                 </span>
               </div>
               <div className="w-full h-2 rounded-full bg-cream overflow-hidden">
                 <div
                   className="h-full bg-blue-600 rounded-full transition-all duration-500"
-                  style={{ width: `${wellnessData?.scoreBreakdown.social ?? 70}%` }}
+                  style={{
+                    width: `${wellnessData?.scoreBreakdown?.social !== null && wellnessData?.scoreBreakdown?.social !== undefined ? wellnessData.scoreBreakdown.social : 0}%`,
+                  }}
                 />
               </div>
             </div>
@@ -500,28 +523,47 @@ export default function WellnessJourneyPage() {
               <h4 className="font-serif text-sm font-bold text-brown-900">
                 Log Catatan Suasana Hati Sepekan
               </h4>
-              <div className="divide-y divide-brown-900/8">
-                {(wellnessData?.history || []).map((h, i) => (
-                  <div key={i} className="py-3.5 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center font-bold text-xs">
-                        {h.date.slice(0, 3)}
+              {(!wellnessData?.history || wellnessData.history.length === 0) ? (
+                <div className="py-8 text-center text-xs text-brown-700/60 space-y-2">
+                  <Calendar className="w-8 h-8 text-[#3E7B54] mx-auto opacity-70" />
+                  <p className="font-serif font-bold text-brown-900">
+                    Belum ada riwayat check-in tercatat
+                  </p>
+                  <p className="max-w-xs mx-auto">
+                    Mulai lakukan check-in harian untuk mencatat tingkat stres, kualitas tidur, dan dinamika emosimu.
+                  </p>
+                  <Link
+                    href="/mood-check-in"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 mt-2 rounded-full bg-orange-500 hover:bg-orange-600 text-brown-900 font-bold text-xs shadow-2xs transition-all"
+                  >
+                    <span>Check-In Sekarang</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              ) : (
+                <div className="divide-y divide-brown-900/8">
+                  {wellnessData.history.map((h, i) => (
+                    <div key={i} className="py-3.5 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center font-bold text-xs">
+                          {h.date.slice(0, 3)}
+                        </div>
+                        <div>
+                          <p className="font-bold text-brown-900">Suasana: {h.mood}</p>
+                          <span className="text-[10px] text-brown-700/60">
+                            Tingkat Stres: {h.stressLevel}/5
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-brown-900">Suasana: {h.mood}</p>
-                        <span className="text-[10px] text-brown-700/60">
-                          Tingkat Stres: {h.stressLevel}/5
+                      <div className="text-right">
+                        <span className="font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md">
+                          Skor {h.score}
                         </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className="font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md">
-                        Skor {h.score}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -38,8 +38,8 @@ export function CommunityHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-[#F5F8F5]/90 backdrop-blur-md border-b border-brown-900/10 px-4 sm:px-6 lg:px-8 py-3 transition-colors">
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-3 sm:gap-6">
+    <header className="sticky top-0 z-40 w-full bg-[#F5F8F5]/95 backdrop-blur-md border-b border-brown-900/10 px-4 sm:px-8 lg:px-12 xl:px-16 py-3 transition-colors shadow-2xs">
+      <div className="w-full max-w-[1600px] mx-auto flex items-center justify-between gap-3 sm:gap-6">
         {/* Left: Mobile Menu & Brand Logo */}
         <div className="flex items-center gap-3 shrink-0">
           <button

@@ -50,7 +50,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F8F5] text-brown-900 selection:bg-emerald-200 overflow-x-hidden">
+    <div className="min-h-screen bg-[#F5F8F5] text-brown-900 selection:bg-emerald-200 overflow-x-clip">
       {/* 1. Left Sidebar on Desktop (>= 768px) */}
       <SanctuarySidebar userName={userName} />
 
