@@ -1,56 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  Heart,
   Eye,
   EyeOff,
   Check,
   Lock,
   Mail,
   User,
-  ChevronLeft,
-  ChevronRight,
+  CheckCircle2,
+  ChevronUp,
 } from "lucide-react";
-import { Mascot } from "@/components/ui/Mascot";
-import { MASCOT_NAME } from "@/lib/brand";
-import { BreathingOrb } from "@/components/wellness/BreathingOrb";
-
-const ONBOARDING_SLIDES = [
-  {
-    id: "welcome",
-    pose: "default" as const,
-    badge: "Langkah Awal",
-    title: "Selamat Datang di Ruang Aman ZYBA",
-    desc: `Kenalkan, aku ${MASCOT_NAME}. Aku hadir menemani perjalanan kesehatan pikiran dan jiwamu secara sadar, tanpa tekanan.`,
-  },
-  {
-    id: "growth",
-    pose: "happy" as const,
-    badge: "Kemenangan Kecil",
-    title: "Rayakan Setiap Langkah Kecilmu",
-    desc: "Tidak ada target streak yang membebani. Setiap jeda nafas dan check-in jujur adalah wujud kepedulian tulus untuk dirimu.",
-  },
-  {
-    id: "listen",
-    pose: "listening" as const,
-    badge: "Selalu Hadir",
-    title: "Selalu Siap Mendengar Kapan Pun",
-    desc: "Saat pikiran terasa riuh dan harimu berat, kami selalu di sini untuk menyimak ceritamu dalam ruang hening yang aman.",
-  },
-];
+import gsap from "gsap";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const [activeSlide, setActiveSlide] = useState(0);
 
   // Form states
-  const [mode, setMode] = useState<"register" | "login">("register");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,6 +35,26 @@ export default function OnboardingPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [registeredEmail, setRegisteredEmail] = useState("");
 
+  const mascotFloatingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    if (mascotFloatingRef.current) {
+      gsap.to(mascotFloatingRef.current.children, {
+        y: -10,
+        duration: 2.8,
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.3,
+        ease: "sine.inOut",
+      });
+    }
+  }, []);
+
   // Password strength check
   const hasMinLength = password.length >= 8;
   const hasNumber = /\d/.test(password);
@@ -72,7 +64,7 @@ export default function OnboardingPage() {
     e.preventDefault();
     setErrorMsg("");
 
-    if (mode === "register" && !name.trim()) {
+    if (!name.trim()) {
       setErrorMsg("Nama lengkap atau panggilan wajib diisi.");
       return;
     }
@@ -84,27 +76,16 @@ export default function OnboardingPage() {
     setLoading(true);
 
     try {
-      if (mode === "login") {
-        const res = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Gagal masuk");
-        router.push(data.redirectUrl || "/dashboard");
-      } else {
-        const res = await fetch("/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Gagal mendaftar");
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mendaftar");
 
-        setRegisteredEmail(email);
-        setStep("otp");
-      }
+      setRegisteredEmail(email);
+      setStep("otp");
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan.");
     } finally {
@@ -154,342 +135,371 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-cream text-brown-900 selection:bg-orange-200">
-      {/* Top Ambient Bar */}
-      <header className="px-6 py-5 border-b border-brown-900/10 bg-cream/70 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500 text-brown-900 shadow-sm">
-              <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-3.5H7.5l7-8.5v4.5h3.5l-7 7.5z" />
-              </svg>
-            </div>
-            <span className="font-serif text-xl font-bold tracking-tight text-brown-900">
-              ZYBA
-            </span>
-          </Link>
+    <div className="min-h-screen bg-[#F5F8F5] flex flex-col justify-between selection:bg-orange-200 selection:text-brown-900">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-screen">
+        
+        {/* ========================================================
+            SISI KIRI (5 Kolom): Panel Gelap Suaka (Sesuai Foto 5 GitHub)
+            ======================================================== */}
+        <div className="lg:col-span-5 bg-[#111A14] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between relative overflow-hidden">
+          
+          {/* Subtle Ambient Cosmic Glow */}
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-teal-500/10 blur-[100px] pointer-events-none rounded-full" />
 
-          <Link
-            href="/guidebook"
-            className="text-xs font-semibold text-brown-700 hover:text-brown-900 transition-colors flex items-center gap-1.5"
-          >
-            <ShieldCheck className="h-3.5 w-3.5 text-orange-600" />
-            Bantuan Krisis 24/7
-          </Link>
-        </div>
-      </header>
-
-      {/* Main Split Sanctuary Layout (ui-ux-pro-max: Organic Biophilic + Soft UI Evolution) */}
-      <main className="max-w-6xl mx-auto px-4 py-8 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Kolom Kiri: Hero & Living Sanctuary Orb (65% / 7 cols) */}
-          <div className="lg:col-span-7 space-y-8">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/25 bg-orange-100/60 px-3 py-1 text-xs font-bold text-orange-950 mb-4">
-                <Sparkles className="h-3.5 w-3.5 text-orange-600" />
-                The Tactile Sanctuary • 100% Gratis
+          {/* Top Brand Logo */}
+          <div className="relative z-10 space-y-8">
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#3E7B54] text-white shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-3.5H7.5l7-8.5v4.5h3.5l-7 7.5z" />
+                </svg>
               </div>
-              <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brown-900 leading-[1.15]">
-                Ruang Tenang untuk Pikiran yang Riuh.
+              <span className="font-serif text-2xl font-black tracking-tight text-white">
+                ZYBA
+              </span>
+            </Link>
+
+            <div className="space-y-3">
+              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight">
+                Buka Ruang Amanmu
               </h1>
-              <p className="mt-4 text-sm md:text-base text-brown-700 leading-relaxed max-w-xl">
-                Pendamping kesehatan mental berbasis AI dengan 4 persona empatik. Lakukan check-in harian, rasakan nafas sadar, dan pulihkan ritme hidupmu tanpa tekanan gamifikasi.
+              <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-sm">
+                Bergabunglah bersama ribuan teman generasi muda yang merawat kesehatan batinnya secara bebas dan sadar.
               </p>
             </div>
 
-            {/* Mascot Interactive Onboarding Carousel (default / happy / listening) */}
-            <div className="rounded-3xl border border-brown-900/10 bg-white/70 p-6 md:p-8 backdrop-blur-md shadow-sm relative overflow-hidden">
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                <div className="shrink-0 flex items-center justify-center">
-                  <Mascot
-                    pose={ONBOARDING_SLIDES[activeSlide].pose}
-                    size={160}
-                    animate={true}
-                    decorative={true}
-                  />
-                </div>
-                <div className="flex-1 text-center sm:text-left space-y-2">
-                  <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-orange-950 bg-orange-100/80 px-2.5 py-0.5 rounded-full border border-orange-500/20">
-                    {ONBOARDING_SLIDES[activeSlide].badge}
-                  </span>
-                  <h3 className="font-serif text-lg md:text-xl font-bold text-brown-900">
-                    {ONBOARDING_SLIDES[activeSlide].title}
-                  </h3>
-                  <p className="text-xs md:text-sm text-brown-700 leading-relaxed">
-                    {ONBOARDING_SLIDES[activeSlide].desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Carousel Indicators & Controls */}
-              <div className="mt-6 pt-4 border-t border-brown-900/10 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {ONBOARDING_SLIDES.map((slide, idx) => (
-                    <button
-                      key={slide.id}
-                      type="button"
-                      onClick={() => setActiveSlide(idx)}
-                      className={`h-2 rounded-full transition-all ${
-                        activeSlide === idx
-                          ? "w-6 bg-orange-500"
-                          : "w-2 bg-brown-900/20 hover:bg-brown-900/40"
-                      }`}
-                      aria-label={`Lihat slide ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActiveSlide((prev) =>
-                        prev === 0 ? ONBOARDING_SLIDES.length - 1 : prev - 1
-                      )
-                    }
-                    className="p-1.5 rounded-lg border border-brown-900/15 text-brown-800 hover:bg-brown-900/5 transition-colors"
-                    aria-label="Slide sebelumnya"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActiveSlide((prev) =>
-                        (prev + 1) % ONBOARDING_SLIDES.length
-                      )
-                    }
-                    className="p-1.5 rounded-lg border border-brown-900/15 text-brown-800 hover:bg-brown-900/5 transition-colors"
-                    aria-label="Slide berikutnya"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Sahabat Mindful: Zibi */}
-            <div className="rounded-3xl border border-brown-900/10 bg-white/80 p-6 shadow-sm">
-              <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70 block mb-3">
-                Sahabat Mindful ZYBA
+            {/* Checklist of Included Perks (Sesuai Foto 5 GitHub) */}
+            <div className="pt-2 space-y-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <span>Semua Fitur Bebas Biaya 100%</span>
+                <ChevronUp className="w-3.5 h-3.5" />
               </span>
 
-              <div className="flex items-center gap-4 rounded-2xl border border-brown-900/10 bg-cream/60 p-4">
-                <Mascot pose="happy" size={54} animate={false} decorative={true} className="shrink-0" />
-                <div>
-                  <div className="text-sm font-bold text-brown-900">
-                    {MASCOT_NAME} &bull; Axolotl Suaka
-                  </div>
-                  <p className="mt-1 text-xs italic text-brown-700 leading-relaxed">
-                    &quot;Ceritakan apa pun yang terasa berat hari ini. Aku ada di sini mendengarmu tanpa penghakiman.&quot;
-                  </p>
+              <div className="space-y-2.5 text-xs text-white/80">
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Akses Zibi Companion AI 24/7 tanpa batas paywall</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Jurnal reflektif pribadi dengan enkripsi aman</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Breathing Garden 4-7-8 & kurva tren kebugaran batin</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Tanpa streak api yang menekan rasa bersalah</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Komunitas empati dengan opsi unggahan anonim</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Kolom Kanan: Tactile Auth Sheet (35% / 5 cols) */}
-          <div className="lg:col-span-5">
-            <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-8 shadow-[0_8px_30px_rgba(44,34,30,0.06)] backdrop-blur-xl">
-              {step === "form" ? (
-                <>
-                  {/* Mode Tabs */}
-                  <div className="flex items-center rounded-2xl bg-brown-900/[0.04] p-1 border border-brown-900/5 mb-6">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode("register");
-                        setErrorMsg("");
-                      }}
-                      className={`flex-1 rounded-xl py-2 text-xs font-bold transition-all ${
-                        mode === "register"
-                          ? "bg-white text-brown-900 shadow-sm"
-                          : "text-brown-700 hover:text-brown-900"
-                      }`}
-                    >
-                      Daftar Akun Baru
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode("login");
-                        setErrorMsg("");
-                      }}
-                      className={`flex-1 rounded-xl py-2 text-xs font-bold transition-all ${
-                        mode === "login"
-                          ? "bg-white text-brown-900 shadow-sm"
-                          : "text-brown-700 hover:text-brown-900"
-                      }`}
-                    >
-                      Sudah Ada Akun
-                    </button>
+          {/* Bottom Floating Mascot Figures (Foto 5 GitHub 3D Mascot Scene) */}
+          <div
+            ref={mascotFloatingRef}
+            className="relative z-10 pt-10 flex items-end justify-center gap-4 sm:gap-6"
+          >
+            {/* Mascot Element 1: Zibi Penasaran */}
+            <div className="w-20 sm:w-24 flex flex-col items-center">
+              <Image
+                src="/images/mascot/trimmed/penasaran.png"
+                alt="Zibi Penasaran"
+                width={96}
+                height={96}
+                className="w-full h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+              />
+            </div>
+
+            {/* Mascot Element 2: Zibi Utama */}
+            <div className="w-28 sm:w-32 flex flex-col items-center -mb-2">
+              <Image
+                src="/images/mascot/trimmed/hero_menyapa.png"
+                alt="Zibi Menyapa"
+                width={128}
+                height={128}
+                className="w-full h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]"
+              />
+            </div>
+
+            {/* Mascot Element 3: Zibi Senang */}
+            <div className="w-20 sm:w-24 flex flex-col items-center">
+              <Image
+                src="/images/mascot/trimmed/senang.png"
+                alt="Zibi Senang"
+                width={96}
+                height={96}
+                className="w-full h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================
+            SISI KANAN (7 Kolom): Formulir Pendaftaran (Sesuai Foto 5 GitHub)
+            ======================================================== */}
+        <div className="lg:col-span-7 bg-[#F5F8F5] p-6 sm:p-10 lg:p-16 flex flex-col justify-between">
+          
+          {/* Top Switcher (Already have account / Sign in) */}
+          <div className="flex items-center justify-end gap-2 text-xs">
+            <span className="text-brown-700/70">Sudah punya akun ZYBA?</span>
+            <Link
+              href="/login"
+              className="font-bold text-[#3E7B54] hover:underline flex items-center gap-1"
+            >
+              <span>Masuk sekarang</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Form Container */}
+          <div className="max-w-[420px] w-full mx-auto my-auto py-8 space-y-6">
+            
+            {step === "form" ? (
+              <>
+                <div className="space-y-1.5">
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-brown-900 tracking-tight">
+                    Daftar Akun Baru
+                  </h2>
+                  <p className="text-xs text-brown-700/70">
+                    Mulai ruang tenang pribadimu dalam hitungan detik.
+                  </p>
+                </div>
+
+                {/* Error Alert */}
+                {errorMsg && (
+                  <div
+                    role="alert"
+                    className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs flex items-center gap-2"
+                  >
+                    <span className="font-bold text-amber-800">Perhatian:</span>
+                    <span>{errorMsg}</span>
+                  </div>
+                )}
+
+                {/* Google OAuth Button */}
+                <button
+                  type="button"
+                  onClick={() => alert("Fitur Google OAuth akan segera aktif.")}
+                  className="w-full py-3 px-4 rounded-2xl bg-white hover:bg-cream border border-brown-900/10 text-brown-900 font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-3 shadow-2xs hover:shadow-xs active:scale-98"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path
+                      fill="#EA4335"
+                      d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 14.5s.7 4.8 1.9 7.2l3.7-2.9z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16.5C3.7 20.4 7.5 23.5 12 23.5z"
+                    />
+                  </svg>
+                  <span>Daftar dengan Google</span>
+                </button>
+
+                {/* Divider */}
+                <div className="relative flex items-center justify-center">
+                  <div className="w-full border-t border-brown-900/10" />
+                  <span className="absolute bg-[#F5F8F5] px-3 text-[11px] font-semibold text-brown-700/50">
+                    atau gunakan email
+                  </span>
+                </div>
+
+                {/* Register Form */}
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-brown-900 mb-1.5">
+                      Nama Lengkap / Panggilan
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Bagaimana Zibi memanggilmu?"
+                      className="w-full px-4 py-3 rounded-2xl bg-white border border-brown-900/10 text-brown-900 placeholder:text-brown-700/40 text-xs sm:text-sm focus:outline-none focus:border-[#3E7B54] focus:ring-2 focus:ring-[#3E7B54]/15 transition-all shadow-2xs"
+                    />
                   </div>
 
-                  <div className="mb-6">
-                    <h2 className="font-serif text-2xl font-bold text-brown-900">
-                      {mode === "register" ? "Mulai Ruang Amanmu" : "Selamat Datang Kembali"}
-                    </h2>
-                    <p className="mt-1 text-xs text-brown-700 leading-relaxed">
-                      {mode === "register"
-                        ? "Daftar dalam 30 detik. Kami mengirimkan kode OTP ke emailmu."
-                        : "Masuk untuk melanjutkan refleksi dan percakapanmu."}
-                    </p>
+                  <div>
+                    <label className="block text-xs font-bold text-brown-900 mb-1.5">
+                      Alamat Email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="nama@email.com"
+                      className="w-full px-4 py-3 rounded-2xl bg-white border border-brown-900/10 text-brown-900 placeholder:text-brown-700/40 text-xs sm:text-sm focus:outline-none focus:border-[#3E7B54] focus:ring-2 focus:ring-[#3E7B54]/15 transition-all shadow-2xs"
+                    />
                   </div>
 
-                  {errorMsg && (
-                    <div className="mb-5 rounded-xl border border-brown-900/20 bg-orange-50 p-3 text-xs text-brown-900">
-                      {errorMsg}
+                  <div>
+                    <label className="block text-xs font-bold text-brown-900 mb-1.5">
+                      Kata Sandi
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Minimal 8 karakter..."
+                        className="w-full px-4 py-3 pr-12 rounded-2xl bg-white border border-brown-900/10 text-brown-900 placeholder:text-brown-700/40 text-xs sm:text-sm focus:outline-none focus:border-[#3E7B54] focus:ring-2 focus:ring-[#3E7B54]/15 transition-all shadow-2xs"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-brown-700/50 hover:text-brown-900 transition-colors p-1"
+                        aria-label={showPassword ? "Sembunyikan kata sandi" : "Lihat kata sandi"}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
                     </div>
-                  )}
 
-                  <form onSubmit={handleRegister} className="space-y-4">
-                    {mode === "register" && (
-                      <div>
-                        <label className="block text-xs font-bold text-brown-900 mb-1.5">
-                          Nama Lengkap / Panggilan
-                        </label>
-                        <div className="relative">
-                          <User className="absolute left-3.5 top-3.5 h-4 w-4 text-brown-700/50" />
-                          <input
-                            type="text"
-                            required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            placeholder="Contoh: Syauqi"
-                            className="h-11 w-full rounded-xl border border-brown-900/15 bg-white/90 pl-10 pr-4 text-xs md:text-sm text-brown-900 placeholder:text-brown-700/50 focus:border-orange-500/70 focus:ring-2 focus:ring-orange-500/30"
+                    {/* Password Strength Checklist */}
+                    {password && (
+                      <div className="mt-2.5 p-3 rounded-xl bg-white border border-brown-900/5 space-y-1.5 text-[11px] text-brown-700/70">
+                        <div className="flex items-center gap-1.5">
+                          <Check
+                            className={`w-3 h-3 ${
+                              hasMinLength ? "text-[#3E7B54]" : "text-brown-700/30"
+                            }`}
                           />
+                          <span className={hasMinLength ? "text-brown-900 font-semibold" : ""}>
+                            Minimal 8 karakter
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Check
+                            className={`w-3 h-3 ${
+                              hasLetter ? "text-[#3E7B54]" : "text-brown-700/30"
+                            }`}
+                          />
+                          <span className={hasLetter ? "text-brown-900 font-semibold" : ""}>
+                            Mengandung huruf
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <Check
+                            className={`w-3 h-3 ${
+                              hasNumber ? "text-[#3E7B54]" : "text-brown-700/30"
+                            }`}
+                          />
+                          <span className={hasNumber ? "text-brown-900 font-semibold" : ""}>
+                            Mengandung angka
+                          </span>
                         </div>
                       </div>
                     )}
-
-                    <div>
-                      <label className="block text-xs font-bold text-brown-900 mb-1.5">
-                        Alamat Email
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-brown-700/50" />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="kamu@email.com"
-                          className="h-11 w-full rounded-xl border border-brown-900/15 bg-white/90 pl-10 pr-4 text-xs md:text-sm text-brown-900 placeholder:text-brown-700/50 focus:border-orange-500/70 focus:ring-2 focus:ring-orange-500/30"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-brown-900 mb-1.5">
-                        Kata Sandi
-                      </label>
-                      <div className="relative">
-                        <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-brown-700/50" />
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          required
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Minimal 8 karakter"
-                          className="h-11 w-full rounded-xl border border-brown-900/15 bg-white/90 pl-10 pr-10 text-xs md:text-sm text-brown-900 placeholder:text-brown-700/50 focus:border-orange-500/70 focus:ring-2 focus:ring-orange-500/30"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3.5 top-3.5 text-brown-700/60 hover:text-brown-900"
-                        >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                        </button>
-                      </div>
-
-                      {mode === "register" && password && (
-                        <div className="mt-2.5 flex items-center gap-3 text-[11px] text-brown-700">
-                          <span className={`inline-flex items-center gap-1 ${hasMinLength ? "text-orange-950 font-semibold" : "text-brown-700/50"}`}>
-                            <Check className="h-3 w-3 stroke-[2.5]" /> 8+ Karakter
-                          </span>
-                          <span className={`inline-flex items-center gap-1 ${hasNumber ? "text-orange-950 font-semibold" : "text-brown-700/50"}`}>
-                            <Check className="h-3 w-3 stroke-[2.5]" /> Angka
-                          </span>
-                          <span className={`inline-flex items-center gap-1 ${hasLetter ? "text-orange-950 font-semibold" : "text-brown-700/50"}`}>
-                            <Check className="h-3 w-3 stroke-[2.5]" /> Huruf
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 text-sm font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50"
-                    >
-                      {loading
-                        ? "Memproses..."
-                        : mode === "register"
-                        ? "Kirim Kode Verifikasi"
-                        : "Masuk ke ZYBA"}
-                      <ArrowRight className="h-4 w-4 stroke-[2]" />
-                    </button>
-                  </form>
-                </>
-              ) : (
-                /* Langkah OTP */
-                <form onSubmit={handleVerifyOtp} className="space-y-6">
-                  <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-brown-700/70">
-                      Verifikasi Akun
-                    </span>
-                    <h2 className="mt-1 font-serif text-2xl font-bold text-brown-900">
-                      Periksa Kotak Masukmu
-                    </h2>
-                    <p className="mt-1 text-xs text-brown-700 leading-relaxed">
-                      Kami telah mengirimkan 6 digit kode OTP ke <span className="font-bold text-brown-900">{registeredEmail}</span>.
-                    </p>
                   </div>
 
-                  {errorMsg && (
-                    <div className="rounded-xl border border-brown-900/20 bg-orange-50 p-3 text-xs text-brown-900">
-                      {errorMsg}
-                    </div>
-                  )}
+                  <button
+                    type="submit"
+                    disabled={loading || !hasMinLength}
+                    className="w-full py-3.5 px-6 rounded-2xl bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                  >
+                    <span>{loading ? "Menyiapkan Ruang Batin..." : "Daftar Akun Gratis"}</span>
+                    <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+                  </button>
+                </form>
+              </>
+            ) : (
+              /* OTP VERIFICATION STEP */
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#3E7B54] bg-emerald-100 px-3 py-1 rounded-full">
+                    Verifikasi Keamanan
+                  </span>
+                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-brown-900 tracking-tight">
+                    Masukkan Kode OTP
+                  </h2>
+                  <p className="text-xs text-brown-700/70 leading-relaxed">
+                    Kami telah mengirimkan 6 digit kode keamanan ke <strong>{registeredEmail}</strong>.
+                  </p>
+                </div>
 
-                  {/* 6 Digit Input Boxes */}
-                  <div className="flex items-center justify-between gap-2">
-                    {otp.map((digit, idx) => (
+                {errorMsg && (
+                  <div
+                    role="alert"
+                    className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs flex items-center gap-2"
+                  >
+                    <span className="font-bold text-amber-800">Perhatian:</span>
+                    <span>{errorMsg}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleVerifyOtp} className="space-y-6">
+                  <div className="flex justify-between gap-2">
+                    {otp.map((digit, i) => (
                       <input
-                        key={idx}
-                        id={`otp-${idx}`}
+                        key={i}
+                        id={`otp-${i}`}
                         type="text"
-                        inputMode="numeric"
                         maxLength={1}
                         value={digit}
-                        onChange={(e) => handleOtpChange(idx, e.target.value)}
-                        className="h-12 w-11 rounded-xl border border-brown-900/20 bg-white text-center text-lg font-bold text-brown-900 focus:border-orange-500/70 focus:ring-2 focus:ring-orange-500/30"
+                        onChange={(e) => handleOtpChange(i, e.target.value)}
+                        className="w-12 h-14 rounded-2xl bg-white border border-brown-900/15 text-center text-xl font-mono font-bold text-brown-900 focus:outline-none focus:border-[#3E7B54] focus:ring-2 focus:ring-[#3E7B54]/15 transition-all shadow-2xs"
                       />
                     ))}
                   </div>
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-orange-500 text-sm font-bold text-brown-900 shadow-sm hover:bg-orange-600 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 disabled:opacity-50"
+                    disabled={loading || otp.join("").length < 6}
+                    className="w-full py-3.5 px-6 rounded-2xl bg-[#3E7B54] hover:bg-[#346B48] active:scale-98 text-white font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {loading ? "Memverifikasi..." : "Lanjutkan ke Asesmen Awal"}
-                    <ArrowRight className="h-4 w-4 stroke-[2]" />
+                    <span>{loading ? "Memverifikasi..." : "Lanjutkan ke Penilaian Awal"}</span>
+                    <ArrowRight className="h-4 w-4 stroke-[2.5]" />
                   </button>
 
                   <div className="text-center">
                     <button
                       type="button"
                       onClick={() => setStep("form")}
-                      className="text-xs font-semibold text-brown-700 hover:text-brown-900 underline underline-offset-4"
+                      className="text-xs font-bold text-brown-700/70 hover:text-brown-900 underline"
                     >
-                      ← Ubah alamat email
+                      Salah alamat email? Ubah di sini
                     </button>
                   </div>
                 </form>
-              )}
+              </div>
+            )}
+          </div>
+
+          {/* Footer Disclaimer & Crisis Support Link */}
+          <div className="pt-6 border-t border-brown-900/8 text-center space-y-2 text-[11px] text-brown-700/60">
+            <p>
+              Dengan mendaftar, kamu menyetujui Ketentuan Layanan & Kebijakan Privasi Suaka ZYBA.
+            </p>
+            <div className="flex items-center justify-center gap-1.5 text-brown-800 font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#3E7B54]" />
+              <span>Butuh bantuan darurat? Akses </span>
+              <Link href="/guidebook" className="underline hover:text-[#3E7B54]">
+                Hotline Bantuan Krisis 24/7
+              </Link>
             </div>
           </div>
         </div>
+
       </main>
     </div>
   );
