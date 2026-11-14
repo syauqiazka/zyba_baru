@@ -142,38 +142,18 @@ function LoginFormContent() {
           {/* Bottom Floating Mascot Figures Container (Foto 5 GitHub 3D Mascot Scene) */}
           <div
             ref={mascotFloatingRef}
-            className="relative z-10 pt-10 flex items-end justify-center gap-4 sm:gap-6"
+            className="relative z-10 pt-8 flex items-end justify-center"
           >
-            {/* Mascot Element 1: Zibi Senang */}
-            <div className="w-20 sm:w-24 flex flex-col items-center">
+            <div className="relative w-full max-w-[340px] flex flex-col items-center">
+              {/* Soft Ambient Rim Light */}
+              <div className="absolute -bottom-2 w-56 h-12 bg-emerald-500/25 blur-2xl rounded-full -z-10" />
               <Image
-                src="/images/mascot/trimmed/senang.png"
-                alt="Zibi Senang"
-                width={96}
-                height={96}
-                className="w-full h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
-              />
-            </div>
-
-            {/* Mascot Element 2: Zibi Utama */}
-            <div className="w-28 sm:w-32 flex flex-col items-center -mb-2">
-              <Image
-                src="/images/mascot/trimmed/hero_menyapa.png"
-                alt="Zibi Menyapa"
-                width={128}
-                height={128}
-                className="w-full h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]"
-              />
-            </div>
-
-            {/* Mascot Element 3: Zibi Semangat */}
-            <div className="w-20 sm:w-24 flex flex-col items-center">
-              <Image
-                src="/images/mascot/trimmed/semangat.png"
-                alt="Zibi Semangat"
-                width={96}
-                height={96}
-                className="w-full h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+                src="/images/auth/zibi_3d_trio.png"
+                alt="Zibi 3D Mascots"
+                width={480}
+                height={328}
+                priority
+                className="w-full h-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-500"
               />
             </div>
           </div>

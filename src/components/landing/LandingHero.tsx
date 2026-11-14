@@ -123,16 +123,30 @@ export function LandingHero() {
     >
       {/* ========================================================
           BACKGROUND SCENE CONTAINER
-          [KETERANGAN ASET]: Wadah panorama langit/alam berkabut
+          Wadah panorama langit/alam berkabut (Foto 2 BirdPulse Reference)
           ======================================================== */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Soft Ambient Radial Lights (Living Sanctuary Tones: Sage, Cream, Soft Lilac Sky) */}
-        <div className="absolute top-0 right-0 w-[60vw] h-[70vh] bg-gradient-to-bl from-[#DCECE0]/70 via-[#EAF4EC]/40 to-transparent blur-3xl opacity-80" />
-        <div className="absolute bottom-0 left-0 w-[50vw] h-[50vh] bg-gradient-to-tr from-[#FDF1EB]/60 via-[#F5F8F5]/50 to-transparent blur-3xl opacity-70" />
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Real Photographic Scenic Sanctuary Background */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/landing/hero_sanctuary_bg.webp"
+            alt="Lanskap Suaka ZYBA"
+            fill
+            priority
+            className="object-cover object-top opacity-30 sm:opacity-35"
+          />
+          {/* Smooth Natural Fade to Background Color #F5F8F5 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F5F8F5]/35 via-[#F5F8F5]/70 to-[#F5F8F5]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F5F8F5]/70 via-transparent to-[#F5F8F5]/70" />
+        </div>
+
+        {/* Soft Ambient Radial Lights (Living Sanctuary Tones) */}
+        <div className="absolute top-0 right-0 w-[55vw] h-[65vh] bg-gradient-to-bl from-[#DCECE0]/50 via-[#EAF4EC]/30 to-transparent blur-3xl opacity-70" />
+        <div className="absolute bottom-0 left-0 w-[45vw] h-[45vh] bg-gradient-to-tr from-[#FDF1EB]/50 via-[#F5F8F5]/40 to-transparent blur-3xl opacity-60" />
 
         {/* Subtle Zen Grid Matrix */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `radial-gradient(#1B241E 1px, transparent 1px)`,
             backgroundSize: "32px 32px",
@@ -299,33 +313,33 @@ export function LandingHero() {
             </div>
 
             {/* ========================================================
-                MASCOT SCENE CONTAINER (Menggantikan Burung di Dahan pada Foto 2)
-                [ASET HERO]: Zibi di Suaka Alami
+                MASCOT SCENE CONTAINER (Foto 2 BirdPulse Reference)
+                Zibi Bertengger di Dahan Suaka Alami (Aset Nyata User)
                 ======================================================== */}
-            <div className="relative w-full max-w-[620px] mx-auto lg:mx-0 h-[360px] sm:h-[420px] flex items-center justify-center">
+            <div className="relative w-full max-w-[680px] mx-auto lg:mx-0 min-h-[380px] sm:min-h-[440px] flex items-center justify-center">
               
               {/* Latar Belakang Lingkaran Halo Suaka Halus */}
-              <div className="absolute w-[320px] sm:w-[420px] h-[320px] sm:h-[420px] rounded-full bg-gradient-to-tr from-[#C8E4CD]/40 via-[#EAF4EC]/60 to-white/80 blur-2xl -z-10" />
+              <div className="absolute w-[340px] sm:w-[460px] h-[340px] sm:h-[460px] rounded-full bg-gradient-to-tr from-[#C8E4CD]/35 via-[#EAF4EC]/50 to-white/70 blur-2xl -z-10" />
 
-              {/* Maskot Zibi Utama */}
-              <div ref={mascotRef} className="relative z-10 flex flex-col items-center">
+              {/* Maskot Zibi di Atas Dahan Alami */}
+              <div ref={mascotRef} className="relative z-10 w-full flex flex-col items-center">
                 <Image
-                  src="/images/mascot/trimmed/hero_menyapa.png"
-                  alt="Zibi Maskot Resmi ZYBA"
-                  width={340}
-                  height={340}
+                  src="/images/landing/hero_mascot_perch.png"
+                  alt="Zibi Maskot ZYBA di Dahan Suaka"
+                  width={560}
+                  height={456}
                   priority
-                  className="w-[260px] sm:w-[320px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(27,36,30,0.12)] transition-transform duration-300"
+                  className="w-[320px] sm:w-[440px] lg:w-[500px] h-auto object-contain drop-shadow-[0_25px_45px_rgba(27,36,30,0.14)] transition-transform duration-300"
                 />
 
-                {/* Bayangan Kontak Realistis di Bawah Maskot */}
-                <div className="w-48 h-4 rounded-full bg-brown-900/10 blur-md -mt-3" />
+                {/* Bayangan Kontak Realistis di Bawah Dahan */}
+                <div className="w-64 sm:w-80 h-4 rounded-full bg-brown-900/10 blur-lg -mt-2" />
               </div>
 
               {/* Floating Glassmorphic Audio Player Badge (Persis Foto 2: Cockatiel Sound Card) */}
               <div
                 ref={audioCardRef}
-                className="absolute top-6 right-2 sm:right-6 z-20 rounded-2xl border border-white/80 bg-white/85 backdrop-blur-md px-4 py-3 shadow-[0_12px_30px_rgba(27,36,30,0.08)] flex items-center gap-3.5 max-w-[240px]"
+                className="absolute top-2 sm:top-6 right-1 sm:right-6 z-20 rounded-2xl border border-white/90 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_12px_30px_rgba(27,36,30,0.08)] flex items-center gap-3.5 max-w-[240px]"
               >
                 <div className="w-9 h-9 rounded-xl bg-[#3E7B54] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Volume2 className="w-4 h-4" />
@@ -344,7 +358,7 @@ export function LandingHero() {
               </div>
 
               {/* Floating Pill Assurance (Pojok Kiri Bawah Maskot) */}
-              <div className="absolute bottom-4 left-0 sm:left-4 z-20 rounded-2xl border border-brown-900/10 bg-white/90 backdrop-blur-md px-4 py-2.5 shadow-2xs flex items-center gap-2">
+              <div className="absolute -bottom-2 sm:bottom-2 left-1 sm:left-4 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-2xs flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#3E7B54]" />
                 <span className="text-[11px] font-bold text-brown-900">
                   100% Bebas Biaya Selamanya
