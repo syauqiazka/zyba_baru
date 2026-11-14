@@ -1,48 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import Link from "next/link";
-import { MessageSquare, Wind, TrendingUp, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Wind, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
 
 export function LandingDeepDives() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      [card1Ref, card2Ref].forEach((ref) => {
-        if (ref.current) {
-          gsap.from(ref.current, {
-            scrollTrigger: {
-              trigger: ref.current,
-              start: "top 80%",
-            },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power2.out",
-          });
-        }
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section id="fitur" ref={containerRef} className="py-24 bg-[#F5F8F5] space-y-20">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-16">
+    <section id="fitur" className="py-20 sm:py-24 bg-[#F5F8F5] space-y-20">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -58,10 +23,7 @@ export function LandingDeepDives() {
         </div>
 
         {/* Feature Deep Dive 1: Large Featured Showcase (Sesuai Foto 3 Laptop Banner) */}
-        <div
-          ref={card1Ref}
-          className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-10 lg:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
-        >
+        <div className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-10 lg:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Sisi Kiri (6 Kolom): Copy */}
           <div className="lg:col-span-6 space-y-5">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1 rounded-full">
@@ -146,7 +108,7 @@ export function LandingDeepDives() {
         </div>
 
         {/* Feature Deep Dive 2: 2-Card Row (Sesuai Foto 3 Bagian Bawah Laptop) */}
-        <div ref={card2Ref} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card A: Breathing Garden */}
           <div className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-9 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">

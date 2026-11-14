@@ -1,42 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { MessageSquareQuote, Heart } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function LandingTestimonials() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      if (cardsRef.current) {
-        gsap.from(cardsRef.current.children, {
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: "top 80%",
-          },
-          y: 40,
-          opacity: 0,
-          duration: 0.9,
-          stagger: 0.15,
-          ease: "power2.out",
-        });
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   const stories = [
     {
       name: "Nadya A.",
@@ -62,8 +29,8 @@ export function LandingTestimonials() {
   ];
 
   return (
-    <section ref={containerRef} className="py-24 bg-white border-b border-brown-900/10">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-16">
+    <section className="py-20 sm:py-24 bg-white border-b border-brown-900/10">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-xs font-bold text-[#3E7B54] uppercase tracking-widest bg-emerald-100 px-3.5 py-1 rounded-full">
@@ -78,10 +45,7 @@ export function LandingTestimonials() {
         </div>
 
         {/* 3 Story Cards Grid (Sesuai Foto 3) */}
-        <div
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
           {stories.map((s, idx) => (
             <div
               key={idx}

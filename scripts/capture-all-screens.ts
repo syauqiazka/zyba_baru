@@ -201,6 +201,38 @@ async function capture() {
       console.log(`Captured: ${fileName}`);
     }
 
+    if (p.slug === "landing") {
+      // Capture alur section
+      await sendCommand(ws, "Runtime.evaluate", {
+        expression: "document.querySelector('#alur')?.scrollIntoView({ behavior: 'instant' })",
+      });
+      await new Promise((r) => setTimeout(r, 600));
+      const { data: alurData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+      fs.writeFileSync(path.join(screenshotDir, "landing-alur-desktop.png"), Buffer.from(alurData, "base64"));
+      fs.writeFileSync(path.join(artifactDir, "landing-alur-desktop.png"), Buffer.from(alurData, "base64"));
+      console.log("Captured: landing-alur-desktop.png");
+
+      // Capture ekosistem section
+      await sendCommand(ws, "Runtime.evaluate", {
+        expression: "document.querySelector('#ekosistem')?.scrollIntoView({ behavior: 'instant' })",
+      });
+      await new Promise((r) => setTimeout(r, 600));
+      const { data: ekoData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+      fs.writeFileSync(path.join(screenshotDir, "landing-ekosistem-desktop.png"), Buffer.from(ekoData, "base64"));
+      fs.writeFileSync(path.join(artifactDir, "landing-ekosistem-desktop.png"), Buffer.from(ekoData, "base64"));
+      console.log("Captured: landing-ekosistem-desktop.png");
+
+      // Capture nilai section
+      await sendCommand(ws, "Runtime.evaluate", {
+        expression: "document.querySelector('#nilai')?.scrollIntoView({ behavior: 'instant' })",
+      });
+      await new Promise((r) => setTimeout(r, 600));
+      const { data: nilaiData } = await sendCommand(ws, "Page.captureScreenshot", { format: "png" });
+      fs.writeFileSync(path.join(screenshotDir, "landing-nilai-desktop.png"), Buffer.from(nilaiData, "base64"));
+      fs.writeFileSync(path.join(artifactDir, "landing-nilai-desktop.png"), Buffer.from(nilaiData, "base64"));
+      console.log("Captured: landing-nilai-desktop.png");
+    }
+
     // Khusus Community: Uji klik tombol "+" mengambang untuk membuka floating compose card (AGENTS.md 7.6)
     if (p.slug === "community") {
       console.log("Menguji klik tombol floating compose '+'...");
