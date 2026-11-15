@@ -29,6 +29,14 @@ body {
   overflow-x: hidden;
   max-width: 100vw;
   -webkit-tap-highlight-color: transparent;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Pastikan seluruh angka numerik di semua elemen memakai lining-nums normal (bebas oldstyle figures janggal) */
+*,
+*::before,
+*::after {
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Aksesibilitas: prefers-reduced-motion mematikan seluruh animasi */

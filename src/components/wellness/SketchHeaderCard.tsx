@@ -129,7 +129,7 @@ export function SketchHeaderCard({
               </div>
             </div>
             <div className="mt-2 flex items-baseline gap-1.5">
-              <span className="font-serif text-2xl font-extrabold text-brown-900">
+              <span className="font-display text-2xl font-bold tracking-tight text-brown-900 tabular-nums">
                 {zybaScore}
               </span>
               <span className="text-[10px] font-semibold text-emerald-800 bg-[#EAF4EC] px-1.5 py-0.2 rounded-md">
@@ -152,7 +152,7 @@ export function SketchHeaderCard({
               </div>
             </div>
             <div className="mt-2 flex items-baseline gap-1.5">
-              <span className="font-serif text-2xl font-extrabold text-brown-900">
+              <span className="font-display text-2xl font-bold tracking-tight text-brown-900 tabular-nums">
                 {sleepScore}%
               </span>
               <span className="text-[10px] font-semibold text-sky-800 bg-[#EDF4F8] px-1.5 py-0.2 rounded-md">
@@ -175,7 +175,7 @@ export function SketchHeaderCard({
               </div>
             </div>
             <div className="mt-2 flex items-baseline gap-1.5">
-              <span className="font-serif text-2xl font-extrabold text-brown-900">
+              <span className="font-display text-2xl font-bold tracking-tight text-brown-900 tabular-nums">
                 Level {stressLevel}
               </span>
               <span className="text-[10px] font-semibold text-emerald-800 bg-[#EAF4EC] px-1.5 py-0.2 rounded-md">

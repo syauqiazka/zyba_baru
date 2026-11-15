@@ -64,6 +64,12 @@ export const activityRepo = {
         orderBy: { createdAt: "desc" },
       });
 
+      const recentMeals = await accountDb.mealLog.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      });
+
       // Tandai template mana saja yang sudah selesai hari ini
       const templates = DEFAULT_ACTIVITY_TEMPLATES.map((tpl) => {
         const isDone = logs.some((l) => l.type === tpl.type && l.completed);
@@ -76,6 +82,7 @@ export const activityRepo = {
       return {
         logs,
         templates,
+        recentMeals,
         completedCount: logs.filter((l) => l.completed).length,
       };
     } catch (err) {
@@ -83,6 +90,7 @@ export const activityRepo = {
       return {
         logs: [],
         templates: DEFAULT_ACTIVITY_TEMPLATES.map((t) => ({ ...t, isCompleted: false })),
+        recentMeals: [],
         completedCount: 0,
       };
     }
@@ -158,6 +166,84 @@ export const activityRepo = {
           createdAt: new Date(),
         },
         newZybaScore: 78,
+      };
+    }
+  },
+
+  /**
+   * Menyimpan log piring makanan hasil analisis AI
+   */
+  async createMealLog(
+    userId: string,
+    data: {
+      imageUrl?: string;
+      foodName: string;
+      calories: number;
+      proteinGrams?: number;
+      carbsGrams?: number;
+      fatGrams?: number;
+      fiberGrams?: number;
+      healthScore?: number;
+      notes?: string;
+    }
+  ) {
+    try {
+      return await accountDb.mealLog.create({
+        data: {
+          userId,
+          imageUrl: data.imageUrl,
+          foodName: data.foodName,
+          calories: data.calories,
+          proteinGrams: data.proteinGrams,
+          carbsGrams: data.carbsGrams,
+          fatGrams: data.fatGrams,
+          fiberGrams: data.fiberGrams,
+          healthScore: data.healthScore,
+          notes: data.notes,
+        },
+      });
+    } catch (err) {
+      console.error("[Activity-Repo] Gagal membuat meal log:", err);
+      return {
+        id: "meal-" + Date.now(),
+        userId,
+        ...data,
+        isCorrected: false,
+        complaintNotes: null,
+        createdAt: new Date(),
+      };
+    }
+  },
+
+  /**
+   * Menyimpan koreksi / komplain pengguna atas hasil analisis AI
+   */
+  async updateMealFeedback(
+    userId: string,
+    data: {
+      mealLogId: string;
+      correctedFoodName?: string;
+      correctedCalories?: number;
+      complaintNotes: string;
+    }
+  ) {
+    try {
+      return await accountDb.mealLog.update({
+        where: { id: data.mealLogId },
+        data: {
+          isCorrected: true,
+          complaintNotes: data.complaintNotes,
+          ...(data.correctedFoodName ? { foodName: data.correctedFoodName } : {}),
+          ...(data.correctedCalories ? { calories: data.correctedCalories } : {}),
+        },
+      });
+    } catch (err) {
+      console.error("[Activity-Repo] Gagal update meal feedback:", err);
+      return {
+        id: data.mealLogId,
+        userId,
+        isCorrected: true,
+        complaintNotes: data.complaintNotes,
       };
     }
   },

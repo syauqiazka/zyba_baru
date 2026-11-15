@@ -49,6 +49,7 @@ model User {
   dailyAssessments DailyAssessment[]
   journalEntries   JournalEntry[]
   activities       ActivityLog[]
+  mealLogs         MealLog[]
   notificationPref NotificationPref?
   moderationLogs   ModerationLog[]  @relation("ModeratedUser")
   adminActions     ModerationLog[]  @relation("ModeratingAdmin")
@@ -183,6 +184,27 @@ model ActivityLog {
 
   @@index([userId, createdAt])
   @@map("activity_logs")
+}
+
+model MealLog {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrl        String?
+  foodName        String
+  calories        Int
+  proteinGrams    Int?
+  carbsGrams      Int?
+  fatGrams        Int?
+  fiberGrams      Int?
+  healthScore     Int?
+  notes           String?
+  complaintNotes  String?
+  isCorrected     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("meal_logs")
 }
 
 enum ResourceType {

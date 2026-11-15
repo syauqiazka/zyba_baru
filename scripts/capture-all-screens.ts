@@ -124,6 +124,7 @@ async function capture() {
     { url: "http://localhost:3005/companion", slug: "companion", auth: "completed" },
     { url: "http://localhost:3005/community", slug: "community", auth: "completed" },
     { url: "http://localhost:3005/activity", slug: "activity", auth: "completed" },
+    { url: "http://localhost:3005/activity?tab=nutrition", slug: "activity-nutrition", auth: "completed" },
     { url: "http://localhost:3005/wellness-journey", slug: "wellness-journey", auth: "completed" },
     { url: "http://localhost:3005/resources", slug: "resources", auth: "completed" },
     { url: "http://localhost:3005/resources?article=res-1", slug: "resources-article-detail", auth: "completed" },

@@ -45,6 +45,10 @@ export default function MoodCheckInPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [alreadyCheckedInToday, setAlreadyCheckedInToday] = useState(false);
+  const [existingCheckIn, setExistingCheckIn] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [completed, setCompleted] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
@@ -53,6 +57,44 @@ export default function MoodCheckInPage() {
   useEffect(() => {
     const currentHour = new Date().getHours();
     setIsNight(currentHour >= 21 || currentHour < 5);
+
+    const checkStatus = async () => {
+      try {
+        const res = await fetch("/api/check-in");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.alreadyCheckedIn && data.todayCheckIn) {
+            setAlreadyCheckedInToday(true);
+            setExistingCheckIn(data.todayCheckIn);
+            // Pre-fill form values in case user wants to update
+            const ci = data.todayCheckIn;
+            if (ci.mood) setMood(ci.mood);
+            if (ci.stressLevel != null) setStressLevel(ci.stressLevel);
+            if (ci.sleepRating != null) setSleepRating(ci.sleepRating);
+            if (Array.isArray(ci.energyTags) && ci.energyTags.length > 0) setEnergyTags(ci.energyTags);
+            if (ci.reflection) setReflection(ci.reflection);
+            const ans = ci.answers || {};
+            if (ans.anxiety != null) setAnxiety(ans.anxiety);
+            if (ans.satisfaction != null) setSatisfaction(ans.satisfaction);
+            if (ans.productivity != null) setProductivity(ans.productivity);
+            if (ans.selfTime != null) setSelfTime(ans.selfTime);
+            if (ans.sleepHours) setSleepHours(ans.sleepHours);
+            if (ans.regularMeals) setRegularMeals(ans.regularMeals);
+            if (ans.physicalActivity) setPhysicalActivity(ans.physicalActivity);
+            if (ans.connection != null) setConnection(ans.connection);
+            if (ans.supported != null) setSupported(ans.supported);
+            if (ans.communityInteraction != null) setCommunityInteraction(ans.communityInteraction);
+            if (ans.gratitude) setGratitude(ans.gratitude);
+          }
+        }
+      } catch (err) {
+        console.warn("Gagal memuat status check-in hari ini:", err);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    checkStatus();
   }, []);
 
   // Form states - 15 Pertanyaan Terstruktur
@@ -186,11 +228,11 @@ export default function MoodCheckInPage() {
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-xs font-medium text-brown-700">Skor Zyba Terkini</span>
-                <div className="font-serif text-3xl font-bold text-brown-900">{score}</div>
+                <div className="font-display text-3xl font-bold tracking-tight text-brown-900 tabular-nums">{score}</div>
               </div>
               <div className="text-right">
                 <span className="text-xs font-medium text-brown-700">Lilin Terjaga</span>
-                <div className="flex items-center justify-end gap-1 font-serif text-xl font-bold text-orange-950">
+                <div className="flex items-center justify-end gap-1 font-display text-xl font-bold tracking-tight text-orange-950 tabular-nums">
                   <Sparkles className="h-4 w-4 text-orange-500" />
                   {resultData.streakDays || 1} Hari
                 </div>
@@ -233,8 +275,132 @@ export default function MoodCheckInPage() {
     );
   }
 
+  // 1. Loading State saat inisialisasi
+  if (initialLoading) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <Mascot pose="happy" size={90} animate={true} decorative={true} />
+        <p className="mt-4 text-xs font-semibold text-brown-700/70">
+          Mempersiapkan ruang hening batinmu...
+        </p>
+      </div>
+    );
+  }
+
+  // 2. Layar "Sudah Check-In Hari Ini" jika user sudah menyelesaikan check-in tanggal ini
+  if (alreadyCheckedInToday && !isEditing && existingCheckIn) {
+    const todayMood = existingCheckIn.mood || "HAPPY";
+    const moodLabels: Record<string, string> = {
+      DEPRESSED: "Tertekan / Berat",
+      SAD: "Sedih / Lemah",
+      NEUTRAL: "Biasa / Netral",
+      HAPPY: "Tenang & Stabil",
+      OVERJOYED: "Gembira & Bersyukur",
+    };
+
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8 md:py-12">
+        <div className="rounded-3xl border border-brown-900/10 bg-white/95 p-6 md:p-10 shadow-sm text-center">
+          <div className="mx-auto flex items-center justify-center mb-3">
+            <Mascot pose="happy" size={130} animate={true} decorative={true} />
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EAF4EC] border border-[#C8E4CD] text-[#28583B] text-xs font-bold shadow-2xs">
+            <Check className="w-3.5 h-3.5 stroke-[3]" />
+            <span>Sudah Check-In Hari Ini ({existingCheckIn.date})</span>
+          </div>
+
+          <h1 className="mt-4 font-serif text-2xl md:text-3xl font-bold text-brown-900">
+            Jeda Batinmu Hari Ini Sudah Tersimpan
+          </h1>
+          <p className="mt-2 text-sm leading-relaxed text-brown-700 max-w-md mx-auto">
+            Kamu sudah meluangkan waktu hadir untuk dirimu sendiri hari ini. Tidak perlu khawatir terlewat, catatan ritmemu aman di suaka ZYBA.
+          </p>
+
+          {/* Rangkuman Check-In Hari Ini */}
+          <div className="mt-6 rounded-2xl border border-brown-900/8 bg-[#F5F8F5] p-5 text-left space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-brown-900/8">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brown-700/70 block">
+                  Suasana Hati Terpilih
+                </span>
+                <span className="text-base font-bold text-brown-900">
+                  {moodLabels[todayMood] || todayMood}
+                </span>
+              </div>
+              <span className="px-3 py-1 rounded-xl bg-white border border-[#C8E4CD] shadow-2xs text-xs font-bold text-[#28583B]">
+                ✓ Terverifikasi
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div className="p-3 rounded-xl bg-white border border-brown-900/5">
+                <span className="text-[10px] text-brown-700/80 block">Tingkat Stres</span>
+                <span className="text-sm font-bold text-brown-900 tabular-nums">
+                  Level {existingCheckIn.stressLevel ?? 2} / 5
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-white border border-brown-900/5">
+                <span className="text-[10px] text-brown-700/80 block">Kualitas Tidur</span>
+                <span className="text-sm font-bold text-brown-900 tabular-nums">
+                  Bintang {existingCheckIn.sleepRating ?? 4} / 5
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-white border border-brown-900/5 col-span-2 sm:col-span-1">
+                <span className="text-[10px] text-brown-700/80 block">Energi & Raga</span>
+                <span className="text-xs font-bold text-brown-900 line-clamp-1">
+                  {Array.isArray(existingCheckIn.energyTags) && existingCheckIn.energyTags.length > 0
+                    ? existingCheckIn.energyTags.join(", ")
+                    : "Segar"}
+                </span>
+              </div>
+            </div>
+
+            {existingCheckIn.reflection && (
+              <div className="p-3 rounded-xl bg-white border border-brown-900/5 text-xs text-brown-700 italic">
+                &ldquo;{existingCheckIn.reflection}&rdquo;
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/dashboard"
+              className="inline-flex h-12 items-center justify-center rounded-2xl bg-[#3E7B54] px-8 text-sm font-bold text-white shadow-xs transition-all hover:bg-[#346B48]"
+            >
+              Kembali ke Dashboard
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsEditing(true)}
+              className="inline-flex h-12 items-center justify-center rounded-2xl border border-brown-900/15 bg-white px-6 text-xs font-bold text-brown-900 hover:bg-brown-900/5 transition-all"
+            >
+              Perbarui / Edit Check-In Hari Ini
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:py-10 pb-28 md:pb-12">
+      {/* Banner Mode Pembaruan */}
+      {isEditing && (
+        <div className="mb-4 flex items-center justify-between rounded-2xl border border-amber-500/30 bg-amber-50 px-4 py-2.5 text-xs text-amber-900 shadow-2xs">
+          <span>
+            <strong>Mode Pembaruan:</strong> Kamu sedang memperbarui catatan check-in batin hari ini.
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            className="font-bold underline text-amber-800 hover:text-amber-950 ml-2"
+          >
+            Batal
+          </button>
+        </div>
+      )}
       {/* Top Navigation & Stepper */}
       <div className="mb-6 flex items-center justify-between">
         <Link
