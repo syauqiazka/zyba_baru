@@ -138,76 +138,76 @@ export default function OnboardingPage() {
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-screen">
         
         {/* ========================================================
-            SISI KIRI (5 Kolom): Panel Gelap Suaka (Sesuai Foto 5 GitHub)
+            SISI KIRI (5 Kolom): Panel Gelap Suaka (Sesuai Gambar User / Login)
             ======================================================== */}
-        <div className="lg:col-span-5 bg-[#111A14] text-white p-6 sm:p-8 lg:p-10 flex flex-col justify-between relative overflow-hidden">
+        <div className="lg:col-span-5 bg-[#111A14] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between relative overflow-hidden">
           
           {/* Subtle Ambient Cosmic Glow */}
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full" />
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-teal-500/10 blur-[100px] pointer-events-none rounded-full" />
 
           {/* Top Brand Logo */}
-          <div className="relative z-10 space-y-4">
+          <div className="relative z-10 space-y-8">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#3E7B54] text-white shadow-xs group-hover:scale-105 transition-transform">
-                <svg className="h-4.5 w-4.5 fill-current" viewBox="0 0 24 24">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#3E7B54] text-white shadow-xs group-hover:scale-105 transition-transform">
+                <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-3.5H7.5l7-8.5v4.5h3.5l-7 7.5z" />
                 </svg>
               </div>
-              <span className="font-serif text-xl font-black tracking-tight text-white">
+              <span className="font-serif text-2xl font-black tracking-tight text-white">
                 ZYBA
               </span>
             </Link>
 
-            <div className="space-y-2">
-              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-white tracking-tight leading-tight">
-                Buka Ruang Amanmu
+            <div className="space-y-3">
+              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight">
+                Masuk ke Ruang Suakamu
               </h1>
-              <p className="text-xs text-white/70 leading-relaxed max-w-sm">
-                Bergabunglah bersama ribuan teman generasi muda yang merawat kesehatan batinnya secara bebas dan sadar.
+              <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-sm">
+                Lanjutkan perjalanan pemulihan batin secara sadar dalam suaka yang tenang, aman, dan tanpa penghakiman.
               </p>
             </div>
 
-            {/* Checklist of Included Perks (Sesuai Foto 5 GitHub) */}
-            <div className="pt-1 space-y-2">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <span>Semua Fitur Bebas Biaya 100%</span>
+            {/* Checklist of Included Perks (Sesuai Foto 5 GitHub / Gambar User) */}
+            <div className="pt-2 space-y-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <span>Keunggulan yang Langsung Terbuka</span>
                 <ChevronUp className="w-3.5 h-3.5" />
               </span>
 
-              <div className="space-y-2 text-xs text-white/80">
-                <div className="flex items-start gap-2">
-                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Akses Zibi Companion AI 24/7 tanpa batas paywall</span>
+              <div className="space-y-2.5 text-xs text-white/80">
+                <div className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Akses Zibi Companion AI 24/7 tanpa batas waktu</span>
                 </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Jurnal reflektif pribadi dengan enkripsi aman</span>
+                <div className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Jurnal reflektif suaka terenkripsi penuh</span>
                 </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Breathing Garden 4-7-8 & kurva tren kebugaran batin</span>
+                <div className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Breathing Garden 4-7-8 & latihan relaksasi terpadu</span>
                 </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Tanpa streak api yang menekan rasa bersalah</span>
+                <div className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
+                  <span>100% Bebas Biaya Selamanya (Bebas Paywall)</span>
                 </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-3.5 h-3.5 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Komunitas empati dengan opsi unggahan anonim</span>
+                <div className="flex items-start gap-2.5">
+                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Komunitas hangat dengan opsi unggahan anonim</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Bottom Floating Mascot Figures (Foto 5 GitHub 3D Mascot Scene) */}
+          {/* Bottom Floating Mascot Figures Container (Foto 5 GitHub 3D Mascot Scene) */}
           <div
             ref={mascotFloatingRef}
-            className="relative z-10 pt-4 flex items-end justify-center"
+            className="relative z-10 pt-8 flex items-end justify-center"
           >
-            <div className="relative w-full max-w-[280px] flex flex-col items-center">
+            <div className="relative w-full max-w-[340px] flex flex-col items-center">
               {/* Soft Ambient Rim Light */}
-              <div className="absolute -bottom-2 w-48 h-10 bg-emerald-500/25 blur-2xl rounded-full -z-10" />
+              <div className="absolute -bottom-2 w-56 h-12 bg-emerald-500/25 blur-2xl rounded-full -z-10" />
               <Image
                 src="/images/auth/zibi_3d_trio.png"
                 alt="Zibi 3D Mascots"
