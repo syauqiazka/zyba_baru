@@ -60,8 +60,8 @@ export function LandingShowcase() {
   ];
 
   return (
-    <section id="ekosistem" className="py-20 sm:py-24 bg-[#F5F8F5]">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="ekosistem" className="py-14 sm:py-18 bg-[#F5F8F5]">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-14">
         {/* Section Header (Sesuai Foto 3) */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-xs font-bold text-[#3E7B54] uppercase tracking-widest bg-emerald-100 px-3.5 py-1 rounded-full">

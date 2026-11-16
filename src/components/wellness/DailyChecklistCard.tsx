@@ -164,15 +164,15 @@ export function DailyChecklistCard({
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  {/* Circular Checkbox */}
+                  {/* Modern Squircle Checkbox (Tanpa buletan radio) */}
                   <div
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-lg border transition-all ${
                       done
-                        ? "border-[#3E7B54] bg-[#3E7B54] text-white"
-                        : "border-brown-900/30 bg-white hover:border-[#3E7B54]"
+                        ? "border-[#3E7B54] bg-[#3E7B54] text-white shadow-2xs"
+                        : "border-brown-900/25 bg-white hover:border-[#3E7B54]"
                     }`}
                   >
-                    {done && <Check className="h-3 w-3 stroke-[3]" />}
+                    {done && <Check className="h-3.5 w-3.5 stroke-[2.8]" />}
                   </div>
 
                   <span

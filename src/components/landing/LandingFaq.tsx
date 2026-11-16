@@ -30,7 +30,7 @@ export function LandingFaq() {
   ];
 
   return (
-    <section id="faq" className="py-24 bg-[#F5F8F5]">
+    <section id="faq" className="py-14 sm:py-18 bg-[#F5F8F5]">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="text-center space-y-3">

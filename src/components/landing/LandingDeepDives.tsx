@@ -6,8 +6,8 @@ import { Wind, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
 
 export function LandingDeepDives() {
   return (
-    <section id="fitur" className="py-20 sm:py-24 bg-[#F5F8F5] space-y-20">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="fitur" className="py-14 sm:py-18 bg-[#F5F8F5] space-y-16">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">

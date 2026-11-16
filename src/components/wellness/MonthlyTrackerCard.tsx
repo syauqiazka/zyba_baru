@@ -130,17 +130,24 @@ export function MonthlyTrackerCard({ trackerData }: MonthlyTrackerCardProps) {
           <div className="flex items-end justify-between gap-1.5 sm:gap-2 h-36 pt-4 pb-1">
             {activeTab === "monthly"
               ? monthlyData.map((d) => (
-                  <div key={d.month} className="flex flex-1 flex-col items-center gap-1.5">
-                    <div className="relative flex h-28 w-full max-w-[28px] flex-col justify-end rounded-lg bg-brown-900/5 p-0.5">
+                  <div key={d.month} className="flex flex-1 flex-col items-center gap-1.5 group relative">
+                    <div
+                      className={`relative flex h-28 w-full max-w-[28px] flex-col justify-end rounded-lg p-0.5 transition-all ${
+                        d.active ? "bg-emerald-100/60 ring-2 ring-[#3E7B54]/20" : "bg-brown-900/5"
+                      }`}
+                      title={`${d.month}: ${d.val}% kehadiran (${d.checkInsCount || 0} check-in)`}
+                    >
                       <div
                         className={`w-full rounded-md transition-all duration-500 ${
                           d.val > 0
                             ? d.active
                               ? "bg-[#3E7B54] shadow-2xs"
                               : "bg-[#80C294]"
+                            : d.active
+                            ? "h-1.5 bg-[#3E7B54]/40"
                             : "bg-transparent"
                         }`}
-                        style={{ height: d.val > 0 ? `${Math.max(8, d.val)}%` : "0%" }}
+                        style={{ height: d.val > 0 ? `${Math.max(8, d.val)}%` : d.active ? "6px" : "0%" }}
                       />
                     </div>
                     <span
@@ -153,17 +160,24 @@ export function MonthlyTrackerCard({ trackerData }: MonthlyTrackerCardProps) {
                   </div>
                 ))
               : weeklyData.map((d) => (
-                  <div key={d.day} className="flex flex-1 flex-col items-center gap-1.5">
-                    <div className="relative flex h-28 w-full max-w-[32px] flex-col justify-end rounded-lg bg-brown-900/5 p-0.5">
+                  <div key={d.day} className="flex flex-1 flex-col items-center gap-1.5 group relative">
+                    <div
+                      className={`relative flex h-28 w-full max-w-[32px] flex-col justify-end rounded-lg p-0.5 transition-all ${
+                        d.active ? "bg-emerald-100/60 ring-2 ring-[#3E7B54]/20" : "bg-brown-900/5"
+                      }`}
+                      title={`${d.day} (Tgl ${d.date}): ${d.val > 0 ? "Hadir Sadar" : "Belum Check-In"}`}
+                    >
                       <div
                         className={`w-full rounded-md transition-all duration-500 ${
                           d.val > 0
                             ? d.active
                               ? "bg-[#3E7B54] shadow-2xs"
                               : "bg-[#80C294]"
+                            : d.active
+                            ? "h-1.5 bg-[#3E7B54]/40"
                             : "bg-transparent"
                         }`}
-                        style={{ height: d.val > 0 ? "100%" : "0%" }}
+                        style={{ height: d.val > 0 ? "100%" : d.active ? "6px" : "0%" }}
                       />
                     </div>
                     <span

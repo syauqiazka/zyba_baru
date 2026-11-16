@@ -360,8 +360,8 @@ export default function ActivityPage() {
         </div>
       </div>
 
-      {/* Primary Tab Navigation Switcher */}
-      <div className="flex items-center gap-2 border-b border-brown-900/10 pb-3 overflow-x-auto no-scrollbar">
+      {/* Primary Tab Navigation Switcher (Scroll horizontal mulus di mobile) */}
+      <div className="flex items-center gap-2 border-b border-brown-900/10 pb-3 w-full max-w-full overflow-x-auto no-scrollbar flex-nowrap scroll-smooth touch-pan-x">
         <button
           type="button"
           onClick={() => setActiveTab("planner")}
@@ -562,18 +562,18 @@ export default function ActivityPage() {
                       </div>
                     </div>
 
-                    {/* Checkbox Button */}
+                    {/* Checkbox Squircle Button (Bukan buletan radio) */}
                     <button
                       type="button"
                       onClick={() => handleToggleActivity(act)}
-                      className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
+                      className={`shrink-0 w-7 h-7 rounded-xl flex items-center justify-center border transition-all ${
                         isDone
                           ? "bg-[#3E7B54] border-[#3E7B54] text-white shadow-2xs"
-                          : "border-brown-900/25 bg-white hover:border-[#3E7B54] hover:bg-emerald-50 text-transparent"
+                          : "border-brown-900/25 bg-white hover:border-[#3E7B54] hover:bg-emerald-50/60 text-transparent"
                       }`}
                       aria-label={isDone ? "Tandai belum selesai" : "Tandai selesai"}
                     >
-                      <Check className="w-4 h-4 stroke-[3]" />
+                      <Check className="w-4 h-4 stroke-[2.8]" />
                     </button>
                   </div>
 
