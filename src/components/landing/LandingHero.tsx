@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
   Volume2,
-  VolumeX,
-  Play,
-  Pause,
-  Brain,
-  Wind,
   ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
@@ -22,9 +17,6 @@ export function LandingHero() {
   const phoneCardRef = useRef<HTMLDivElement>(null);
   const mascotRef = useRef<HTMLDivElement>(null);
   const audioCardRef = useRef<HTMLDivElement>(null);
-
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [pulseActive, setPulseActive] = useState(true);
 
   useEffect(() => {
     // Respect prefers-reduced-motion
@@ -158,128 +150,76 @@ export function LandingHero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* ====================================================
-              SISI KIRI (5 Kolom): Glassy Phone Preview Card
-              (Tampil di Desktop/Tablet; di Mobile fokus ke Headline & Zibi)
+              SISI KIRI (5 Kolom): 3D Perspective Phone Showcase
+              (Sesuai Referensi Gambar 2 & 3: Phone Tilted in 3D Perspective)
               ==================================================== */}
-          <div className="hidden lg:flex lg:col-span-5 flex-col items-center lg:items-start">
-            <div
-              ref={phoneCardRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="w-full max-w-[390px] rounded-[36px] border border-white/80 bg-white/70 backdrop-blur-xl p-5 sm:p-6 shadow-[0_20px_50px_-15px_rgba(27,36,30,0.08)] transition-transform duration-200 ease-out space-y-5"
-            >
-              {/* Card Top Label */}
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-brown-700/60">
-                  Didukung Rantai AI Bebas Biaya
-                </span>
-                <span className="flex items-center gap-1 text-[10px] font-bold text-[#3E7B54] bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
-                  <span>Siap 24/7</span>
+          <div className="hidden lg:flex lg:col-span-5 flex-col items-center justify-center relative">
+            <div className="relative w-full max-w-[440px] flex flex-col items-center justify-center">
+              {/* Subtle 3D Perspective Grid Background (Inspired by Reference Gambar 2) */}
+              <div className="absolute -inset-4 rounded-[40px] overflow-hidden border border-[#3E7B54]/15 bg-gradient-to-b from-[#EBF3ED]/90 via-[#F3F7F4]/60 to-[#EBF3ED]/90 shadow-[0_20px_50px_-15px_rgba(27,36,30,0.08)] backdrop-blur-md pointer-events-none -z-10">
+                {/* Coordinate Grid Lines */}
+                <div
+                  className="absolute inset-0 opacity-[0.22]"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(to right, rgba(62, 123, 84, 0.25) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(62, 123, 84, 0.25) 1px, transparent 1px)
+                    `,
+                    backgroundSize: "36px 36px",
+                  }}
+                />
+                {/* Soft Radial Center Highlight */}
+                <div className="absolute inset-0 bg-radial from-white/70 via-transparent to-transparent" />
+              </div>
+
+              {/* Top Floating Badge */}
+              <div className="self-end mr-3 mb-1 z-20 rounded-full border border-white/90 bg-white/95 backdrop-blur-md px-3.5 py-1 shadow-[0_8px_20px_rgba(27,36,30,0.08)] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#3E7B54]" />
+                <span className="text-[10px] font-bold text-brown-900 tracking-tight">
+                  Didukung AI Suaka • Bebas Biaya
                 </span>
               </div>
 
-              {/* Inner Smartphone Screen Frame */}
-              <div className="relative rounded-[28px] bg-gradient-to-b from-[#1B241E] to-[#25332A] p-5 text-white shadow-inner overflow-hidden space-y-5">
-                {/* Dynamic Island / Speaker notch */}
-                <div className="w-24 h-4 bg-black/40 rounded-full mx-auto" />
+              {/* 3D Perspective Phone Mockup with Parallax Tilt */}
+              <div
+                ref={phoneCardRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="relative z-10 w-full flex flex-col items-center transition-transform duration-200 ease-out cursor-pointer py-1"
+              >
+                <Image
+                  src="/images/landing/hero_phone_3d_mockup.png"
+                  alt="Tampilan Antarmuka Aplikasi ZYBA Mobile dalam Mockup 3D"
+                  width={686}
+                  height={830}
+                  priority
+                  className="w-[330px] sm:w-[370px] h-auto object-contain drop-shadow-[0_28px_45px_rgba(27,36,30,0.18)] select-none hover:scale-[1.015] transition-transform duration-300"
+                />
+              </div>
 
-                {/* Greeting inside device */}
-                <div className="text-center space-y-1">
-                  <span className="text-[11px] font-medium text-emerald-300">
-                    Selamat datang di ruang tenangmu
-                  </span>
-                  <h4 className="font-serif text-lg font-bold tracking-tight text-white">
-                    Teman Zibi Siap Mendengarkan
-                  </h4>
-                </div>
-
-                {/* Animated Circular Soundwave Visualizer (Foto 2 Inspired) */}
-                <div className="relative flex items-center justify-center py-4">
-                  {/* Concentric Rings */}
-                  <div className="absolute w-36 h-36 rounded-full border border-emerald-400/20" />
-                  <div className="absolute w-28 h-28 rounded-full border border-emerald-400/30" />
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#3E7B54] to-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-900/40 relative z-10">
-                    <button
-                      type="button"
-                      onClick={() => setPulseActive(!pulseActive)}
-                      className="p-3 text-white hover:scale-110 active:scale-95 transition-transform"
-                      aria-label="Toggle sound pulse animation"
-                    >
-                      {pulseActive ? (
-                        <Pause className="w-6 h-6 fill-white" />
-                      ) : (
-                        <Play className="w-6 h-6 fill-white ml-0.5" />
-                      )}
-                    </button>
+              {/* Bottom Quick Action Floating Banner */}
+              <div className="w-[92%] mx-auto -mt-2 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md p-3.5 shadow-[0_12px_28px_rgba(27,36,30,0.08)] space-y-2.5">
+                <div className="flex items-center justify-between text-left">
+                  <div>
+                    <span className="text-[11px] font-bold text-brown-900 block">
+                      Pemulih Batin di Sakumu
+                    </span>
+                    <span className="text-[10px] text-brown-700/70">
+                      Ruang aman instan tanpa janji temu atau biaya
+                    </span>
                   </div>
-                </div>
-
-                {/* Waveform Equalizer Bars */}
-                <div className="flex items-center justify-center gap-1.5 h-6">
-                  {[40, 75, 55, 90, 65, 80, 45, 95, 60, 85, 50].map((h, i) => (
-                    <div
-                      key={i}
-                      className="w-1 bg-emerald-400/80 rounded-full transition-all duration-300"
-                      style={{
-                        height: pulseActive ? `${Math.max(20, (h + (i % 3) * 15) % 100)}%` : "20%",
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* Device footer micro text */}
-                <p className="text-[11px] text-center text-white/70 leading-snug">
-                  Curahkan isi hati lewat suara atau teks. 100% privat & terlindungi.
-                </p>
-              </div>
-
-              {/* Bottom Card Copy & CTA Button */}
-              <div className="space-y-3 pt-1">
-                <div className="text-center">
-                  <h3 className="font-serif text-base font-bold text-brown-900">
-                    Pemulih Batin di Sakumu
-                  </h3>
-                  <p className="text-xs text-brown-700/70">
-                    Ruang aman instan tanpa perlu jadwal janji atau biaya.
-                  </p>
+                  <span className="text-[10px] font-bold text-[#3E7B54] bg-emerald-100/90 px-2.5 py-0.5 rounded-full">
+                    Aktif 24/7
+                  </span>
                 </div>
 
                 <Link
                   href="/onboarding"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs shadow-xs transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs shadow-xs transition-all"
                 >
                   <span>Coba Ruang Batin Sekarang</span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </Link>
-              </div>
-
-              {/* Features Quick List */}
-              <div className="pt-2 border-t border-brown-900/8 space-y-2">
-                <span className="text-[10px] font-bold text-brown-700/60 uppercase tracking-wider block">
-                  Fitur Unggulan Terbuka:
-                </span>
-                <div className="flex items-center justify-between text-xs font-semibold text-brown-900 bg-cream/70 p-2.5 rounded-xl border border-brown-900/5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-emerald-100 text-[#3E7B54] flex items-center justify-center">
-                      <Brain className="w-3.5 h-3.5" />
-                    </div>
-                    <span>Zyba Companion AI</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
-                    Aktif
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-xs font-semibold text-brown-900 bg-cream/70 p-2.5 rounded-xl border border-brown-900/5">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
-                      <Wind className="w-3.5 h-3.5" />
-                    </div>
-                    <span>Breathing Garden 4-7-8</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-orange-800 bg-orange-100 px-2 py-0.5 rounded-md">
-                    Aktif
-                  </span>
-                </div>
               </div>
             </div>
           </div>
