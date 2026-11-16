@@ -90,14 +90,7 @@ export default function ResourcesPage() {
 
   // Feedback states
   const [likedArticles, setLikedArticles] = useState<Record<string, boolean>>({});
-  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({
-    "res-1": 42,
-    "res-2": 38,
-    "res-3": 54,
-    "res-4": 61,
-    "res-5": 29,
-    "res-6": 47,
-  });
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState<"normal" | "large">("normal");
   const [scrollProgress, setScrollProgress] = useState(0);

@@ -177,7 +177,7 @@ export default function CompanionLandingPage() {
             onClick={() => setShowZibiInfo(!showZibiInfo)}
             aria-expanded={showZibiInfo}
             aria-haspopup="true"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream/90 hover:bg-cream border border-botanical-500/15 text-xs font-serif font-bold text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream/90 hover:bg-cream border border-botanical-500/15 text-xs font-display font-bold text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
           >
             <span>Zyba Companion &bull; Zibi</span>
             <ChevronDown className="w-3.5 h-3.5 text-charcoal-900/40" />
@@ -248,7 +248,7 @@ export default function CompanionLandingPage() {
           </div>
 
           {/* Greeting */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-charcoal-900 tracking-tight mb-1.5">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-charcoal-900 tracking-tight mb-1.5">
             {greeting}, {userName}
           </h1>
 

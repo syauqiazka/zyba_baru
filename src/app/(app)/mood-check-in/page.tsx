@@ -243,15 +243,15 @@ export default function MoodCheckInPage() {
             <div className="mt-5 grid grid-cols-3 gap-3 border-t border-brown-900/10 pt-4">
               <div>
                 <span className="text-[11px] text-brown-700">Mental (50%)</span>
-                <div className="text-base font-bold text-brown-900">{breakdown.mentalScore ?? 75}</div>
+                <div className="font-display text-base font-bold text-brown-900 tabular-nums">{breakdown.mentalScore ?? 75}</div>
               </div>
               <div>
                 <span className="text-[11px] text-brown-700">Fisik (25%)</span>
-                <div className="text-base font-bold text-brown-900">{breakdown.physicalScore ?? 75}</div>
+                <div className="font-display text-base font-bold text-brown-900 tabular-nums">{breakdown.physicalScore ?? 75}</div>
               </div>
               <div>
                 <span className="text-[11px] text-brown-700">Sosial (25%)</span>
-                <div className="text-base font-bold text-brown-900">{breakdown.socialScore ?? 75}</div>
+                <div className="font-display text-base font-bold text-brown-900 tabular-nums">{breakdown.socialScore ?? 75}</div>
               </div>
             </div>
           </div>
@@ -336,13 +336,13 @@ export default function MoodCheckInPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               <div className="p-3 rounded-xl bg-white border border-brown-900/5">
                 <span className="text-[10px] text-brown-700/80 block">Tingkat Stres</span>
-                <span className="text-sm font-bold text-brown-900 tabular-nums">
+                <span className="font-display text-sm font-bold text-brown-900 tabular-nums">
                   Level {existingCheckIn.stressLevel ?? 2} / 5
                 </span>
               </div>
               <div className="p-3 rounded-xl bg-white border border-brown-900/5">
                 <span className="text-[10px] text-brown-700/80 block">Kualitas Tidur</span>
-                <span className="text-sm font-bold text-brown-900 tabular-nums">
+                <span className="font-display text-sm font-bold text-brown-900 tabular-nums">
                   Bintang {existingCheckIn.sleepRating ?? 4} / 5
                 </span>
               </div>

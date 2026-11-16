@@ -124,7 +124,7 @@ export function HearthFlame({
                 </span>
               )}
             </div>
-            <h3 className="font-serif text-lg font-bold text-brown-900">
+            <h3 className="font-display text-lg font-bold text-brown-900 tabular-nums">
               {isLit
                 ? `${streakDays} Hari Konsisten`
                 : "Kehangatan Diri"}

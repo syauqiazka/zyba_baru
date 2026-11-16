@@ -64,7 +64,7 @@ export function QuotaModal({
 
         <h3
           id="quota-modal-title"
-          className="text-xl sm:text-2xl font-serif font-bold text-charcoal-900 mb-2"
+          className="text-xl sm:text-2xl font-display font-bold text-charcoal-900 mb-2 tabular-nums"
         >
           Batas 15.000 Token Sesi Tercapai
         </h3>

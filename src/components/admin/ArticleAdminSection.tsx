@@ -472,7 +472,7 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
                 Total Terkumpul
               </span>
               <div className="flex items-baseline justify-between">
-                <span className="font-serif text-3xl font-extrabold text-brown-900">
+                <span className="font-display text-3xl font-extrabold tracking-tight tabular-nums text-brown-900">
                   {stats.total}
                 </span>
                 <BookOpen className="w-5 h-5 text-[#3E7B54]" />
@@ -487,7 +487,7 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
                 Published (Tayang)
               </span>
               <div className="flex items-baseline justify-between">
-                <span className="font-serif text-3xl font-extrabold text-emerald-950">
+                <span className="font-display text-3xl font-extrabold tracking-tight tabular-nums text-emerald-950">
                   {stats.published}
                 </span>
                 <CheckCircle className="w-5 h-5 text-emerald-600" />
@@ -500,7 +500,7 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
                 Pending Verifikasi
               </span>
               <div className="flex items-baseline justify-between">
-                <span className="font-serif text-3xl font-extrabold text-amber-950">
+                <span className="font-display text-3xl font-extrabold tracking-tight tabular-nums text-amber-950">
                   {stats.pending}
                 </span>
                 <Clock className="w-5 h-5 text-amber-600" />
@@ -522,7 +522,7 @@ export function ArticleAdminSection({ onNotify }: { onNotify: (msg: string) => v
                       : "bg-stone-400"
                   }`}
                 />
-                <span className="font-serif text-xl font-bold text-brown-900">
+                <span className="font-display text-xl font-bold text-brown-900">
                   {stats.systemStatus === "HEALTHY" ? "Aktif & Sehat" : "Terpantau"}
                 </span>
               </div>

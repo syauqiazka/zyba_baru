@@ -9,6 +9,7 @@ import {
   Moon,
   ShieldCheck,
   MessageCircle,
+  Check,
 } from "lucide-react";
 import { Mascot } from "@/components/ui/Mascot";
 
@@ -104,14 +105,27 @@ export function SketchHeaderCard({
               </div>
             </div>
 
-            {/* Tombol "Check-in Mood Harian ->" (Habitdo Primary Botanical Green) */}
+            {/* Tombol Check-in Mood Harian (Sesuai status kehadiran batin hari ini) */}
             <Link
               href="/mood-check-in"
-              className="inline-flex h-11 items-center gap-2 rounded-2xl bg-[#3E7B54] text-white px-5 text-xs font-bold shadow-xs hover:bg-[#346B48] active:scale-[0.98] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
+              className={`inline-flex h-11 items-center gap-2 rounded-2xl px-5 text-xs font-bold shadow-xs transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 ${
+                litToday
+                  ? "bg-[#EAF4EC] border border-[#C8E4CD] text-[#28583B] hover:bg-[#d8eedd]"
+                  : "bg-[#3E7B54] text-white hover:bg-[#346B48] active:scale-[0.98]"
+              }`}
             >
-              <Sparkles className="h-4 w-4 stroke-[2]" />
-              <span>Check-in Mood Harian</span>
-              <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+              {litToday ? (
+                <>
+                  <Check className="h-4 w-4 stroke-[2.5]" />
+                  <span>Sudah Check-In Hari Ini</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4 stroke-[2]" />
+                  <span>Check-in Mood Harian</span>
+                  <ArrowRight className="h-4 w-4 stroke-[2.5]" />
+                </>
+              )}
             </Link>
           </div>
         </div>

@@ -301,7 +301,7 @@ export default function SettingsPage() {
               <Sparkles className="h-3.5 w-3.5" />
               <span>Pusat Kendali Pengguna</span>
             </div>
-            <h1 className="font-serif text-3xl font-medium tracking-tight text-[#1B241E] sm:text-4xl">
+            <h1 className="font-display text-3xl font-bold tracking-tight text-[#1B241E] sm:text-4xl">
               Pengaturan & Suaka Data
             </h1>
             <p className="mt-1 text-sm text-[#2D3E33]/70">

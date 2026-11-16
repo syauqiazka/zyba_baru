@@ -301,7 +301,7 @@ export function PostCard({
                 isLiked ? "fill-orange-500 text-orange-500" : "stroke-[1.8]"
               }`}
             />
-            <span>{likesCount}</span>
+            <span className="font-display tabular-nums font-semibold">{likesCount}</span>
           </button>
 
           {/* Comment Toggle Button */}
@@ -316,7 +316,7 @@ export function PostCard({
             aria-label={`Komentar (${commentsCount})`}
           >
             <MessageCircle className="h-4 w-4 stroke-[1.8]" />
-            <span>{commentsCount}</span>
+            <span className="font-display tabular-nums font-semibold">{commentsCount}</span>
           </button>
 
           {/* Bookmark Button */}

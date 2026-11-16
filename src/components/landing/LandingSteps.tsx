@@ -39,7 +39,7 @@ export function LandingSteps() {
           <span className="text-xs font-bold text-[#3E7B54] uppercase tracking-widest bg-emerald-100 px-3.5 py-1 rounded-full">
             Alur Terpadu ZYBA
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-brown-900 tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-brown-900 tracking-tight tabular-nums">
             3 Langkah Menuju Ruang Batin yang Tenang
           </h2>
           <p className="text-xs sm:text-sm text-brown-700/70 leading-relaxed">

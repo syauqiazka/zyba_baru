@@ -146,7 +146,7 @@ export default function WellnessJourneyPage() {
           <div className="flex items-start gap-3.5">
             <HeartHandshake className="h-5 w-5 text-orange-600 shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h4 className="font-serif font-bold text-sm text-brown-900">
+              <h4 className="font-display font-bold text-sm text-brown-900">
                 Kami menyimak isi hatimu dengan penuh rasa peduli.
               </h4>
               <p className="text-brown-700 leading-relaxed text-xs">
@@ -172,7 +172,7 @@ export default function WellnessJourneyPage() {
       {/* Page Header: Impeccable Craft (No eyebrow, balanced typography) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-2">
         <div className="space-y-1.5">
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-brown-900">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-brown-900">
             Ruang Sehat (Wellness Journey)
           </h1>
           <p className="text-xs sm:text-sm text-brown-700/70 max-w-xl">
@@ -202,7 +202,7 @@ export default function WellnessJourneyPage() {
                 <Sparkles className="w-4 h-4" />
               </div>
             </div>
-            <div className="font-mono text-4xl sm:text-5xl font-black text-brown-900 tracking-tight">
+            <div className="font-display text-4xl sm:text-5xl font-black text-brown-900 tracking-tight tabular-nums">
               {wellnessData?.currentScore !== null && wellnessData?.currentScore !== undefined ? (
                 <>
                   {wellnessData.currentScore}
@@ -214,7 +214,7 @@ export default function WellnessJourneyPage() {
             </div>
           </div>
           <div className="pt-4 border-t border-brown-900/8 mt-4 space-y-1">
-            <span className="text-sm font-serif font-bold text-[#3E7B54] block">
+            <span className="text-sm font-display font-bold text-[#3E7B54] block">
               {wellnessData?.currentScore !== null && wellnessData?.currentScore !== undefined
                 ? getScoreVerdict(wellnessData.currentScore)
                 : "Belum Ada Evaluasi"}
@@ -245,7 +245,7 @@ export default function WellnessJourneyPage() {
                 <span className="text-xs font-semibold text-brown-700/80 truncate">
                   Skor Batin
                 </span>
-                <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
+                <span className="font-display text-xs font-bold text-brown-900 shrink-0 tabular-nums">
                   {wellnessData?.scoreBreakdown?.mental !== null && wellnessData?.scoreBreakdown?.mental !== undefined
                     ? `${wellnessData.scoreBreakdown.mental}/100`
                     : "—"}
@@ -278,7 +278,7 @@ export default function WellnessJourneyPage() {
                 <span className="text-xs font-semibold text-brown-700/80 truncate">
                   Tidur & Energi
                 </span>
-                <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
+                <span className="font-display text-xs font-bold text-brown-900 shrink-0 tabular-nums">
                   {wellnessData?.scoreBreakdown?.physical !== null && wellnessData?.scoreBreakdown?.physical !== undefined
                     ? `${wellnessData.scoreBreakdown.physical}/100`
                     : "—"}
@@ -311,7 +311,7 @@ export default function WellnessJourneyPage() {
                 <span className="text-xs font-semibold text-brown-700/80 truncate">
                   Koneksi Komunitas
                 </span>
-                <span className="font-mono text-xs font-bold text-brown-900 shrink-0">
+                <span className="font-display text-xs font-bold text-brown-900 shrink-0 tabular-nums">
                   {wellnessData?.scoreBreakdown?.social !== null && wellnessData?.scoreBreakdown?.social !== undefined
                     ? `${wellnessData.scoreBreakdown.social}/100`
                     : "—"}

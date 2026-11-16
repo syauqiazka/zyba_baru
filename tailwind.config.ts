@@ -91,6 +91,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-manrope)", "sans-serif"],
         body: ["var(--font-dm-sans)", "sans-serif"],
+        serif: ["var(--font-manrope)", "serif"],
       },
     },
   },

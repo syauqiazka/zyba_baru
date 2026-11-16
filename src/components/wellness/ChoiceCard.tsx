@@ -51,14 +51,15 @@ export function ChoiceCard({
         </div>
       </div>
 
+      {/* Squircle Indicator (Bukan buletan radio) */}
       <div
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all ${
+        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-lg border transition-all ${
           selected
-            ? "border-orange-500 bg-orange-500 text-brown-900"
+            ? "border-orange-500 bg-orange-500 text-brown-900 shadow-2xs"
             : "border-brown-900/20 bg-white group-hover:border-orange-500/50"
         }`}
       >
-        {selected && <Check className="h-3 w-3 stroke-[2.5]" />}
+        {selected && <Check className="h-3.5 w-3.5 stroke-[2.8]" />}
       </div>
     </button>
   );
@@ -95,7 +96,7 @@ export function ScaleRating({
               key={pt}
               type="button"
               onClick={() => onChange(pt)}
-              className={`flex h-11 flex-1 items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 ${
+              className={`flex h-11 flex-1 items-center justify-center rounded-xl font-display text-sm font-semibold tabular-nums transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 ${
                 isSelected
                   ? "border-2 border-orange-500 bg-orange-100 font-bold text-brown-900 shadow-sm"
                   : "border border-brown-900/10 bg-white text-brown-700 hover:border-orange-500/40 hover:bg-orange-500/[0.04]"

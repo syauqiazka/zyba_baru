@@ -185,7 +185,7 @@ export default function AdminPage() {
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#FDF4F1] border border-[#F28C6E]/30 text-[#F28C6E] mb-4">
           <Shield className="h-6 w-6" />
         </div>
-        <h1 className="font-serif text-2xl font-semibold text-[#1B241E]">
+        <h1 className="font-display text-2xl font-bold text-[#1B241E]">
           Akses Terbatas Administrator
         </h1>
         <p className="mt-2 max-w-md text-sm text-[#2D3E33]/70">
@@ -306,25 +306,25 @@ export default function AdminPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div className="rounded-2xl bg-white p-5 border border-[#2D3E33]/10">
           <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">Menunggu</p>
-          <p className="font-serif text-3xl font-semibold text-[#1B241E] mt-1">{stats.pending}</p>
+          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-[#1B241E] mt-1">{stats.pending}</p>
           <p className="text-[11px] text-[#2D3E33]/60 mt-1">Laporan baru perlu ditinjau</p>
         </div>
 
         <div className="rounded-2xl bg-white p-5 border border-[#2D3E33]/10">
           <p className="text-xs font-semibold uppercase tracking-wider text-blue-700">Ditinjau</p>
-          <p className="font-serif text-3xl font-semibold text-[#1B241E] mt-1">{stats.reviewing}</p>
+          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-[#1B241E] mt-1">{stats.reviewing}</p>
           <p className="text-[11px] text-[#2D3E33]/60 mt-1">Dalam proses pemeriksaan</p>
         </div>
 
         <div className="rounded-2xl bg-white p-5 border border-[#2D3E33]/10">
           <p className="text-xs font-semibold uppercase tracking-wider text-[#3E7B54]">Selesai Ditindak</p>
-          <p className="font-serif text-3xl font-semibold text-[#1B241E] mt-1">{stats.actionTaken}</p>
+          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-[#1B241E] mt-1">{stats.actionTaken}</p>
           <p className="text-[11px] text-[#2D3E33]/60 mt-1">Konten tersembunyi / ditegur</p>
         </div>
 
         <div className="rounded-2xl bg-white p-5 border border-[#2D3E33]/10">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Ditolak</p>
-          <p className="font-serif text-3xl font-semibold text-[#1B241E] mt-1">{stats.dismissed}</p>
+          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-[#1B241E] mt-1">{stats.dismissed}</p>
           <p className="text-[11px] text-[#2D3E33]/60 mt-1">Tidak melanggar panduan</p>
         </div>
       </div>

@@ -194,7 +194,7 @@ export default function ActiveCompanionChatPage() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-sm font-serif font-bold text-charcoal-900">
+                <h2 className="text-sm font-display font-bold text-charcoal-900">
                   {personaConfig.name}
                 </h2>
                 <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-botanical-100 text-botanical-700 font-medium">
@@ -217,11 +217,11 @@ export default function ActiveCompanionChatPage() {
           >
             <Sparkles className="w-3.5 h-3.5 text-botanical-500" />
             {isCooldown ? (
-              <span className="font-bold text-amber-700 font-mono text-[11px]">
+              <span className="font-bold text-amber-700 font-display text-[11px] tabular-nums">
                 Jeda ({Math.floor(cooldownRemainingSec / 3600)}j {Math.floor((cooldownRemainingSec % 3600) / 60)}m)
               </span>
             ) : (
-              <span className="text-[11px] font-mono">
+              <span className="text-[11px] font-display tabular-nums">
                 <strong className="text-botanical-700">{remainingTokens.toLocaleString("id-ID")}</strong> / {tokenLimit.toLocaleString("id-ID")} Token
               </span>
             )}
