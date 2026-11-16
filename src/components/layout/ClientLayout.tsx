@@ -99,7 +99,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
         className={`w-full md:ml-64 md:w-[calc(100%-16rem)] min-h-screen transition-all ${
           hideMobileDock
             ? "pt-4 sm:pt-6 md:pt-12 px-3.5 sm:px-8 lg:px-10 pb-24 md:pb-16"
-            : "pt-4 sm:pt-6 md:pt-12 px-3.5 sm:px-8 lg:px-10 pb-28 md:pb-16"
+            : "pt-4 sm:pt-6 md:pt-12 px-3.5 sm:px-8 lg:px-10 pb-36 md:pb-16"
         }`}
       >
         <div className="mx-auto w-full max-w-[1240px]">

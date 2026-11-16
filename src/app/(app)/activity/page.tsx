@@ -137,6 +137,45 @@ const DEFAULT_SCHEDULED_ACTIVITIES: ActivityItem[] = [
   },
 ];
 
+const TIME_SLOTS = [
+  {
+    id: "pagi",
+    label: "Pagi Hari",
+    hours: "06:00 – 10:00",
+    desc: "Awali hari dengan kesegaran & niat hening",
+    icon: Sunrise,
+    iconBg: "bg-amber-100/90",
+    iconColor: "text-amber-800",
+  },
+  {
+    id: "siang",
+    label: "Siang Hari",
+    hours: "11:00 – 14:00",
+    desc: "Menjaga fokus sadar & asupan nutrisi seimbang",
+    icon: Sun,
+    iconBg: "bg-emerald-100/90",
+    iconColor: "text-[#28583B]",
+  },
+  {
+    id: "sore",
+    label: "Sore Hari",
+    hours: "15:00 – 18:00",
+    desc: "Regangkan raga & pulihkan energi dari lelah",
+    icon: Sunset,
+    iconBg: "bg-orange-100/90",
+    iconColor: "text-orange-800",
+  },
+  {
+    id: "malam",
+    label: "Malam Hari",
+    hours: "19:00 – 22:00",
+    desc: "Lepaskan beban pikiran menuju rehat lelap",
+    icon: Moon,
+    iconBg: "bg-indigo-100/90",
+    iconColor: "text-indigo-800",
+  },
+];
+
 export default function ActivityPage() {
   const [activeTab, setActiveTab] = useState<"planner" | "nutrition" | "breathing">("planner");
   const [activities, setActivities] = useState<ActivityItem[]>(DEFAULT_SCHEDULED_ACTIVITIES);
@@ -321,7 +360,7 @@ export default function ActivityPage() {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-8 pb-36 sm:pb-36 md:pb-16">
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-6 right-6 z-50 rounded-2xl bg-[#3E7B54] text-white px-5 py-3 shadow-xl text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-300">
@@ -421,8 +460,8 @@ export default function ActivityPage() {
           ======================================================== */}
       {activeTab === "planner" && (
         <div className="space-y-6">
-          {/* Progress Banner & Action Bar */}
-          <div className="rounded-3xl border border-brown-900/10 bg-white p-6 shadow-xs">
+          {/* Progress Banner & Filter Bar */}
+          <div className="rounded-3xl border border-brown-900/10 bg-white p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-brown-700/70 block">
@@ -444,18 +483,18 @@ export default function ActivityPage() {
             </div>
 
             {/* Visual Progress Bar */}
-            <div className="mt-4 h-2.5 w-full rounded-full bg-brown-900/5 overflow-hidden">
+            <div className="h-2 w-full rounded-full bg-brown-900/5 overflow-hidden">
               <div
                 className="h-full bg-[#3E7B54] transition-all duration-500 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
 
-            {/* Filters: Waktu & Kategori */}
-            <div className="mt-5 pt-4 border-t border-brown-900/8 flex flex-wrap items-center justify-between gap-3">
+            {/* Filter Waktu & Kategori (Responsif, Scrollable di Mobile) */}
+            <div className="pt-3 border-t border-brown-900/8 flex flex-col md:flex-row md:items-center justify-between gap-3">
               {/* Filter Waktu */}
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[11px] font-bold text-brown-700 mr-1">Waktu:</span>
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+                <span className="text-[11px] font-bold text-brown-700 mr-1 shrink-0">Waktu:</span>
                 {[
                   { id: "all", label: "Semua Jam" },
                   { id: "pagi", label: "Pagi (06-10)" },
@@ -467,7 +506,7 @@ export default function ActivityPage() {
                     key={t.id}
                     type="button"
                     onClick={() => setSelectedTimeFilter(t.id)}
-                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold shrink-0 transition-all ${
                       selectedTimeFilter === t.id
                         ? "bg-[#3E7B54] text-white shadow-2xs"
                         : "bg-[#F5F8F5] text-brown-700 hover:text-brown-900"
@@ -479,8 +518,8 @@ export default function ActivityPage() {
               </div>
 
               {/* Filter Aspek */}
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[11px] font-bold text-brown-700 mr-1">Aspek:</span>
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+                <span className="text-[11px] font-bold text-brown-700 mr-1 shrink-0">Aspek:</span>
                 {[
                   { id: "all", label: "Semua" },
                   { id: "mindful", label: "Pikiran" },
@@ -492,7 +531,7 @@ export default function ActivityPage() {
                     key={c.id}
                     type="button"
                     onClick={() => setSelectedCategoryFilter(c.id)}
-                    className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold transition-all ${
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-semibold shrink-0 transition-all ${
                       selectedCategoryFilter === c.id
                         ? "bg-brown-900 text-white shadow-2xs"
                         : "bg-[#F5F8F5] text-brown-700 hover:text-brown-900"
@@ -505,103 +544,243 @@ export default function ActivityPage() {
             </div>
           </div>
 
-          {/* List Timeline Rencana Aktivitas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredActivities.map((act) => {
-              const isDone = Boolean(completedIds[act.id]);
-              const badge = getCategoryBadge(act.category);
+          {/* MAIN 2-COLUMN DESKTOP SPLIT / 1-COLUMN MOBILE */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* LEFT / MAIN COLUMN (8 Cols): Grouped Time Blocks */}
+            <div className="lg:col-span-8 space-y-6">
+              {TIME_SLOTS.filter((slot) => {
+                if (selectedTimeFilter !== "all" && slot.id !== selectedTimeFilter) return false;
+                const slotActivities = filteredActivities.filter((a) => a.timeSlot === slot.id);
+                return slotActivities.length > 0;
+              }).map((slot) => {
+                const slotActivities = filteredActivities.filter((a) => a.timeSlot === slot.id);
+                const SlotIcon = slot.icon;
+                const slotDoneCount = slotActivities.filter((a) => completedIds[a.id]).length;
 
-              return (
-                <div
-                  key={act.id}
-                  className={`rounded-2xl border p-4.5 transition-all duration-200 flex flex-col justify-between gap-3 ${
-                    isDone
-                      ? "bg-[#EAF4EC]/60 border-[#C8E4CD]"
-                      : "bg-white border-brown-900/10 hover:border-[#3E7B54]/40 hover:shadow-2xs"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-                          isDone ? "bg-[#3E7B54] text-white" : "bg-[#F5F8F5] text-[#28583B]"
-                        }`}
-                      >
-                        {act.timeSlot === "pagi" ? (
-                          <Sunrise className="w-4 h-4" />
-                        ) : act.timeSlot === "siang" ? (
-                          <Sun className="w-4 h-4" />
-                        ) : act.timeSlot === "sore" ? (
-                          <Sunset className="w-4 h-4" />
-                        ) : (
-                          <Moon className="w-4 h-4" />
-                        )}
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-display text-xs font-bold text-brown-700/80 tabular-nums">
-                            {act.timeString || "08:00"}
-                          </span>
-                          <span className={`text-[10px] font-bold px-2 py-0.2 rounded-full border ${badge.color}`}>
-                            {badge.label}
-                          </span>
-                        </div>
-
-                        <h4
-                          className={`text-xs font-bold leading-snug ${
-                            isDone ? "line-through text-brown-700/60" : "text-brown-900"
-                          }`}
+                return (
+                  <div
+                    key={slot.id}
+                    className="rounded-3xl border border-brown-900/10 bg-white overflow-hidden shadow-2xs transition-all"
+                  >
+                    {/* Time Slot Header */}
+                    <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-r from-[#F5F8F5]/80 via-white to-[#F5F8F5]/50 border-b border-brown-900/6">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${slot.iconBg} ${slot.iconColor}`}
                         >
-                          {act.title}
-                        </h4>
-
-                        <p className="text-[11px] text-brown-700/70 leading-relaxed">
-                          {act.desc}
-                        </p>
+                          <SlotIcon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-serif text-sm sm:text-base font-bold text-brown-900">
+                              {slot.label}
+                            </h3>
+                            <span className="text-[10px] sm:text-xs text-brown-700/60 font-medium tabular-nums">
+                              ({slot.hours})
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-brown-700/60 hidden sm:block">
+                            {slot.desc}
+                          </p>
+                        </div>
                       </div>
+
+                      <span className="text-[11px] font-bold text-[#3E7B54] bg-emerald-100/70 px-2.5 py-0.5 rounded-full tabular-nums">
+                        {slotDoneCount}/{slotActivities.length} Selesai
+                      </span>
                     </div>
 
-                    {/* Checkbox Squircle Button (Bukan buletan radio) */}
-                    <button
-                      type="button"
-                      onClick={() => handleToggleActivity(act)}
-                      className={`shrink-0 w-7 h-7 rounded-xl flex items-center justify-center border transition-all ${
-                        isDone
-                          ? "bg-[#3E7B54] border-[#3E7B54] text-white shadow-2xs"
-                          : "border-brown-900/25 bg-white hover:border-[#3E7B54] hover:bg-emerald-50/60 text-transparent"
-                      }`}
-                      aria-label={isDone ? "Tandai belum selesai" : "Tandai selesai"}
-                    >
-                      <Check className="w-4 h-4 stroke-[2.8]" />
-                    </button>
-                  </div>
+                    {/* Activity Item Rows */}
+                    <div className="divide-y divide-brown-900/6">
+                      {slotActivities.map((act) => {
+                        const isDone = Boolean(completedIds[act.id]);
+                        const badge = getCategoryBadge(act.category);
 
-                  <div className="pt-2 border-t border-brown-900/5 flex items-center justify-between text-[10px] text-brown-700/60">
-                    <span className="flex items-center gap-1 font-semibold">
-                      <Clock className="w-3 h-3" />
-                      Estimasi: {act.recommendedMin} menit
+                        return (
+                          <div
+                            key={act.id}
+                            onClick={() => handleToggleActivity(act)}
+                            className={`group px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between gap-3 sm:gap-4 transition-all duration-150 cursor-pointer select-none ${
+                              isDone
+                                ? "bg-emerald-50/30 hover:bg-emerald-50/50"
+                                : "hover:bg-[#F5F8F5]/80 bg-white"
+                            }`}
+                          >
+                            <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
+                              {/* Checkbox Squircle */}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleToggleActivity(act);
+                                }}
+                                className={`mt-0.5 w-6 h-6 rounded-lg flex items-center justify-center border-2 transition-all shrink-0 ${
+                                  isDone
+                                    ? "bg-[#3E7B54] border-[#3E7B54] text-white shadow-2xs"
+                                    : "border-brown-900/25 bg-white group-hover:border-[#3E7B54] text-transparent"
+                                }`}
+                                aria-label={isDone ? "Tandai belum selesai" : "Tandai selesai"}
+                              >
+                                <Check
+                                  className={`w-3.5 h-3.5 stroke-[3] ${
+                                    isDone ? "opacity-100" : "opacity-0"
+                                  }`}
+                                />
+                              </button>
+
+                              <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-display text-xs font-bold text-brown-900 tabular-nums">
+                                    {act.timeString || "08:00"}
+                                  </span>
+                                  <span
+                                    className={`text-[10px] font-bold px-2 py-0.2 rounded-full border ${badge.color}`}
+                                  >
+                                    {badge.label}
+                                  </span>
+                                  <span className="text-[10px] text-brown-700/60 flex items-center gap-1 font-medium">
+                                    <Clock className="w-2.5 h-2.5" />
+                                    {act.recommendedMin} menit
+                                  </span>
+                                </div>
+
+                                <h4
+                                  className={`text-xs sm:text-sm font-bold leading-snug transition-colors ${
+                                    isDone
+                                      ? "line-through text-brown-700/50"
+                                      : "text-brown-900 group-hover:text-[#3E7B54]"
+                                  }`}
+                                >
+                                  {act.title}
+                                </h4>
+
+                                <p
+                                  className={`text-[11px] leading-relaxed hidden sm:block ${
+                                    isDone
+                                      ? "text-brown-700/40 line-through"
+                                      : "text-brown-700/70"
+                                  }`}
+                                >
+                                  {act.desc}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Right Action Badge */}
+                            <div className="shrink-0">
+                              <span
+                                className={`text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all ${
+                                  isDone
+                                    ? "bg-emerald-100 text-emerald-800"
+                                    : "bg-brown-900/5 text-brown-700 group-hover:bg-[#3E7B54] group-hover:text-white"
+                                }`}
+                              >
+                                {isDone ? "Selesai" : "Mulai"}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {filteredActivities.length === 0 && (
+                <div className="rounded-3xl border border-brown-900/10 bg-white p-12 text-center space-y-3">
+                  <Mascot pose="happy" size={80} animate={false} decorative={true} />
+                  <h4 className="font-serif text-lg font-bold text-brown-900">
+                    Tidak ada rencana dalam filter ini
+                  </h4>
+                  <p className="text-xs text-brown-700/70">
+                    Ubah filter waktu atau tambahkan rencana baru untuk mengisinya.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* RIGHT COLUMN (4 Cols): Desktop Zen Sanctuary Sidebar */}
+            <div className="hidden lg:flex lg:col-span-4 flex-col space-y-5 sticky top-20">
+              {/* Mascot Zibi Mindful Message */}
+              <div className="rounded-3xl border border-brown-900/10 bg-gradient-to-br from-cream/90 via-white to-emerald-50/40 p-6 shadow-2xs space-y-3">
+                <div className="flex items-center gap-3">
+                  <Mascot pose="happy" size={48} animate={false} decorative={true} />
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#3E7B54] block">
+                      Teman Suaka ZYBA
                     </span>
-                    <span className="font-bold text-[#3E7B54]">
-                      {isDone ? "✓ Selesai" : "Siap Dilakukan"}
-                    </span>
+                    <h4 className="font-serif text-sm font-bold text-brown-900">
+                      Zibi Menemani Harimu
+                    </h4>
                   </div>
                 </div>
-              );
-            })}
-          </div>
 
-          {filteredActivities.length === 0 && (
-            <div className="rounded-3xl border border-brown-900/10 bg-white p-12 text-center space-y-3">
-              <Mascot pose="happy" size={80} animate={false} decorative={true} />
-              <h4 className="font-serif text-lg font-bold text-brown-900">
-                Tidak ada rencana dalam filter ini
-              </h4>
-              <p className="text-xs text-brown-700/70">
-                Ubah filter waktu atau tambahkan rencana baru untuk mengisinya.
-              </p>
+                <p className="text-xs text-brown-800/80 leading-relaxed font-serif italic">
+                  &ldquo;Tidak perlu menyelesaikan semua rencana sekaligus jika tubuh terasa lelah. Satu hembusan napas hening adalah awal pemulihan.&rdquo;
+                </p>
+
+                <div className="pt-2 border-t border-brown-900/6 flex items-center justify-between text-[11px] font-bold text-brown-700/70">
+                  <span>Konsistensi Lembut</span>
+                  <span className="text-[#3E7B54]">{progressPercent}% Ritme Hari Ini</span>
+                </div>
+              </div>
+
+              {/* Quick Launchers */}
+              <div className="rounded-3xl border border-brown-900/10 bg-white p-5 shadow-xs space-y-3">
+                <h4 className="font-serif text-xs font-bold uppercase tracking-wider text-brown-700/70">
+                  Aksi Cepat Suaka
+                </h4>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("breathing")}
+                  className="w-full flex items-center justify-between p-3 rounded-2xl border border-brown-900/8 hover:border-[#3E7B54]/40 hover:bg-[#F5F8F5] transition-all group text-left"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                      <Wind className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-brown-900 group-hover:text-[#3E7B54] transition-colors block">
+                        Latihan Napas 4-7-8
+                      </span>
+                      <span className="text-[10px] text-brown-700/60">
+                        Redakan cemas dalam 3 menit
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs text-brown-700/40 group-hover:text-[#3E7B54] font-bold transition-colors">
+                    →
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("nutrition")}
+                  className="w-full flex items-center justify-between p-3 rounded-2xl border border-brown-900/8 hover:border-[#3E7B54]/40 hover:bg-[#F5F8F5] transition-all group text-left"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center">
+                      <Salad className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-brown-900 group-hover:text-[#3E7B54] transition-colors block">
+                        Scan Nutrisi Piring AI
+                      </span>
+                      <span className="text-[10px] text-brown-700/60">
+                        Evaluasi mindful pola makan
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs text-brown-700/40 group-hover:text-[#3E7B54] font-bold transition-colors">
+                    →
+                  </span>
+                </button>
+              </div>
             </div>
-          )}
+
+          </div>
         </div>
       )}
 

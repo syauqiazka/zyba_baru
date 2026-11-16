@@ -18,7 +18,7 @@ export function BottomSanctuary() {
 
   return (
     <nav
-      className="fixed bottom-3 left-4 right-4 z-50 flex h-16 items-center justify-around rounded-2xl border border-brown-900/8 bg-white/95 px-2 shadow-[0_8px_32px_rgba(27,36,30,0.08)] backdrop-blur-xl md:hidden"
+      className="fixed bottom-[max(0.75rem,env(safe-area-inset-bottom,0px))] left-4 right-4 z-50 flex h-16 items-center justify-around rounded-2xl border border-brown-900/8 bg-white/95 px-2 shadow-[0_8px_32px_rgba(27,36,30,0.08)] backdrop-blur-xl md:hidden"
       aria-label="Navigasi Bawah"
     >
       {MOBILE_ITEMS.map((item) => {
