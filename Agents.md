@@ -18,6 +18,7 @@ Riwayat proyek ini punya pola agent melapor "selesai" padahal komponen tidak ter
 3. Sebelum membuat komponen baru: `grep` dulu apakah sudah ada. Sebelum menghapus: `grep` referensi. Komponen yang dibuat tapi tidak pernah di-import = dead code = dianggap belum selesai.
 4. Jangan mengerjakan lebih dari **satu fase** (Bagian 9) per batch.
 5. Jika ada konflik antar dokumen atau instruksi ambigu: **berhenti dan tanya**, jangan menebak lalu membangun.
+6. **Wajib Selalu Memakai Skill (Instruksi Mutlak Pengguna):** Sebelum memberikan respons, melakukan pemeriksaan, atau mengeksekusi aksi apa pun, agent **WAJIB** memanggil dan mematuhi skill yang relevan sesuai panduan `using-superpowers` tanpa terkecuali, apa pun keadaannya. Pipeline wajib (Bagian 2 & 3) dan stack skills (`nextjs-app-router-patterns`, `react-best-practices`, `tailwind-patterns`, `prisma-expert`) wajib menjadi rujukan standar.
 
 ---
 
