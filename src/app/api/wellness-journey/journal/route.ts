@@ -18,7 +18,14 @@ export async function GET() {
     }
 
     const entries = await wellnessRepo.listJournalEntries(session.userId);
-    return NextResponse.json({ entries });
+    return NextResponse.json(
+      { entries },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (err: any) {
     console.error("Gagal memuat jurnal:", err);
     return NextResponse.json(

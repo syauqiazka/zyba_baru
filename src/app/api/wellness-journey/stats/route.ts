@@ -18,7 +18,11 @@ export async function GET() {
     }
 
     const stats = await wellnessRepo.getStats(session.userId);
-    return NextResponse.json(stats);
+    return NextResponse.json(stats, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
+    });
   } catch (err: any) {
     console.error("Gagal memuat statistik wellness:", err);
     return NextResponse.json(

@@ -208,6 +208,10 @@ export async function GET() {
         flaggedForRisk: d.flaggedForRisk,
       })),
       crisisAlert: todayCheckIn?.flaggedForRisk ?? false,
+    }, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
     });
   } catch (error: any) {
     console.error("[GET /api/dashboard] Error:", error);

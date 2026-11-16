@@ -23,59 +23,9 @@ export interface DirectMessageItem {
   isMine: boolean;
 }
 
-// In-memory fallback for dev / testing reliability
-const memoryConversations: DirectConversationItem[] = [
-  {
-    id: "conv-demo-1",
-    partnerId: "user-partner-1",
-    partnerName: "Alya (Ruang Hening)",
-    partnerHandle: "alya_mindful",
-    lastMessageSnippet: "Terima kasih sudah berbagi di lingkar syukur tadi siang ya!",
-    lastMessageAt: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
-    unreadCount: 1,
-  },
-  {
-    id: "conv-demo-2",
-    partnerId: "user-partner-2",
-    partnerName: "Rian Pemulihan",
-    partnerHandle: "rian_breathe",
-    lastMessageSnippet: "Semangat untuk latihan pernapasannya hari ini.",
-    lastMessageAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
-    unreadCount: 0,
-  },
-];
-
-const memoryMessages: Record<string, DirectMessageItem[]> = {
-  "conv-demo-1": [
-    {
-      id: "msg-1",
-      conversationId: "conv-demo-1",
-      senderId: "user-partner-1",
-      senderName: "Alya (Ruang Hening)",
-      content: "Halo! Aku baca ceritamu tentang mengatasi overthinking, sangat relate.",
-      createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-      isMine: false,
-    },
-    {
-      id: "msg-2",
-      conversationId: "conv-demo-1",
-      senderId: "current-user",
-      senderName: "Kamu",
-      content: "Iya, terima kasih banyak sudah merespons dan saling menyemangati.",
-      createdAt: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
-      isMine: true,
-    },
-    {
-      id: "msg-3",
-      conversationId: "conv-demo-1",
-      senderId: "user-partner-1",
-      senderName: "Alya (Ruang Hening)",
-      content: "Terima kasih sudah berbagi di lingkar syukur tadi siang ya!",
-      createdAt: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
-      isMine: false,
-    },
-  ],
-};
+// Resilient storage fallback: empty array for authentic user data
+const memoryConversations: DirectConversationItem[] = [];
+const memoryMessages: Record<string, DirectMessageItem[]> = {};
 
 export const directMessageRepo = {
   /**

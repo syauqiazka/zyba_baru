@@ -1,7 +1,7 @@
 import { accountDb } from "./accountClient";
 import { MoodLevel } from "@/generated/account-client";
 import { detectRisk } from "@/lib/crisisDetection";
-import { moodToPoints, scaleToPoints } from "../scoring/zybaScore";
+import { moodToPoints, scaleToPoints, calculateZybaScore } from "../scoring/zybaScore";
 
 export interface WellnessStatItem {
   date: string;
@@ -30,14 +30,38 @@ export const wellnessRepo = {
         select: { zybaScore: true, name: true },
       });
 
-      const assessments = await accountDb.dailyAssessment.findMany({
+      // 1. Ambil 14 penilaian harian terbaru (desc), bukan terlama
+      const assessmentsDesc = await accountDb.dailyAssessment.findMany({
         where: { userId },
-        orderBy: { date: "asc" },
+        orderBy: { date: "desc" },
         take: 14,
       });
 
-      // Format riwayat nyata dari database
-      const history: WellnessStatItem[] = assessments.map((a) => {
+      const initialAssessment = await accountDb.assessment.findUnique({
+        where: { userId },
+        select: { initialMood: true, stressLevel: true, sleepQualityRating: true },
+      });
+
+      const completedActs = await accountDb.activityLog.count({
+        where: {
+          userId,
+          completed: true,
+          createdAt: { gte: new Date(Date.now() - 7 * 86400000) },
+        },
+      });
+
+      const hasData = assessmentsDesc.length > 0;
+
+      // 2. Hitung skor Zyba akurat dengan formula terpadu rolling window 7 hari
+      const scoreResult = calculateZybaScore({
+        dailyAssessments: assessmentsDesc.slice(0, 7),
+        initialAssessment,
+        completedActivitiesCount: completedActs,
+      });
+
+      // 3. Format riwayat nyata dari database untuk kurva tren (diurutkan kronologis lama ke baru)
+      const assessmentsAsc = [...assessmentsDesc].reverse();
+      const history: WellnessStatItem[] = assessmentsAsc.map((a) => {
         let dayLabel = a.date;
         try {
           const parsed = new Date(a.date);
@@ -53,25 +77,13 @@ export const wellnessRepo = {
         };
       });
 
-      const hasData = assessments.length > 0;
-      const latestAssessment = hasData ? assessments[assessments.length - 1] : null;
-      const ans = (latestAssessment?.answers as Record<string, any>) || {};
-
-      const mental = latestAssessment
-        ? Math.round(moodToPoints(latestAssessment.mood) * 0.5 + scaleToPoints(latestAssessment.stressLevel, true) * 0.5)
-        : null;
-      const physical = latestAssessment?.sleepRating ? scaleToPoints(latestAssessment.sleepRating) : null;
-      const social = ans.connection
-        ? scaleToPoints(Number(ans.connection))
-        : (ans.supported ? scaleToPoints(Number(ans.supported)) : (hasData ? 60 : null));
-
       return {
         hasData,
-        currentScore: user?.zybaScore ?? (hasData ? (latestAssessment?.calculatedScore || 50) : null),
+        currentScore: user?.zybaScore ?? (hasData ? scoreResult.zybaScore : null),
         scoreBreakdown: {
-          mental,
-          physical,
-          social,
+          mental: hasData ? scoreResult.mentalScore : null,
+          physical: hasData ? scoreResult.physicalScore : null,
+          social: hasData ? scoreResult.socialScore : null,
         },
         history, // Data riil murni tanpa fabrikasi dummy
       };

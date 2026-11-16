@@ -72,8 +72,8 @@ export default function WellnessJourneyPage() {
   const fetchWellnessData = async () => {
     try {
       const [statsRes, journalRes] = await Promise.all([
-        fetch("/api/wellness-journey/stats"),
-        fetch("/api/wellness-journey/journal"),
+        fetch("/api/wellness-journey/stats", { cache: "no-store" }),
+        fetch("/api/wellness-journey/journal", { cache: "no-store" }),
       ]);
 
       if (statsRes.ok) {

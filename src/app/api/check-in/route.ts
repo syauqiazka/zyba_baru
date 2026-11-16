@@ -53,12 +53,19 @@ export async function GET() {
       take: 7,
     });
 
-    return NextResponse.json({
-      todayDate,
-      alreadyCheckedIn: !!todayCheckIn,
-      todayCheckIn,
-      pastCheckIns,
-    });
+    return NextResponse.json(
+      {
+        todayDate,
+        alreadyCheckedIn: !!todayCheckIn,
+        todayCheckIn,
+        pastCheckIns,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (error: any) {
     console.error("[GET /api/check-in] Error:", error);
     return NextResponse.json(
@@ -243,18 +250,25 @@ export async function POST(request: Request) {
       // Ignored if DB offline
     }
 
-    return NextResponse.json({
-      success: true,
-      dailyAssessment: daily || {
-        date,
-        mood: validMood,
-        calculatedScore: scoreResult.zybaScore,
+    return NextResponse.json(
+      {
+        success: true,
+        dailyAssessment: daily || {
+          date,
+          mood: validMood,
+          calculatedScore: scoreResult.zybaScore,
+        },
+        scoreResult,
+        flaggedForRisk: isFlagged,
+        crisisResources: isFlagged ? CRISIS_RESOURCES : null,
+        streakDays: newStreakDays,
       },
-      scoreResult,
-      flaggedForRisk: isFlagged,
-      crisisResources: isFlagged ? CRISIS_RESOURCES : null,
-      streakDays: newStreakDays,
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (error: any) {
     console.error("[POST /api/check-in] Error:", error);
     return NextResponse.json(

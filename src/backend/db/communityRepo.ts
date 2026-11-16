@@ -6,6 +6,7 @@
  */
 
 import { communityDb } from "./communityClient";
+import { accountDb } from "./accountClient";
 import { detectRisk } from "@/lib/crisisDetection";
 
 export interface CommunityPostRecord {
@@ -306,23 +307,47 @@ export const communityRepo = {
           });
         }
 
-        return sortedPosts.slice(0, limit).map((p: any) => ({
-          id: p.id,
-          userId: p.userId,
-          authorName: p.isAnonymous ? "Teman Berkelana" : "Pengguna ZYBA",
-          authorHandle: p.isAnonymous ? "anonim" : "zyba_user",
-          title: p.title || null,
-          content: p.content || "",
-          topicTag: p.topicTag || "Refleksi",
-          isAnonymous: p.isAnonymous,
-          imageUrl: p.imageUrl,
-          audioUrl: p.audioUrl,
-          likesCount: p.likes?.length || 0,
-          commentsCount: p.comments?.length || 0,
-          isLiked: p.likes?.some((l: any) => l.userId === userId) || false,
-          isBookmarked: p.bookmarks?.some((b: any) => b.userId === userId) || false,
-          createdAt: p.createdAt.toISOString(),
-        }));
+        const finalSlice = sortedPosts.slice(0, limit);
+
+        // Batch kueri profil penulis non-anonim dari database akun (AGENTS.md §5.2)
+        const nonAnonUserIds = Array.from(
+          new Set(finalSlice.filter((p: any) => !p.isAnonymous).map((p: any) => p.userId))
+        );
+
+        let userMap = new Map<string, { name: string; username?: string | null; avatarUrl?: string | null }>();
+        if (nonAnonUserIds.length > 0) {
+          try {
+            const users = await accountDb.user.findMany({
+              where: { id: { in: nonAnonUserIds } },
+              select: { id: true, name: true, username: true, avatarUrl: true },
+            });
+            userMap = new Map(users.map((u) => [u.id, u]));
+          } catch (err) {
+            console.warn("[CommunityRepo] Error fetching author profiles:", err);
+          }
+        }
+
+        return finalSlice.map((p: any) => {
+          const author = !p.isAnonymous ? userMap.get(p.userId) : null;
+          return {
+            id: p.id,
+            userId: p.userId,
+            authorName: p.isAnonymous ? "Teman Berkelana" : (author?.name || "Teman ZYBA"),
+            authorHandle: p.isAnonymous ? "anonim" : (author?.username || (author?.name ? author.name.toLowerCase().replace(/\s+/g, "_") : "zyba_user")),
+            authorAvatar: p.isAnonymous ? null : (author?.avatarUrl || null),
+            title: p.title || null,
+            content: p.content || "",
+            topicTag: p.topicTag || "Refleksi",
+            isAnonymous: p.isAnonymous,
+            imageUrl: p.imageUrl,
+            audioUrl: p.audioUrl,
+            likesCount: p.likes?.length || 0,
+            commentsCount: p.comments?.length || 0,
+            isLiked: p.likes?.some((l: any) => l.userId === userId) || false,
+            isBookmarked: p.bookmarks?.some((b: any) => b.userId === userId) || false,
+            createdAt: p.createdAt.toISOString(),
+          };
+        });
       }
       // Jika DB kosong: jatuh ke seed memory
     } catch {
@@ -596,15 +621,34 @@ export const communityRepo = {
         }));
       }
 
-      return comments.map((c: any) => ({
-        id: c.id,
-        postId: c.postId,
-        userId: c.userId,
-        authorName: c.isAnonymous ? "Teman Berkelana" : "Pengguna ZYBA",
-        content: c.content,
-        isAnonymous: c.isAnonymous,
-        createdAt: c.createdAt.toISOString(),
-      }));
+      const nonAnonUserIds = Array.from(
+        new Set(comments.filter((c: any) => !c.isAnonymous).map((c: any) => c.userId))
+      );
+
+      let userMap = new Map<string, { name: string; avatarUrl?: string | null }>();
+      if (nonAnonUserIds.length > 0) {
+        try {
+          const users = await accountDb.user.findMany({
+            where: { id: { in: nonAnonUserIds } },
+            select: { id: true, name: true, avatarUrl: true },
+          });
+          userMap = new Map(users.map((u) => [u.id, u]));
+        } catch {}
+      }
+
+      return comments.map((c: any) => {
+        const author = !c.isAnonymous ? userMap.get(c.userId) : null;
+        return {
+          id: c.id,
+          postId: c.postId,
+          userId: c.userId,
+          authorName: c.isAnonymous ? "Teman Berkelana" : (author?.name || "Teman ZYBA"),
+          authorAvatar: c.isAnonymous ? null : (author?.avatarUrl || null),
+          content: c.content,
+          isAnonymous: c.isAnonymous,
+          createdAt: c.createdAt.toISOString(),
+        };
+      });
     } catch {
       const comments = Array.from(memComments.values())
         .filter((c) => c.postId === postId && !c.isHidden)

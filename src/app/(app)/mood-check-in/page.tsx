@@ -61,7 +61,7 @@ export default function MoodCheckInPage() {
 
     const checkStatus = async () => {
       try {
-        const res = await fetch("/api/check-in");
+        const res = await fetch("/api/check-in", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           if (data.alreadyCheckedIn && data.todayCheckIn) {
@@ -186,6 +186,11 @@ export default function MoodCheckInPage() {
 
       setResultData(data);
       setCompleted(true);
+      setAlreadyCheckedInToday(true);
+      if (data.dailyAssessment) {
+        setExistingCheckIn(data.dailyAssessment);
+      }
+      setIsEditing(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan saat menyimpan.");
