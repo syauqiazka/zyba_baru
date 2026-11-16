@@ -150,77 +150,24 @@ export function LandingHero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* ====================================================
-              SISI KIRI (5 Kolom): 3D Perspective Phone Showcase
-              (Sesuai Referensi Gambar 2 & 3: Phone Tilted in 3D Perspective)
+              SISI KIRI (5 Kolom): Standalone 3D Phone Mockup
+              (Clean, tanpa card wrapper, tanpa badge berlebih)
               ==================================================== */}
           <div className="hidden lg:flex lg:col-span-5 flex-col items-center justify-center relative">
-            <div className="relative w-full max-w-[440px] flex flex-col items-center justify-center">
-              {/* Subtle 3D Perspective Grid Background (Inspired by Reference Gambar 2) */}
-              <div className="absolute -inset-4 rounded-[40px] overflow-hidden border border-[#3E7B54]/15 bg-gradient-to-b from-[#EBF3ED]/90 via-[#F3F7F4]/60 to-[#EBF3ED]/90 shadow-[0_20px_50px_-15px_rgba(27,36,30,0.08)] backdrop-blur-md pointer-events-none -z-10">
-                {/* Coordinate Grid Lines */}
-                <div
-                  className="absolute inset-0 opacity-[0.22]"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(to right, rgba(62, 123, 84, 0.25) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(62, 123, 84, 0.25) 1px, transparent 1px)
-                    `,
-                    backgroundSize: "36px 36px",
-                  }}
-                />
-                {/* Soft Radial Center Highlight */}
-                <div className="absolute inset-0 bg-radial from-white/70 via-transparent to-transparent" />
-              </div>
-
-              {/* Top Floating Badge */}
-              <div className="self-end mr-3 mb-1 z-20 rounded-full border border-white/90 bg-white/95 backdrop-blur-md px-3.5 py-1 shadow-[0_8px_20px_rgba(27,36,30,0.08)] flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#3E7B54]" />
-                <span className="text-[10px] font-bold text-brown-900 tracking-tight">
-                  Didukung AI Suaka • Bebas Biaya
-                </span>
-              </div>
-
-              {/* 3D Perspective Phone Mockup with Parallax Tilt */}
-              <div
-                ref={phoneCardRef}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                className="relative z-10 w-full flex flex-col items-center transition-transform duration-200 ease-out cursor-pointer py-1"
-              >
-                <Image
-                  src="/images/landing/hero_phone_3d_mockup.png"
-                  alt="Tampilan Antarmuka Aplikasi ZYBA Mobile dalam Mockup 3D"
-                  width={686}
-                  height={830}
-                  priority
-                  className="w-[330px] sm:w-[370px] h-auto object-contain drop-shadow-[0_28px_45px_rgba(27,36,30,0.18)] select-none hover:scale-[1.015] transition-transform duration-300"
-                />
-              </div>
-
-              {/* Bottom Quick Action Floating Banner */}
-              <div className="w-[92%] mx-auto -mt-2 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md p-3.5 shadow-[0_12px_28px_rgba(27,36,30,0.08)] space-y-2.5">
-                <div className="flex items-center justify-between text-left">
-                  <div>
-                    <span className="text-[11px] font-bold text-brown-900 block">
-                      Pemulih Batin di Sakumu
-                    </span>
-                    <span className="text-[10px] text-brown-700/70">
-                      Ruang aman instan tanpa janji temu atau biaya
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-bold text-[#3E7B54] bg-emerald-100/90 px-2.5 py-0.5 rounded-full">
-                    Aktif 24/7
-                  </span>
-                </div>
-
-                <Link
-                  href="/onboarding"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs shadow-xs transition-all"
-                >
-                  <span>Coba Ruang Batin Sekarang</span>
-                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                </Link>
-              </div>
+            <div
+              ref={phoneCardRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="relative z-10 w-full flex flex-col items-center justify-center transition-transform duration-200 ease-out cursor-pointer"
+            >
+              <Image
+                src="/images/landing/hero_phone_3d_mockup.png"
+                alt="Tampilan Antarmuka Aplikasi ZYBA Mobile dalam Mockup 3D"
+                width={686}
+                height={830}
+                priority
+                className="w-[360px] xl:w-[400px] h-auto object-contain drop-shadow-[0_32px_60px_rgba(27,36,30,0.20)] select-none hover:scale-[1.02] transition-transform duration-300"
+              />
             </div>
           </div>
 
