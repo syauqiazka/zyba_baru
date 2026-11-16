@@ -23,7 +23,7 @@ export function LandingDeepDives() {
         </div>
 
         {/* Feature Deep Dive 1: Large Featured Showcase (Sesuai Foto 3 Laptop Banner) */}
-        <div className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-10 lg:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="rounded-3xl sm:rounded-[36px] border border-brown-900/10 bg-white p-5 sm:p-8 lg:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
           {/* Sisi Kiri (6 Kolom): Copy */}
           <div className="lg:col-span-6 space-y-5">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1 rounded-full">
@@ -108,9 +108,9 @@ export function LandingDeepDives() {
         </div>
 
         {/* Feature Deep Dive 2: 2-Card Row (Sesuai Foto 3 Bagian Bawah Laptop) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {/* Card A: Breathing Garden */}
-          <div className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-9 shadow-sm flex flex-col justify-between space-y-6">
+          <div className="rounded-3xl sm:rounded-[36px] border border-brown-900/10 bg-white p-5 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-[#3E7B54] flex items-center justify-center">
                 <Wind className="w-5 h-5 stroke-[2]" />
@@ -143,7 +143,7 @@ export function LandingDeepDives() {
           </div>
 
           {/* Card B: Kurva Kebugaran Batin */}
-          <div className="rounded-[36px] border border-brown-900/10 bg-white p-7 sm:p-9 shadow-sm flex flex-col justify-between space-y-6">
+          <div className="rounded-3xl sm:rounded-[36px] border border-brown-900/10 bg-white p-5 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
             <div className="space-y-4">
               <div className="w-10 h-10 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 stroke-[2]" />

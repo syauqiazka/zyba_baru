@@ -120,7 +120,7 @@ export function MoodPebble({
     >
       <div
         className={`relative flex items-center justify-center rounded-2xl border-2 transition-all duration-200 ${
-          size === "md" ? "h-14 w-14" : "h-11 w-11"
+          size === "md" ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11"
         } ${
           selected
             ? `${meta.activeBorder} shadow-sm ring-2 ring-orange-500/30`
@@ -129,7 +129,7 @@ export function MoodPebble({
       >
         <MoodFaceIcon
           mood={mood}
-          className={`${size === "md" ? "h-7 w-7" : "h-5 w-5"} ${meta.textCol} transition-transform group-hover:scale-110`}
+          className={`${size === "md" ? "h-6 w-6 sm:h-7 sm:w-7" : "h-4 w-4 sm:h-5 sm:w-5"} ${meta.textCol} transition-transform group-hover:scale-110`}
         />
 
         {selected && (
@@ -140,7 +140,7 @@ export function MoodPebble({
       </div>
 
       <span
-        className={`text-xs transition-colors ${
+        className={`text-[10px] sm:text-xs text-center leading-tight transition-colors truncate max-w-full ${
           selected
             ? "font-semibold text-brown-900"
             : "text-brown-700/80 group-hover:text-brown-900"

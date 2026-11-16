@@ -157,11 +157,13 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Hearth Flame Konsistensi Batin (Anti-Slop Lilin Tenang) */}
-      <HearthFlame
-        litToday={hearthFlame.litToday}
-        streakDays={hearthFlame.streakDays || 0}
-      />
+      {/* Hearth Flame Konsistensi Batin (Tampil di desktop/tablet; di mobile sudah terwakili di SketchHeader) */}
+      <div className="hidden md:block">
+        <HearthFlame
+          litToday={hearthFlame.litToday}
+          streakDays={hearthFlame.streakDays || 0}
+        />
+      </div>
 
       {/* 2. MIDDLE SECTION: 2 Kolom (Checklist Harian di kiri, Monthly Tracker di kanan) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">

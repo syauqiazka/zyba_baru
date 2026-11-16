@@ -160,8 +160,9 @@ export function LandingHero() {
           
           {/* ====================================================
               SISI KIRI (5 Kolom): Glassy Phone Preview Card
+              (Tampil di Desktop/Tablet; di Mobile fokus ke Headline & Zibi)
               ==================================================== */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start">
+          <div className="hidden lg:flex lg:col-span-5 flex-col items-center lg:items-start">
             <div
               ref={phoneCardRef}
               onMouseMove={handleMouseMove}
@@ -302,24 +303,41 @@ export function LandingHero() {
                 <span>Ruang Pemulihan Batin Gen Z</span>
               </span>
 
-              <h1 className="font-serif text-4xl sm:text-6xl xl:text-7xl font-black text-brown-900 tracking-tight leading-[1.05]">
+              <h1 className="font-display text-3xl sm:text-6xl xl:text-7xl font-black text-brown-900 tracking-tight leading-[1.08]">
                 <span className="block">SUAKA BATIN</span>
                 <span className="text-[#3E7B54] block">JEDA HENINGMU.</span>
               </h1>
 
-              <p className="text-sm sm:text-base lg:text-lg text-brown-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="text-xs sm:text-base lg:text-lg text-brown-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 Ketika tuntutan sosial dan dunia di luar terlalu bising, ZYBA hadir sebagai ruang aman untuk mengurai overthinking, bernapas lega, dan memulihkan ritme jiwamu secara alami.
               </p>
+
+              {/* Primary Mobile/Desktop Hero CTAs */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full">
+                <Link
+                  href="/onboarding"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs sm:text-sm shadow-xs transition-all"
+                >
+                  <span>Mulai Perjalanan Tenangmu (Gratis)</span>
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </Link>
+                <Link
+                  href="/login"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-brown-900/15 bg-white/80 hover:bg-white text-brown-900 font-semibold text-xs sm:text-sm transition-all shadow-2xs"
+                >
+                  <span>Masuk ke Akun</span>
+                </Link>
+              </div>
             </div>
 
             {/* ========================================================
                 MASCOT SCENE CONTAINER (Foto 2 BirdPulse Reference)
                 Zibi Bertengger di Dahan Suaka Alami (Aset Nyata User)
                 ======================================================== */}
-            <div className="relative w-full max-w-[680px] mx-auto lg:mx-0 min-h-[380px] sm:min-h-[440px] flex items-center justify-center">
+            <div className="relative w-full max-w-[680px] mx-auto lg:mx-0 min-h-[250px] sm:min-h-[440px] flex items-center justify-center overflow-hidden sm:overflow-visible">
               
               {/* Latar Belakang Lingkaran Halo Suaka Halus */}
-              <div className="absolute w-[340px] sm:w-[460px] h-[340px] sm:h-[460px] rounded-full bg-gradient-to-tr from-[#C8E4CD]/35 via-[#EAF4EC]/50 to-white/70 blur-2xl -z-10" />
+              <div className="absolute w-[260px] sm:w-[460px] h-[260px] sm:h-[460px] rounded-full bg-gradient-to-tr from-[#C8E4CD]/35 via-[#EAF4EC]/50 to-white/70 blur-2xl -z-10" />
 
               {/* Maskot Zibi di Atas Dahan Alami */}
               <div ref={mascotRef} className="relative z-10 w-full flex flex-col items-center">
@@ -329,17 +347,17 @@ export function LandingHero() {
                   width={560}
                   height={456}
                   priority
-                  className="w-[320px] sm:w-[440px] lg:w-[500px] h-auto object-contain drop-shadow-[0_25px_45px_rgba(27,36,30,0.14)] transition-transform duration-300"
+                  className="w-[240px] sm:w-[440px] lg:w-[500px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(27,36,30,0.12)] transition-transform duration-300"
                 />
 
                 {/* Bayangan Kontak Realistis di Bawah Dahan */}
-                <div className="w-64 sm:w-80 h-4 rounded-full bg-brown-900/10 blur-lg -mt-2" />
+                <div className="w-48 sm:w-80 h-3 sm:h-4 rounded-full bg-brown-900/10 blur-lg -mt-2" />
               </div>
 
-              {/* Floating Glassmorphic Audio Player Badge (Persis Foto 2: Cockatiel Sound Card) */}
+              {/* Floating Glassmorphic Audio Player Badge (Tampil di sm: ke atas agar tidak ofside di mobile) */}
               <div
                 ref={audioCardRef}
-                className="absolute top-2 sm:top-6 right-1 sm:right-6 z-20 rounded-2xl border border-white/90 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_12px_30px_rgba(27,36,30,0.08)] flex items-center gap-3.5 max-w-[240px]"
+                className="hidden sm:flex absolute top-2 sm:top-6 right-1 sm:right-6 z-20 rounded-2xl border border-white/90 bg-white/90 backdrop-blur-md px-4 py-3 shadow-[0_12px_30px_rgba(27,36,30,0.08)] items-center gap-3.5 max-w-[240px]"
               >
                 <div className="w-9 h-9 rounded-xl bg-[#3E7B54] text-white flex items-center justify-center shrink-0 shadow-xs">
                   <Volume2 className="w-4 h-4" />
@@ -357,8 +375,8 @@ export function LandingHero() {
                 </div>
               </div>
 
-              {/* Floating Pill Assurance (Pojok Kiri Bawah Maskot) */}
-              <div className="absolute -bottom-2 sm:bottom-2 left-1 sm:left-4 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-2xs flex items-center gap-2">
+              {/* Floating Pill Assurance (Tampil di sm: ke atas) */}
+              <div className="hidden sm:flex absolute -bottom-2 sm:bottom-2 left-1 sm:left-4 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-2xs items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-[#3E7B54]" />
                 <span className="text-[11px] font-bold text-brown-900">
                   100% Bebas Biaya Selamanya

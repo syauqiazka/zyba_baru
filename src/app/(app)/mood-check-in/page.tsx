@@ -463,7 +463,7 @@ export default function MoodCheckInPage() {
               <label className="block text-xs font-semibold text-brown-900 mb-3">
                 1. Mood Utama Hari Ini
               </label>
-              <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="grid grid-cols-5 gap-1 sm:gap-3 items-start justify-items-center">
                 {Object.values(MoodLevel).map((lvl) => (
                   <MoodPebble
                     key={lvl}

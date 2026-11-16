@@ -13,7 +13,7 @@ export function LandingCtaFooter() {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 space-y-16 relative z-10">
         
         {/* FINAL HERO CTA BANNER (Sesuai Foto 3 Bagian Bawah) */}
-        <div className="rounded-[36px] border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 sm:p-12 lg:p-16 text-center max-w-4xl mx-auto space-y-6 shadow-2xl backdrop-blur-md">
+        <div className="rounded-3xl sm:rounded-[36px] border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-5 sm:p-12 lg:p-16 text-center max-w-4xl mx-auto space-y-6 shadow-2xl backdrop-blur-md">
           <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-300 uppercase tracking-widest bg-emerald-950/60 border border-emerald-500/30 px-3.5 py-1 rounded-full">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Suaka Ketenangan Batin</span>

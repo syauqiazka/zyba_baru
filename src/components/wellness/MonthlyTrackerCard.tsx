@@ -129,8 +129,13 @@ export function MonthlyTrackerCard({ trackerData }: MonthlyTrackerCardProps) {
           {/* The Visual Bars (Nilai Riil) */}
           <div className="flex items-end justify-between gap-1.5 sm:gap-2 h-36 pt-4 pb-1">
             {activeTab === "monthly"
-              ? monthlyData.map((d) => (
-                  <div key={d.month} className="flex flex-1 flex-col items-center gap-1.5 group relative">
+              ? monthlyData.map((d, idx) => (
+                  <div
+                    key={d.month}
+                    className={`flex-1 flex-col items-center gap-1.5 group relative ${
+                      idx < 6 ? "hidden sm:flex" : "flex"
+                    }`}
+                  >
                     <div
                       className={`relative flex h-28 w-full max-w-[28px] flex-col justify-end rounded-lg p-0.5 transition-all ${
                         d.active ? "bg-emerald-100/60 ring-2 ring-[#3E7B54]/20" : "bg-brown-900/5"

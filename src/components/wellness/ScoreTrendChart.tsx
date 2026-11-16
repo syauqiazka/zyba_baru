@@ -100,7 +100,7 @@ export function ScoreTrendChart({ data }: ScoreTrendChartProps) {
       </div>
 
       {/* Chart Canvas */}
-      <div className="relative w-full overflow-x-auto rounded-2xl bg-gradient-to-b from-cream/20 to-white border border-brown-900/5 p-3">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-gradient-to-b from-cream/20 to-white border border-brown-900/5 p-3">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           className="w-full h-48 sm:h-56 overflow-hidden"

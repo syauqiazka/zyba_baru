@@ -635,11 +635,11 @@ export default function ResourcesPage() {
             {/* --------------------------------------------------------------------- */}
             {/* KOLOM KIRI (Sidebar Filter & Kategori, lebar 3.5 kolom / ~280px)      */}
             {/* --------------------------------------------------------------------- */}
-            <aside className="lg:col-span-4 xl:col-span-3 space-y-6 lg:sticky lg:top-24">
-              <div className="rounded-3xl border border-brown-900/10 bg-white p-6 space-y-6 shadow-sm">
-                {/* 1. Input Pencarian Artikel (Persis Foto 1: Label Search Article) */}
-                <div className="space-y-2">
-                  <label htmlFor="search-input" className="block text-xs font-bold text-brown-900 tracking-wide uppercase">
+            <aside className="lg:col-span-4 xl:col-span-3 space-y-4 lg:space-y-6 lg:sticky lg:top-24">
+              <div className="rounded-2xl sm:rounded-3xl border border-brown-900/10 bg-white p-4 sm:p-6 space-y-4 sm:space-y-6 shadow-sm">
+                {/* 1. Input Pencarian Artikel */}
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label htmlFor="search-input" className="block text-[11px] sm:text-xs font-bold text-brown-900 tracking-wide uppercase">
                     Pencarian Artikel
                   </label>
                   <div className="relative">
@@ -650,7 +650,7 @@ export default function ResourcesPage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Cari topik atau kata kunci..."
-                      className="w-full pl-10 pr-9 py-2.5 rounded-2xl border border-brown-900/10 bg-brown-50/50 text-xs text-brown-900 placeholder:text-brown-600 focus:outline-none focus:ring-2 focus:ring-[#3E7B54]/30 focus:border-[#3E7B54] transition-all"
+                      className="w-full pl-10 pr-9 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-brown-900/10 bg-brown-50/50 text-xs text-brown-900 placeholder:text-brown-600 focus:outline-none focus:ring-2 focus:ring-[#3E7B54]/30 focus:border-[#3E7B54] transition-all"
                     />
                     {searchQuery && (
                       <button
@@ -665,8 +665,8 @@ export default function ResourcesPage() {
                   </div>
                 </div>
 
-                {/* 2. Filter Durasi Baca (Persis Foto 1: Filter Select Dropdown) */}
-                <div className="space-y-2">
+                {/* 2. Filter Durasi Baca (Desktop/Tablet) */}
+                <div className="hidden lg:block space-y-2">
                   <label htmlFor="duration-select" className="block text-xs font-bold text-brown-900 tracking-wide uppercase">
                     Filter Waktu Baca
                   </label>
@@ -687,12 +687,35 @@ export default function ResourcesPage() {
                   </div>
                 </div>
 
-                {/* 3. Browse By Categories (Persis Foto 1: Vertical List with Active Indicator) */}
-                <div className="space-y-3 pt-2 border-t border-brown-900/10">
-                  <span className="block text-xs font-bold text-brown-900 tracking-wide uppercase">
+                {/* 3. Browse By Categories (Desktop: Vertical List | Mobile: Horizontal Scroll) */}
+                <div className="space-y-2 sm:space-y-3 pt-2 border-t border-brown-900/10">
+                  <span className="block text-[11px] sm:text-xs font-bold text-brown-900 tracking-wide uppercase">
                     Kategori Wawasan
                   </span>
-                  <nav className="space-y-1" aria-label="Kategori Wawasan">
+
+                  {/* Mobile Horizontal Pill Scroll */}
+                  <div className="lg:hidden flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
+                    {CATEGORIES.map((cat) => {
+                      const isActive = selectedCategory === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setSelectedCategory(cat.id)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
+                            isActive
+                              ? "bg-[#3E7B54] text-white shadow-2xs"
+                              : "bg-[#F5F8F5] text-brown-700 hover:text-brown-900"
+                          }`}
+                        >
+                          {cat.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Desktop Vertical Nav */}
+                  <nav className="hidden lg:block space-y-1" aria-label="Kategori Wawasan">
                     {CATEGORIES.map((cat) => {
                       const isActive = selectedCategory === cat.id;
                       const count =
@@ -726,8 +749,8 @@ export default function ResourcesPage() {
                 </div>
               </div>
 
-              {/* 4. Audio Relax Player (Sound Bath Binaural Generator) */}
-              <div className="rounded-3xl border border-emerald-900/10 bg-white p-5 space-y-4 shadow-sm">
+              {/* 4. Audio Relax Player (Sound Bath Binaural Generator - Tampil di desktop) */}
+              <div className="hidden lg:block rounded-3xl border border-emerald-900/10 bg-white p-5 space-y-4 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-[#3E7B54]">
                   <Volume2 className="h-4 w-4" />
                   <span>Audio Relaksasi & Gelombang Batin</span>
@@ -735,8 +758,8 @@ export default function ResourcesPage() {
                 <AudioRelaxPlayer tracks={audioTracks} />
               </div>
 
-              {/* 5. Banner Hotline Bantuan Krisis */}
-              <div className="rounded-3xl border border-orange-500/20 bg-orange-50/70 p-5 space-y-2.5">
+              {/* 5. Banner Hotline Bantuan Krisis (Tampil di desktop) */}
+              <div className="hidden lg:block rounded-3xl border border-orange-500/20 bg-orange-50/70 p-5 space-y-2.5">
                 <div className="flex items-center gap-2 text-xs font-bold text-orange-700">
                   <ShieldAlert className="h-4 w-4" />
                   <span>Bantuan Krisis 24/7</span>

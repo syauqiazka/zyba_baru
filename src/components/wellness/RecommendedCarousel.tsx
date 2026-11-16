@@ -113,13 +113,15 @@ export function RecommendedCarousel() {
 
       {/* Grid / Horizontal Row of 5-6 Rounded Cards (Sesuai Sketsa User dengan panah -> di kanan bawah) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
-        {ITEMS.map((item) => {
+        {ITEMS.map((item, idx) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.id}
               href={item.href}
-              className={`group flex flex-col justify-between rounded-2xl border border-brown-900/10 p-4 shadow-2xs transition-all duration-200 hover:shadow-xs hover:-translate-y-0.5 ${item.bgTint}`}
+              className={`group flex flex-col justify-between rounded-2xl border border-brown-900/10 p-4 shadow-2xs transition-all duration-200 hover:shadow-xs hover:-translate-y-0.5 ${item.bgTint} ${
+                idx >= 2 ? "hidden sm:flex" : "flex"
+              }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-3">

@@ -20,7 +20,7 @@ function CompanionLayoutContent({ children }: { children: React.ReactNode }) {
   } = useCompanion();
 
   return (
-    <div className="flex h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] w-full bg-white rounded-2xl sm:rounded-3xl border border-botanical-500/15 overflow-hidden shadow-xs">
+    <div className="flex h-full sm:h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] w-full bg-white rounded-none sm:rounded-3xl border-0 sm:border border-botanical-500/15 overflow-hidden shadow-xs">
       {/* Sidebar rendered once */}
       <CompanionSidebar
         conversations={conversations}

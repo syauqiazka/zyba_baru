@@ -138,9 +138,9 @@ export default function OnboardingPage() {
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-screen">
         
         {/* ========================================================
-            SISI KIRI (5 Kolom): Panel Gelap Suaka (Sesuai Gambar User / Login)
+            SISI KIRI (5 Kolom): Panel Gelap Suaka (Tampil di Desktop/Laptop)
             ======================================================== */}
-        <div className="lg:col-span-5 bg-[#111A14] text-white p-8 sm:p-12 lg:p-16 flex flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:col-span-5 bg-[#111A14] text-white p-8 sm:p-12 lg:p-16 flex-col justify-between relative overflow-hidden">
           
           {/* Subtle Ambient Cosmic Glow */}
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full" />
@@ -223,18 +223,26 @@ export default function OnboardingPage() {
         {/* ========================================================
             SISI KANAN (7 Kolom): Formulir Pendaftaran (Sesuai Foto 5 GitHub)
             ======================================================== */}
-        <div className="lg:col-span-7 bg-[#F5F8F5] p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
+        <div className="lg:col-span-7 bg-[#F5F8F5] p-5 sm:p-8 lg:p-10 flex flex-col justify-between">
           
-          {/* Top Switcher (Already have account / Sign in) */}
-          <div className="flex items-center justify-end gap-2 text-xs">
-            <span className="text-brown-700/70">Sudah punya akun ZYBA?</span>
-            <Link
-              href="/login"
-              className="font-bold text-[#3E7B54] hover:underline flex items-center gap-1"
-            >
-              <span>Masuk sekarang</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+          {/* Top Switcher (Mobile Brand + Already have account / Sign in) */}
+          <div className="flex items-center justify-between gap-2 text-xs">
+            <Link href="/" className="lg:hidden inline-flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#3E7B54] text-white">
+                <span className="font-display text-xs font-black">Z</span>
+              </div>
+              <span className="font-display font-bold text-brown-900">ZYBA</span>
             </Link>
+            <div className="flex items-center gap-1.5 ml-auto">
+              <span className="text-brown-700/70">Sudah punya akun?</span>
+              <Link
+                href="/login"
+                className="font-bold text-[#3E7B54] hover:underline flex items-center gap-1"
+              >
+                <span>Masuk</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
           {/* Form Container */}
