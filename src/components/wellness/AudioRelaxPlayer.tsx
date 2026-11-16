@@ -132,8 +132,7 @@ export function AudioRelaxPlayer({ tracks }: AudioRelaxPlayerProps) {
                 Audio Relaksasi & Gelombang Batin
               </h3>
               {isPlaying && (
-                <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
                   Mengalun
                 </span>
               )}

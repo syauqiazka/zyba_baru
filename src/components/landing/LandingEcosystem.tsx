@@ -76,19 +76,10 @@ export function LandingEcosystem() {
               Zibi AI siap mendengarkan cerita, kecemasan, atau kekusutan pikiranmu kapan saja. Dilengkapi kuota 15.000 token per siklus dan <strong>Jeda Batin 5 Jam</strong> untuk mencegah ketergantungan digital dan mendorong pemulihan di dunia nyata.
             </p>
 
-            <div className="space-y-2.5 text-xs text-brown-800 font-semibold pt-2 border-t border-brown-900/6">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                <span>Rantai AI Cerdas Bebas Biaya (Multi-Provider Fallback)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                <span>Dukungan Suara Realtime & Transkrip Groq Whisper</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                <span>Deteksi Krisis Tenang (Hotline 119 Selalu Siaga)</span>
-              </div>
+            <div className="space-y-1.5 text-xs text-brown-800/90 font-medium pt-2 border-t border-brown-900/6">
+              <p>Rantai AI Cerdas Bebas Biaya (Multi-Provider Fallback)</p>
+              <p>Dukungan Suara Realtime & Transkrip Groq Whisper</p>
+              <p>Deteksi Krisis Tenang (Hotline 119 Selalu Siaga)</p>
             </div>
 
             <div className="pt-2">
@@ -207,19 +198,10 @@ export function LandingEcosystem() {
               Skor ZYBA (0–100) dihitung dinamis dari rolling window 7 hari dengan rumus terukur: <strong>Mental (50%)</strong>, <strong>Fisik (25%)</strong>, dan <strong>Sosial (25%)</strong>. Dilengkapi grafik kurva pemulihan, riwayat check-in, serta Lilin Jiwa yang menjaga konsistensi tanpa beban.
             </p>
 
-            <div className="space-y-2 text-xs text-brown-800 font-semibold pt-2 border-t border-brown-900/6">
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                <span>Analisis 3 Aspek Hidup Tanpa Angka Palsu</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                <span>Jurnal Refleksi dengan Deteksi Risiko Mandiri</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                <span>100% Gratis dan Terbuka Penuh Tanpa Paywall</span>
-              </div>
+            <div className="space-y-1.5 text-xs text-brown-800/90 font-medium pt-2 border-t border-brown-900/6">
+              <p>Analisis 3 Aspek Hidup Tanpa Angka Palsu</p>
+              <p>Jurnal Refleksi dengan Deteksi Risiko Mandiri</p>
+              <p>100% Gratis dan Terbuka Penuh Tanpa Paywall</p>
             </div>
 
             <div className="pt-2">

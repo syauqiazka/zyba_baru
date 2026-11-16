@@ -6,8 +6,6 @@ import Image from "next/image";
 import {
   ArrowRight,
   Volume2,
-  ShieldCheck,
-  CheckCircle2,
 } from "lucide-react";
 import gsap from "gsap";
 
@@ -246,38 +244,13 @@ export function LandingHero() {
                   <span className="block text-[11px] font-bold text-brown-900 truncate">
                     Zibi • Siap Menyimak
                   </span>
-                  <div className="flex items-center gap-1 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
+                  <div className="mt-1">
                     <span className="text-[10px] text-brown-700/60 font-medium">
                       Mendengarkan curhatmu
                     </span>
                   </div>
                 </div>
               </div>
-
-              {/* Floating Pill Assurance (Tampil di sm: ke atas) */}
-              <div className="hidden sm:flex absolute -bottom-2 sm:bottom-2 left-1 sm:left-4 z-20 rounded-2xl border border-brown-900/10 bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-2xs items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[#3E7B54]" />
-                <span className="text-[11px] font-bold text-brown-900">
-                  100% Bebas Biaya Selamanya
-                </span>
-              </div>
-            </div>
-
-            {/* Bottom Value Badges */}
-            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-5 text-xs text-brown-700/80 font-semibold">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#3E7B54]" />
-                Tanpa Beban Streak
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#3E7B54]" />
-                Privasi Terenkripsi Penuh
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#3E7B54]" />
-                Direktori Bantuan Krisis Cepat
-              </span>
             </div>
           </div>
         </div>

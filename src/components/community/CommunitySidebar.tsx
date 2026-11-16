@@ -194,7 +194,6 @@ export function CommunitySidebar({
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
-                  <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-white" : "bg-[#3E7B54]"}`} />
                   <span className="truncate">{topic.name}</span>
                 </div>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${

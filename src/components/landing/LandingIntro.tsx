@@ -51,19 +51,10 @@ export function LandingIntro() {
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-brown-900/6 space-y-2 text-xs text-brown-800 font-semibold">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                  <span>Check-In Harian 15 Indikator Sadar</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                  <span>Expression Analysis Tanpa Vonis</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
-                  <span>Privasi 100% Terenkripsi Penuh</span>
-                </div>
+              <div className="pt-2 border-t border-brown-900/6 space-y-1.5 text-xs text-brown-800/90 font-medium">
+                <p>Check-In Harian 15 Indikator Sadar</p>
+                <p>Expression Analysis Tanpa Vonis</p>
+                <p>Privasi 100% Terenkripsi Penuh</p>
               </div>
             </div>
 
@@ -97,19 +88,10 @@ export function LandingIntro() {
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-brown-900/6 space-y-2 text-xs text-brown-800 font-semibold">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                  <span>Smart Activity 4 Blok Ritme Harian</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                  <span>Taman Pernapasan Sadar 4-7-8</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                  <span>Tanpa Streak Menghukum Saat Lupa</span>
-                </div>
+              <div className="pt-2 border-t border-brown-900/6 space-y-1.5 text-xs text-brown-800/90 font-medium">
+                <p>Smart Activity 4 Blok Ritme Harian</p>
+                <p>Taman Pernapasan Sadar 4-7-8</p>
+                <p>Tanpa Streak Menghukum Saat Lupa</p>
               </div>
             </div>
 
@@ -143,19 +125,10 @@ export function LandingIntro() {
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-brown-900/6 space-y-2 text-xs text-brown-800 font-semibold">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                  <span>Komunitas Berbagi Cerita & Anonim</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                  <span>Pesan Langsung Privat via Ably</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-600" />
-                  <span>Nol Iklan & Bebas Metrik Toksik</span>
-                </div>
+              <div className="pt-2 border-t border-brown-900/6 space-y-1.5 text-xs text-brown-800/90 font-medium">
+                <p>Komunitas Berbagi Cerita & Anonim</p>
+                <p>Pesan Langsung Privat via Ably</p>
+                <p>Nol Iklan & Bebas Metrik Toksik</p>
               </div>
             </div>
 

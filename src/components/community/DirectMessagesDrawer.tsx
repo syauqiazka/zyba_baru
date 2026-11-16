@@ -101,8 +101,7 @@ export function DirectMessagesDrawer({
                 <h3 className="font-serif text-sm font-bold text-brown-900 truncate">
                   {activeConv?.partnerName || "Sahabat Suaka"}
                 </h3>
-                <div className="flex items-center gap-1.5 text-[10px] text-emerald-800 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                <div className="text-[10px] text-emerald-800 font-medium">
                   <span>Realtime via Ably</span>
                 </div>
               </div>

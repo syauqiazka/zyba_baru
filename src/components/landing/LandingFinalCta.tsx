@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function LandingFinalCta() {
   return (
@@ -54,22 +54,6 @@ export function LandingFinalCta() {
           >
             <span>Masuk ke Akun</span>
           </Link>
-        </div>
-
-        {/* Reassurance Badges */}
-        <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-white/70 font-semibold">
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            100% Bebas Biaya Selamanya
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            Privasi Terenkripsi Penuh
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            Bebas dari Algoritma Toxic Streak
-          </span>
         </div>
 
       </div>

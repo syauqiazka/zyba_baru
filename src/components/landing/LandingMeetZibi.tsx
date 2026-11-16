@@ -82,8 +82,7 @@ export function LandingMeetZibi() {
                     <h4 className="font-serif text-sm font-bold text-brown-900">
                       Zyba Companion • Zibi AI
                     </h4>
-                    <span className="text-[10px] text-[#3E7B54] font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
+                    <span className="text-[10px] text-[#3E7B54] font-semibold">
                       Siap Mendengarkan 24/7
                     </span>
                   </div>

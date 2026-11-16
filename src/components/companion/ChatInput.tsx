@@ -155,8 +155,8 @@ export function ChatInput({
       {/* Listening wave badge */}
       {isListening && (
         <div className="absolute -top-11 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-botanical-500 text-white text-xs font-medium flex items-center gap-2 shadow-md">
-          <span className="w-2 h-2 rounded-full bg-red-400" />
-          Mendengarkan suaramu... Bicara sekarang
+          <Mic className="w-3.5 h-3.5 text-white animate-pulse" />
+          <span>Mendengarkan suaramu... Bicara sekarang</span>
         </div>
       )}
 

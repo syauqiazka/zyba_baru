@@ -9,9 +9,7 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  Check,
   Lock,
-  ChevronUp,
 } from "lucide-react";
 import gsap from "gsap";
 
@@ -104,37 +102,6 @@ function LoginFormContent() {
               <p className="text-xs sm:text-sm text-white/70 leading-relaxed max-w-sm">
                 Lanjutkan perjalanan pemulihan batin secara sadar dalam suaka yang tenang, aman, dan tanpa penghakiman.
               </p>
-            </div>
-
-            {/* Checklist of Included Perks (Sesuai Foto 5 GitHub) */}
-            <div className="pt-2 space-y-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <span>Keunggulan yang Langsung Terbuka</span>
-                <ChevronUp className="w-3.5 h-3.5" />
-              </span>
-
-              <div className="space-y-2.5 text-xs text-white/80">
-                <div className="flex items-start gap-2.5">
-                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Akses Zibi Companion AI 24/7 tanpa batas waktu</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Jurnal reflektif suaka terenkripsi penuh</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Breathing Garden 4-7-8 & latihan relaksasi terpadu</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>100% Bebas Biaya Selamanya (Bebas Paywall)</span>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <Check className="w-4 h-4 stroke-[2.5] text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Komunitas hangat dengan opsi unggahan anonim</span>
-                </div>
-              </div>
             </div>
           </div>
 

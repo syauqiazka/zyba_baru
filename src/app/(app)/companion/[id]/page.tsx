@@ -190,7 +190,6 @@ export default function ActiveCompanionChatPage() {
           <div className="flex items-center gap-2.5">
             <div className="relative">
               <PersonaAvatar id={selectedPersona} size={36} />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">

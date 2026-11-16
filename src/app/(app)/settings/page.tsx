@@ -865,11 +865,11 @@ export default function SettingsPage() {
               <p>
                 Tindakan ini akan <strong>menghapus permanen</strong> akunmu di 3 basis data ZYBA:
               </p>
-              <ul className="list-disc pl-5 space-y-1 text-[#2D3E33]/70">
-                <li>Seluruh unggahan, like, komentar, dan pesan komunitas.</li>
-                <li>Seluruh percakapan dan memori reflektif bersama Zibi.</li>
-                <li>Seluruh riwayat check-in, skor Zyba, dan data profil.</li>
-              </ul>
+              <div className="space-y-1.5 text-[#2D3E33]/70 pl-2 border-l-2 border-orange-500/30">
+                <p>Seluruh unggahan, like, komentar, dan pesan komunitas.</p>
+                <p>Seluruh percakapan dan memori reflektif bersama Zibi.</p>
+                <p>Seluruh riwayat check-in, skor Zyba, dan data profil.</p>
+              </div>
 
               {deleteError && (
                 <div className="rounded-xl bg-[#FDF4F1] p-3 text-xs text-[#F28C6E]">

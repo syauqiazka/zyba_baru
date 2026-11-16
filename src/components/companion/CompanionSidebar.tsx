@@ -288,13 +288,12 @@ export function CompanionSidebar({
                       onClick={onCloseMobile}
                       className="flex-1 min-w-0 pr-2"
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-botanical-500 shrink-0" />
-                        <p className="text-xs truncate">
+                      <div>
+                        <p className="text-xs truncate font-medium text-charcoal-900">
                           {c.title || "Percakapan Suaka"}
                         </p>
                       </div>
-                      <span className="text-[10px] text-charcoal-900/40 ml-3.5 block truncate">
+                      <span className="text-[10px] text-charcoal-900/40 block truncate">
                         {formatRelativeTime(c.updatedAt)}
                       </span>
                     </Link>

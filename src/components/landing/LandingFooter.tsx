@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Heart, ArrowUpRight } from "lucide-react";
+import { ShieldCheck, ArrowUpRight } from "lucide-react";
 
 export function LandingFooter() {
   return (
@@ -134,13 +134,6 @@ export function LandingFooter() {
                 <span className="text-white/50 block">Kontak: suaka@zyba.my.id</span>
               </li>
             </ul>
-
-            <div className="pt-2">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full bg-white/10 text-emerald-300">
-                <Heart className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-                <span>100% Bebas Biaya Selamanya</span>
-              </span>
-            </div>
           </div>
 
         </div>

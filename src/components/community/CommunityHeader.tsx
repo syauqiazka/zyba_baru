@@ -123,12 +123,11 @@ export function CommunityHeader() {
           {/* Notification Bell */}
           <button
             type="button"
-            className="p-2 rounded-full text-brown-700 hover:text-brown-900 hover:bg-white border border-transparent hover:border-brown-900/10 transition-all relative"
+            className="p-2 rounded-full text-brown-700 hover:text-brown-900 hover:bg-white border border-transparent hover:border-brown-900/10 transition-all"
             aria-label="Notifikasi"
             title="Notifikasi"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500 ring-2 ring-[#F5F8F5]" />
           </button>
 
           {/* User Profile Pill */}
