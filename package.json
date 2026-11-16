@@ -18,7 +18,11 @@
     "test:community": "tsx tests/community.test.ts",
     "test:dm": "tsx tests/ably-dm.test.ts",
     "test:wellness": "tsx tests/wellness-suite.test.ts",
-    "test:phase6": "tsx tests/phase6-settings-admin.test.ts"
+    "test:phase6": "tsx tests/phase6-settings-admin.test.ts",
+    "skills:search": "tsx scripts/skill-manager.ts search",
+    "skills:install": "tsx scripts/skill-manager.ts install",
+    "skills:remove": "tsx scripts/skill-manager.ts remove",
+    "skills:list": "tsx scripts/skill-manager.ts list"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",

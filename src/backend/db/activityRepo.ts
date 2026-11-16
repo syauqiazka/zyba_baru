@@ -243,7 +243,17 @@ export const activityRepo = {
         id: data.mealLogId,
         userId,
         isCorrected: true,
+        foodName: data.correctedFoodName || "Piring Pengguna",
+        calories: data.correctedCalories || 400,
+        proteinGrams: null,
+        carbsGrams: null,
+        fatGrams: null,
+        fiberGrams: null,
+        healthScore: null,
+        notes: null,
+        imageUrl: null,
         complaintNotes: data.complaintNotes,
+        createdAt: new Date(),
       };
     }
   },

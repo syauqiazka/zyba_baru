@@ -41,3 +41,6 @@ Thumbs.db
 __pycache__/
 *.py[cod]
 
+# Agentic Awesome Skills library store (preventing 400MB / 31k files git bloat)
+/.agents/skills_library/
+
