@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { MoodLevel } from "@/generated/account-client";
 import { Check } from "lucide-react";
 
@@ -12,92 +13,72 @@ interface MoodPebbleProps {
   size?: "sm" | "md";
 }
 
-// SVG ekspresi garis minimalis (Bebas Emoji sesuai AGENTS.md Bagian 3.1 & DESIGN.md §6.7)
-function MoodFaceIcon({ mood, className }: { mood: MoodLevel; className?: string }) {
-  switch (mood) {
-    case MoodLevel.DEPRESSED:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="8" y1="9" x2="10" y2="9" strokeLinecap="round" />
-          <line x1="14" y1="9" x2="16" y2="9" strokeLinecap="round" />
-          <path d="M8 16C9 14.5 10.5 14 12 14C13.5 14 15 14.5 16 16" strokeLinecap="round" />
-        </svg>
-      );
-    case MoodLevel.SAD:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="10" />
-          <circle cx="9" cy="10" r="1" fill="currentColor" />
-          <circle cx="15" cy="10" r="1" fill="currentColor" />
-          <path d="M9 16C10 14.8 11 14.5 12 14.5C13 14.5 14 14.8 15 16" strokeLinecap="round" />
-        </svg>
-      );
-    case MoodLevel.NEUTRAL:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="10" />
-          <circle cx="9" cy="10" r="1" fill="currentColor" />
-          <circle cx="15" cy="10" r="1" fill="currentColor" />
-          <line x1="9" y1="15" x2="15" y2="15" strokeLinecap="round" />
-        </svg>
-      );
-    case MoodLevel.HAPPY:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="10" />
-          <circle cx="9" cy="9.5" r="1" fill="currentColor" />
-          <circle cx="15" cy="9.5" r="1" fill="currentColor" />
-          <path d="M8 14.5C9.5 16.5 14.5 16.5 16 14.5" strokeLinecap="round" />
-        </svg>
-      );
-    case MoodLevel.OVERJOYED:
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M8 9.5C8.8 8.5 9.8 8.5 10.5 9.5" strokeLinecap="round" />
-          <path d="M13.5 9.5C14.2 8.5 15.2 8.5 16 9.5" strokeLinecap="round" />
-          <path d="M8 13.5C9 17 15 17 16 13.5H8Z" fill="currentColor" fillOpacity="0.2" strokeLinejoin="round" />
-        </svg>
-      );
-  }
-}
-
 const moodMeta: Record<
   MoodLevel,
-  { label: string; baseBg: string; activeBorder: string; textCol: string }
+  {
+    label: string;
+    imageSrc: string;
+    description: string;
+    activeBorder: string;
+    activeBg: string;
+    activeRing: string;
+    textCol: string;
+    empathyQuote: string;
+  }
 > = {
   [MoodLevel.DEPRESSED]: {
     label: "Tertekan",
-    baseBg: "bg-sage-100/70 border-brown-700/20",
-    activeBorder: "border-brown-900 bg-sage-100",
+    imageSrc: "/mascot/moods/tertekan.png",
+    description: "Cemas & terbebani",
+    activeBorder: "border-brown-900",
+    activeBg: "bg-sage-100",
+    activeRing: "ring-brown-800/25",
     textCol: "text-brown-900",
+    empathyQuote: "Zibi di sini bersamamu. Tarik napas perlahan, kamu tidak sendirian.",
   },
   [MoodLevel.SAD]: {
     label: "Sedih",
-    baseBg: "bg-sky-100/70 border-sky-200",
-    activeBorder: "border-sky-600 bg-sky-100",
+    imageSrc: "/mascot/moods/sedih.png",
+    description: "Hati sendu",
+    activeBorder: "border-sky-600",
+    activeBg: "bg-sky-50",
+    activeRing: "ring-sky-500/25",
     textCol: "text-sky-950",
+    empathyQuote: "Peluk hangat dari Zibi. Wajar bersedih, air matamu bukan kelemahan.",
   },
   [MoodLevel.NEUTRAL]: {
     label: "Biasa",
-    baseBg: "bg-sand-200/70 border-sand-300",
-    activeBorder: "border-brown-700 bg-sand-200",
+    imageSrc: "/mascot/moods/biasa.png",
+    description: "Mengalir apa adanya",
+    activeBorder: "border-sand-500",
+    activeBg: "bg-sand-100/90",
+    activeRing: "ring-sand-400/25",
     textCol: "text-brown-900",
+    empathyQuote: "Hari yang tenang. Mari kita nikmati setiap langkah kecil hari ini apa adanya.",
   },
   [MoodLevel.HAPPY]: {
     label: "Tenang",
-    baseBg: "bg-orange-100/70 border-orange-200",
-    activeBorder: "border-orange-500 bg-orange-100",
-    textCol: "text-orange-950",
+    imageSrc: "/mascot/moods/tenang.png",
+    description: "Damai & hening",
+    activeBorder: "border-[#3E7B54]",
+    activeBg: "bg-emerald-50",
+    activeRing: "ring-emerald-500/25",
+    textCol: "text-[#1B241E]",
+    empathyQuote: "Senang melihat ketenangan batinmu hari ini. Tetap jaga keseimbangan ya.",
   },
   [MoodLevel.OVERJOYED]: {
     label: "Gembira",
-    baseBg: "bg-orange-200/70 border-orange-300",
-    activeBorder: "border-orange-600 bg-orange-200",
+    imageSrc: "/mascot/moods/gembira.png",
+    description: "Penuh sukacita",
+    activeBorder: "border-orange-500",
+    activeBg: "bg-orange-50",
+    activeRing: "ring-orange-500/30",
     textCol: "text-orange-950",
+    empathyQuote: "Yay! Energinya menyenangkan sekali! Zibi ikut tersenyum dan bahagia untukmu!",
   },
 };
+
+export { moodMeta };
 
 export function MoodPebble({
   mood,
@@ -112,29 +93,40 @@ export function MoodPebble({
     <button
       type="button"
       onClick={() => onSelect(mood)}
-      className={`group flex flex-col items-center gap-1.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 ${
-        selected ? "scale-105" : "hover:scale-102"
+      className={`group flex flex-col items-center gap-1.5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 ${
+        selected ? "scale-105 sm:scale-110" : "hover:scale-105 active:scale-95"
       }`}
       aria-pressed={selected}
       aria-label={label || meta.label}
     >
       <div
-        className={`relative flex items-center justify-center rounded-2xl border-2 transition-all duration-200 ${
-          size === "md" ? "h-12 w-12 sm:h-14 sm:w-14" : "h-10 w-10 sm:h-11 sm:w-11"
+        className={`relative flex items-center justify-center rounded-2xl border-2 transition-all duration-300 ${
+          size === "md"
+            ? "h-14 w-14 sm:h-16 sm:w-16"
+            : "h-12 w-12 sm:h-13 sm:w-13"
         } ${
           selected
-            ? `${meta.activeBorder} shadow-sm ring-2 ring-orange-500/30`
-            : `${meta.baseBg} hover:border-orange-500/40`
+            ? `${meta.activeBorder} ${meta.activeBg} shadow-md ring-4 ${meta.activeRing}`
+            : "border-brown-900/10 bg-white/90 hover:border-orange-500/40 hover:bg-cream"
         }`}
       >
-        <MoodFaceIcon
-          mood={mood}
-          className={`${size === "md" ? "h-6 w-6 sm:h-7 sm:w-7" : "h-4 w-4 sm:h-5 sm:w-5"} ${meta.textCol} transition-transform group-hover:scale-110`}
-        />
+        <div className="relative w-full h-full p-1.5 flex items-center justify-center">
+          <Image
+            src={meta.imageSrc}
+            alt={`Ekspresi Zibi ${meta.label}`}
+            width={64}
+            height={64}
+            className={`w-auto h-full object-contain transition-transform duration-300 select-none ${
+              selected
+                ? "scale-110 drop-shadow-md"
+                : "group-hover:scale-110 group-hover:-translate-y-0.5"
+            }`}
+          />
+        </div>
 
         {selected && (
-          <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-brown-900 shadow-sm">
-            <Check className="h-2.5 w-2.5 stroke-[2.5]" />
+          <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full bg-orange-500 text-brown-900 shadow-sm animate-in zoom-in-50 duration-200">
+            <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 stroke-[3]" />
           </div>
         )}
       </div>
@@ -142,8 +134,8 @@ export function MoodPebble({
       <span
         className={`text-[10px] sm:text-xs text-center leading-tight transition-colors truncate max-w-full ${
           selected
-            ? "font-semibold text-brown-900"
-            : "text-brown-700/80 group-hover:text-brown-900"
+            ? `font-bold ${meta.textCol} scale-105`
+            : "font-medium text-brown-700/80 group-hover:text-brown-900"
         }`}
       >
         {label || meta.label}
@@ -151,4 +143,3 @@ export function MoodPebble({
     </button>
   );
 }
-

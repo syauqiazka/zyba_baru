@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   ArrowLeft,
@@ -16,7 +17,7 @@ import {
 import { Mascot } from "@/components/ui/Mascot";
 import { MoodLevel } from "@/generated/account-client";
 import { ChoiceCard, ScaleRating } from "@/components/wellness/ChoiceCard";
-import { MoodPebble } from "@/components/wellness/MoodPebble";
+import { MoodPebble, moodMeta } from "@/components/wellness/MoodPebble";
 
 const GOAL_OPTIONS = [
   { value: "Mengurangi Stres & Overthinking", label: "Mengurangi Stres & Overthinking" },
@@ -251,7 +252,7 @@ export default function AssessmentPage() {
                 <label className="block text-xs font-bold text-brown-900 mb-3">
                   Suasana Hati yang Paling Sering Muncul
                 </label>
-                <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2 items-start justify-items-center">
                   {Object.values(MoodLevel).map((lvl) => (
                     <MoodPebble
                       key={lvl}
@@ -261,6 +262,29 @@ export default function AssessmentPage() {
                     />
                   ))}
                 </div>
+
+                {/* Micro Empathy Feedback */}
+                {initialMood && (
+                  <div className="mt-3.5 p-3 rounded-2xl bg-[#EAF4EC] border border-[#C8E4CD] text-xs text-brown-800 flex items-center gap-2.5 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="w-8 h-8 rounded-xl bg-white border border-[#C8E4CD] flex items-center justify-center shrink-0 shadow-2xs">
+                      <Image
+                        src={moodMeta[initialMood].imageSrc}
+                        alt={moodMeta[initialMood].label}
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="font-bold text-[#3E7B54] text-[11px] block leading-tight">
+                        Zibi ({moodMeta[initialMood].label}):
+                      </span>
+                      <p className="text-[11px] text-brown-700 leading-snug mt-0.5">
+                        {moodMeta[initialMood].empathyQuote}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Stres Scale */}

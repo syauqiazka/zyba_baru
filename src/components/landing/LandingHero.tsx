@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -8,8 +8,11 @@ import {
   Volume2,
 } from "lucide-react";
 import gsap from "gsap";
+import { MoodLevel } from "@/generated/account-client";
+import { MoodPebble, moodMeta } from "@/components/wellness/MoodPebble";
 
 export function LandingHero() {
+  const [selectedHeroMood, setSelectedHeroMood] = useState<MoodLevel | null>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const phoneCardRef = useRef<HTMLDivElement>(null);
@@ -205,6 +208,62 @@ export function LandingHero() {
                 >
                   <span>Explore ZYBA</span>
                 </a>
+              </div>
+
+              {/* Interactive Quick Mood Check with Zibi (Solves empty space warmly) */}
+              <div className="pt-4 border-t border-brown-900/8 max-w-lg mx-auto lg:mx-0 text-left">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2.5">
+                  <span className="text-xs font-bold text-brown-900">
+                    Bagaimana perasaanmu saat ini?
+                  </span>
+                  <span className="text-[10px] text-brown-700/60 font-medium">
+                    Ketuk ekspresi Zibi
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 items-start justify-items-center">
+                  {Object.values(MoodLevel).map((lvl) => (
+                    <MoodPebble
+                      key={lvl}
+                      mood={lvl}
+                      selected={selectedHeroMood === lvl}
+                      onSelect={(m) => setSelectedHeroMood(m)}
+                      size="sm"
+                    />
+                  ))}
+                </div>
+
+                {/* Micro Empathy Feedback Reaction */}
+                {selectedHeroMood && (
+                  <div className="mt-3 p-3 rounded-2xl bg-white/95 border border-brown-900/10 text-xs text-brown-800 flex items-center justify-between gap-3 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-xl bg-[#EAF4EC] border border-[#C8E4CD] flex items-center justify-center shrink-0">
+                        <Image
+                          src={moodMeta[selectedHeroMood].imageSrc}
+                          alt={moodMeta[selectedHeroMood].label}
+                          width={28}
+                          height={28}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="font-bold text-[#3E7B54] text-[11px] block leading-tight">
+                          Kata Zibi ({moodMeta[selectedHeroMood].label}):
+                        </span>
+                        <p className="text-[11px] text-brown-700 leading-snug truncate">
+                          {moodMeta[selectedHeroMood].empathyQuote}
+                        </p>
+                      </div>
+                    </div>
+
+                    <Link
+                      href="/mood-check-in"
+                      className="shrink-0 px-3 py-1.5 rounded-full bg-[#3E7B54] hover:bg-[#346B48] text-white text-[10px] font-bold shadow-2xs transition-all whitespace-nowrap"
+                    >
+                      Check-In &rarr;
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 

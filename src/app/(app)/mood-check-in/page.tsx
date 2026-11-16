@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight, Check, HeartHandshake, Flame, CheckCircle2 } from "lucide-react";
 import { MoodLevel } from "@/generated/account-client";
-import { MoodPebble } from "@/components/wellness/MoodPebble";
+import { MoodPebble, moodMeta } from "@/components/wellness/MoodPebble";
 import { ChoiceCard, ScaleRating } from "@/components/wellness/ChoiceCard";
 import { CrisisGateBanner } from "@/components/wellness/CrisisGateBanner";
 import { detectRisk } from "@/lib/crisisDetection";
@@ -450,7 +451,15 @@ export default function MoodCheckInPage() {
               </div>
               <div className="shrink-0 mx-auto sm:mx-0 flex items-center justify-center">
                 <Mascot
-                  pose={isNight ? "sleep" : "default"}
+                  pose={
+                    mood === MoodLevel.OVERJOYED || mood === MoodLevel.HAPPY
+                      ? "happy"
+                      : mood === MoodLevel.SAD || mood === MoodLevel.DEPRESSED
+                      ? "sad"
+                      : isNight
+                      ? "sleep"
+                      : "default"
+                  }
                   size={96}
                   animate={true}
                   decorative={true}
@@ -460,10 +469,15 @@ export default function MoodCheckInPage() {
 
             {/* Q1: Mood Pebbles */}
             <div>
-              <label className="block text-xs font-semibold text-brown-900 mb-3">
-                1. Mood Utama Hari Ini
-              </label>
-              <div className="grid grid-cols-5 gap-1 sm:gap-3 items-start justify-items-center">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-0.5 sm:gap-2 mb-3">
+                <label className="block text-xs font-semibold text-brown-900">
+                  1. Mood Utama Hari Ini
+                </label>
+                <span className="text-[10px] text-brown-700/60 font-medium">
+                  Ketuk ekspresi Zibi yang paling sesuai
+                </span>
+              </div>
+              <div className="grid grid-cols-5 gap-1.5 sm:gap-3 items-start justify-items-center">
                 {Object.values(MoodLevel).map((lvl) => (
                   <MoodPebble
                     key={lvl}
@@ -473,6 +487,29 @@ export default function MoodCheckInPage() {
                   />
                 ))}
               </div>
+
+              {/* Delightful Mood Empathy Response Effect */}
+              {mood && (
+                <div className="mt-3.5 p-3 rounded-2xl bg-cream/80 border border-brown-900/8 text-xs text-brown-800 flex items-center gap-2.5 animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="w-8 h-8 rounded-xl bg-white border border-brown-900/10 flex items-center justify-center shrink-0 shadow-2xs">
+                    <Image
+                      src={moodMeta[mood].imageSrc}
+                      alt={moodMeta[mood].label}
+                      width={28}
+                      height={28}
+                      className="object-contain"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="font-bold text-[#3E7B54] text-[11px] block leading-tight">
+                      Respon Zibi ({moodMeta[mood].label}):
+                    </span>
+                    <p className="text-[11px] text-brown-700 leading-snug mt-0.5">
+                      {moodMeta[mood].empathyQuote}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Q2: Stres */}
