@@ -6,7 +6,6 @@ import {
   Send,
   MessageCircle,
   ArrowLeft,
-  Sparkles,
   Check,
   CheckCheck,
   User,
@@ -103,7 +102,7 @@ export function DirectMessagesDrawer({
                   {activeConv?.partnerName || "Sahabat Suaka"}
                 </h3>
                 <div className="flex items-center gap-1.5 text-[10px] text-emerald-800 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                   <span>Realtime via Ably</span>
                 </div>
               </div>

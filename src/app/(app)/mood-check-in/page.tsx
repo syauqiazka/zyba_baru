@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, HeartHandshake, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, HeartHandshake, Flame, CheckCircle2 } from "lucide-react";
 import { MoodLevel } from "@/generated/account-client";
 import { MoodPebble } from "@/components/wellness/MoodPebble";
 import { ChoiceCard, ScaleRating } from "@/components/wellness/ChoiceCard";
@@ -233,7 +233,7 @@ export default function MoodCheckInPage() {
               <div className="text-right">
                 <span className="text-xs font-medium text-brown-700">Lilin Terjaga</span>
                 <div className="flex items-center justify-end gap-1 font-display text-xl font-bold tracking-tight text-orange-950 tabular-nums">
-                  <Sparkles className="h-4 w-4 text-orange-500" />
+                  <Flame className="h-4 w-4 text-orange-500 fill-orange-500" />
                   {resultData.streakDays || 1} Hari
                 </div>
               </div>

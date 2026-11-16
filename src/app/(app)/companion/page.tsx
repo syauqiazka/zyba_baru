@@ -8,16 +8,14 @@ import { ChatInput } from "@/components/companion/ChatInput";
 import { Mascot } from "@/components/ui/Mascot";
 import {
   Menu,
-  ChevronDown,
-  Sparkles,
   Wind,
   Brain,
   Heart,
   Clock,
   MessageSquare,
   Compass,
+  ArrowLeft,
   ArrowRight,
-  Info,
 } from "lucide-react";
 
 export default function CompanionLandingPage() {
@@ -35,7 +33,6 @@ export default function CompanionLandingPage() {
   } = useCompanion();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [showZibiInfo, setShowZibiInfo] = useState(false);
 
   // Dynamic greeting based on time of day (WIB)
   const hour = new Date().getHours();
@@ -111,45 +108,6 @@ export default function CompanionLandingPage() {
     },
   ];
 
-  // 3 Recent chats (or fallback starter reflection cards)
-  const recentChats = conversations.slice(0, 3);
-
-  const fallbackCards = [
-    {
-      id: "f-1",
-      title: "Melepas Lelah Mental",
-      snippet: "Bagikan beban yang membuat energimu terasa terkuras hari ini...",
-      date: "Saran Zibi",
-      prompt: "Aku merasa energiku terkuras habis hari ini dan ingin curhat santai.",
-    },
-    {
-      id: "f-2",
-      title: "Kecemasan Masa Depan",
-      snippet: "Mengurai ketakutan dan kekhawatiran tentang langkah berikutnya...",
-      date: "Saran Zibi",
-      prompt: "Aku cemas memikirkan masa depan dan ekspektasi di sekitarku.",
-    },
-    {
-      id: "f-3",
-      title: "Momen Syukur Sederhana",
-      snippet: "Menemukan secercah hal hangat yang layak dirayakan hari ini...",
-      date: "Saran Zibi",
-      prompt: "Ajak aku mengingat hal-hal kecil yang layak kusyukuri hari ini.",
-    },
-  ];
-
-  const formatCardDate = (dateInput: string | Date) => {
-    try {
-      const d = new Date(dateInput);
-      return d.toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "short",
-      });
-    } catch {
-      return "Hari ini";
-    }
-  };
-
   const cooldownHours = Math.floor(cooldownRemainingSec / 3600);
   const cooldownMinutes = Math.floor((cooldownRemainingSec % 3600) / 60);
   const cooldownSeconds = cooldownRemainingSec % 60;
@@ -157,72 +115,52 @@ export default function CompanionLandingPage() {
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-gradient-to-b from-[#F5F8F5] via-[#FAFBF9] to-white">
-      {/* Top Navigation Bar (Matching reference: Centered "Aetheris AI Chat ∨") */}
-      <header className="px-4 py-3 bg-white/70 backdrop-blur-md border-b border-botanical-500/10 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2">
+      {/* Top Navigation Bar */}
+      <header className="px-3 sm:px-4 py-2.5 bg-white/80 backdrop-blur-md border-b border-botanical-500/10 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Mobile drawer button */}
           <button
             onClick={() => setIsMobileSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-xl text-charcoal-900/60 hover:text-charcoal-900 hover:bg-cream focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+            className="lg:hidden p-2 rounded-xl text-charcoal-900/70 hover:text-charcoal-900 hover:bg-cream focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
             aria-label="Buka riwayat percakapan"
           >
             <Menu className="w-5 h-5" />
           </button>
-        </div>
 
-        {/* Centered Breadcrumb / Title Dropdown */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setShowZibiInfo(!showZibiInfo)}
-            aria-expanded={showZibiInfo}
-            aria-haspopup="true"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream/90 hover:bg-cream border border-botanical-500/15 text-xs font-display font-bold text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+          {/* Quick Back to Dashboard Button */}
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-botanical-500/15 bg-white text-xs font-semibold text-charcoal-900 hover:bg-cream transition-colors shadow-2xs whitespace-nowrap"
+            title="Kembali ke Beranda"
           >
-            <span>Zyba Companion &bull; Zibi</span>
-            <ChevronDown className="w-3.5 h-3.5 text-charcoal-900/40" />
-          </button>
-
-          {/* Zibi Info Popup */}
-          {showZibiInfo && (
-            <>
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setShowZibiInfo(false)}
-              />
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 p-4 rounded-3xl bg-white border border-botanical-500/15 shadow-xl z-50 text-center animate-in fade-in zoom-in-95 duration-150 motion-reduce:transition-none">
-                <div className="mb-2 flex justify-center">
-                  <Mascot pose="happy" size={70} animate={false} decorative={true} />
-                </div>
-                <h4 className="text-sm font-serif font-bold text-charcoal-900">
-                  Zibi &bull; Axolotl Suaka
-                </h4>
-                <p className="text-[11px] text-charcoal-900/70 mt-1 leading-relaxed">
-                  Sahabat AI mindful yang mendengarkan curhatmu tanpa penghakiman 24/7.
-                </p>
-                <div className="mt-3 pt-2.5 border-t border-botanical-500/10 text-[10px] text-charcoal-900/50 flex items-center justify-center gap-1">
-                  <Sparkles className="w-3 h-3 text-botanical-500" />
-                  Batas sesi: 15.000 Token &bull; Jeda 5 Jam
-                </div>
-              </div>
-            </>
-          )}
+            <ArrowLeft className="w-3.5 h-3.5 text-botanical-600 shrink-0" />
+            <span className="hidden sm:inline">Beranda</span>
+          </Link>
         </div>
 
-        {/* Right Token Badge */}
+        {/* Clean Center Title (No Popovers / No Dropdown Overlap) */}
+        <div className="flex items-center gap-2">
+          <span className="font-display text-xs sm:text-sm font-bold text-charcoal-900">
+            Zyba Companion
+          </span>
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100/90 text-[#3E7B54]">
+            Zibi
+          </span>
+        </div>
+
+        {/* Right Token Badge (Clean, No Star/Sparkles Decoration) */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsQuotaModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cream hover:bg-botanical-100/50 border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
-            title="Klik untuk melihat detail token & jeda"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-cream hover:bg-botanical-100/50 border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+            title="Detail token & jeda"
           >
-            <Sparkles className="w-3 h-3 text-botanical-500" />
             {isCooldown ? (
-              <span className="font-bold text-amber-700 font-mono text-[11px]">
+              <span className="font-bold text-amber-700 font-mono text-[10px] sm:text-[11px]">
                 Jeda ({pad(cooldownHours)}:{pad(cooldownMinutes)}:{pad(cooldownSeconds)})
               </span>
             ) : (
-              <span className="text-[11px] font-mono">
+              <span className="text-[10px] sm:text-[11px] font-mono">
                 <strong className="text-botanical-700">
                   {remainingTokens.toLocaleString("id-ID")}
                 </strong>{" "}
@@ -295,7 +233,7 @@ export default function CompanionLandingPage() {
           </div>
 
           {/* Quick Action Starter Pills */}
-          <div className="w-full flex items-center justify-center flex-wrap gap-2 mb-10">
+          <div className="w-full flex items-center justify-center flex-wrap gap-2 mb-6">
             {quickActions.map((action, i) => {
               const Icon = action.icon;
               return (
@@ -310,71 +248,6 @@ export default function CompanionLandingPage() {
                 </button>
               );
             })}
-          </div>
-
-          {/* "Percakapan Terakhirmu" Section */}
-          <div className="w-full text-left">
-            <div className="flex items-center justify-between mb-3 px-1">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-charcoal-900/50 flex items-center gap-1.5 font-mono">
-                <MessageSquare className="w-3.5 h-3.5 text-botanical-500" />
-                Percakapan Terakhirmu
-              </h3>
-              {conversations.length > 3 && (
-                <button
-                  onClick={() => setIsMobileSidebarOpen(true)}
-                  className="text-[11px] text-botanical-700 hover:text-botanical-800 font-medium focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500 rounded-md"
-                >
-                  Lihat Semua ({conversations.length})
-                </button>
-              )}
-            </div>
-
-            {/* 3 Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {recentChats.length > 0
-                ? recentChats.map((chat) => (
-                    <Link
-                      key={chat.id}
-                      href={`/companion/${chat.id}`}
-                      className="group p-4 rounded-2xl bg-white border border-botanical-500/15 hover:border-botanical-500/40 hover:bg-cream/50 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
-                    >
-                      <div>
-                        <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-botanical-700 transition-colors line-clamp-1 mb-1">
-                          {chat.title}
-                        </h4>
-                        <p className="text-[11px] text-charcoal-900/60 line-clamp-2 leading-relaxed">
-                          Sesi curhat bersama Zibi mengenai perasaan dan refleksi batin.
-                        </p>
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-botanical-500/10 flex items-center justify-between text-[10px] text-charcoal-900/40 font-mono">
-                        <span>{formatCardDate(chat.updatedAt)}</span>
-                        <ArrowRight className="w-3 h-3 text-botanical-500 group-hover:translate-x-0.5 transition-transform motion-reduce:group-hover:translate-x-0" />
-                      </div>
-                    </Link>
-                  ))
-                : fallbackCards.map((card) => (
-                    <button
-                      key={card.id}
-                      type="button"
-                      onClick={() => handleStartChat(card.prompt)}
-                      disabled={isLoading || isCooldown}
-                      className="group p-4 rounded-2xl bg-white border border-botanical-500/15 hover:border-botanical-500/40 hover:bg-cream/50 transition-all shadow-2xs hover:shadow-xs text-left flex flex-col justify-between disabled:opacity-50 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
-                    >
-                      <div>
-                        <h4 className="text-xs font-bold text-charcoal-900 group-hover:text-botanical-700 transition-colors line-clamp-1 mb-1">
-                          {card.title}
-                        </h4>
-                        <p className="text-[11px] text-charcoal-900/60 line-clamp-2 leading-relaxed">
-                          {card.snippet}
-                        </p>
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-botanical-500/10 flex items-center justify-between text-[10px] text-charcoal-900/40 font-mono">
-                        <span>{card.date}</span>
-                        <ArrowRight className="w-3 h-3 text-botanical-500 group-hover:translate-x-0.5 transition-transform motion-reduce:group-hover:translate-x-0" />
-                      </div>
-                    </button>
-                  ))}
-            </div>
           </div>
         </div>
       </div>

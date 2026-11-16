@@ -12,7 +12,7 @@ import {
 import { ChatInput } from "@/components/companion/ChatInput";
 import { CrisisBanner } from "@/components/companion/CrisisBanner";
 import { Mascot } from "@/components/ui/Mascot";
-import { Menu, ArrowLeft, RefreshCw, Sparkles } from "lucide-react";
+import { Menu, ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 export default function ActiveCompanionChatPage() {
@@ -209,25 +209,24 @@ export default function ActiveCompanionChatPage() {
         </div>
 
         {/* Token Quota Badge & Companion Header Mascot */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setIsQuotaModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cream hover:bg-botanical-100/50 border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-cream hover:bg-botanical-100/50 border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
             title="Klik untuk melihat detail kuota token & jeda batin"
           >
-            <Sparkles className="w-3.5 h-3.5 text-botanical-500" />
             {isCooldown ? (
-              <span className="font-bold text-amber-700 font-display text-[11px] tabular-nums">
+              <span className="font-bold text-amber-700 font-display text-[10px] sm:text-[11px] tabular-nums">
                 Jeda ({Math.floor(cooldownRemainingSec / 3600)}j {Math.floor((cooldownRemainingSec % 3600) / 60)}m)
               </span>
             ) : (
-              <span className="text-[11px] font-display tabular-nums">
+              <span className="text-[10px] sm:text-[11px] font-display tabular-nums">
                 <strong className="text-botanical-700">{remainingTokens.toLocaleString("id-ID")}</strong> / {tokenLimit.toLocaleString("id-ID")} Token
               </span>
             )}
           </button>
           <div className="flex items-center" title="Maskot ZYBA - Zibi">
-            <Mascot pose={isCooldown ? "sleep" : "listening"} size={38} animate={false} decorative={true} />
+            <Mascot pose={isCooldown ? "sleep" : "listening"} size={34} animate={false} decorative={true} />
           </div>
         </div>
       </header>

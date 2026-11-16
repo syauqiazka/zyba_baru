@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Play, RotateCcw, Check, Volume2, VolumeX, Wind, Sparkles } from "lucide-react";
+import { Play, RotateCcw, Check, Volume2, VolumeX, Wind } from "lucide-react";
 
 interface BreathingGardenProps {
   onSessionComplete?: (durationMin: number) => void;

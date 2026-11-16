@@ -6,7 +6,6 @@ import {
   Search,
   Menu,
   X,
-  Sparkles,
   MessageCircle,
   Bell,
   ChevronDown,
@@ -106,7 +105,7 @@ export function CommunityHeader() {
             className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-emerald-100/90 hover:bg-emerald-200 text-[#275338] font-bold text-xs border border-emerald-300/60 shadow-2xs transition-all active:scale-[0.98]"
             title="Ngobrol dengan Pendamping AI Zibi"
           >
-            <Sparkles className="h-3.5 w-3.5 text-[#3E7B54] shrink-0" />
+            <MessageCircle className="h-3.5 w-3.5 text-[#3E7B54] shrink-0" />
             <span className="hidden sm:inline">Zibi AI</span>
           </Link>
 

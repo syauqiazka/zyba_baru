@@ -6,7 +6,7 @@ import { SanctuaryGarden } from "@/components/wellness/SanctuaryGarden";
 import { MealScannerCard } from "@/components/wellness/MealScannerCard";
 import { Mascot } from "@/components/ui/Mascot";
 import {
-  Sparkles,
+  Heart,
   Check,
   Clock,
   Flame,
@@ -325,7 +325,7 @@ export default function ActivityPage() {
       {/* Toast Notification */}
       {toastMsg && (
         <div className="fixed top-6 right-6 z-50 rounded-2xl bg-[#3E7B54] text-white px-5 py-3 shadow-xl text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-300">
-          <Sparkles className="w-4 h-4 shrink-0" />
+          <Check className="w-4 h-4 shrink-0 stroke-[2.5]" />
           <span>{toastMsg}</span>
         </div>
       )}
@@ -629,7 +629,7 @@ export default function ActivityPage() {
               </div>
               <div className="space-y-1.5 text-center sm:text-left">
                 <div className="flex items-center justify-center sm:justify-start gap-1.5 text-xs font-bold text-[#3E7B54]">
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Heart className="w-3.5 h-3.5" />
                   <span>Pesan Teduh dari Zibi</span>
                 </div>
                 <p className="text-xs text-brown-900/90 leading-relaxed font-serif italic">

@@ -14,7 +14,6 @@ import {
   Settings,
   ShieldAlert,
   LogOut,
-  Sparkles,
 } from "lucide-react";
 
 interface SanctuarySidebarProps {

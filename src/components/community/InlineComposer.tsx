@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import {
   Send,
-  Sparkles,
   ShieldAlert,
   HeartHandshake,
   Tag,

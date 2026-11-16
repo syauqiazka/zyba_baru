@@ -14,7 +14,6 @@ import {
   Plus,
   Send,
   HeartHandshake,
-  Sparkles,
   ChevronRight,
   ShieldCheck,
   Feather,
@@ -199,7 +198,7 @@ export default function WellnessJourneyPage() {
                 Skor ZYBA
               </span>
               <div className="w-8 h-8 rounded-xl bg-emerald-50 text-[#3E7B54] flex items-center justify-center">
-                <Sparkles className="w-4 h-4" />
+                <Activity className="w-4 h-4" />
               </div>
             </div>
             <div className="font-display text-4xl sm:text-5xl font-black text-brown-900 tracking-tight tabular-nums">

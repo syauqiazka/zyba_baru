@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Sparkles, X, Clock, Wind, BookOpen, Coffee } from "lucide-react";
+import { X, Clock, Wind, BookOpen, Coffee } from "lucide-react";
 import { Mascot } from "@/components/ui/Mascot";
 
 interface QuotaModalProps {
@@ -59,7 +59,7 @@ export function QuotaModal({
 
         {/* Badge: High contrast brown text on peach-100 per DESIGN.md §2.2 */}
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-peach-100 text-charcoal-900 text-xs font-semibold mb-2">
-          <Sparkles className="w-3.5 h-3.5 text-botanical-600" /> Jeda Batin Mindful ZYBA
+          <Clock className="w-3.5 h-3.5 text-botanical-600" /> Jeda Batin Mindful ZYBA
         </span>
 
         <h3

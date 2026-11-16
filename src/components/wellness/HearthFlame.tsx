@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Sparkles } from "lucide-react";
 
 interface HearthFlameProps {
   litToday?: boolean;
@@ -85,7 +84,6 @@ export function HearthFlame({
                     r="9"
                     fill="#f97316"
                     fillOpacity="0.12"
-                    className="animate-pulse motion-reduce:animate-none"
                   />
                   {/* Nyala luar */}
                   <path
@@ -119,7 +117,6 @@ export function HearthFlame({
               </span>
               {isLit && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2 py-0.5 text-[11px] font-semibold text-orange-950">
-                  <Sparkles className="h-3 w-3 text-orange-600" />
                   Aktif
                 </span>
               )}

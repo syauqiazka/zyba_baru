@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
-  Sparkles,
   ArrowRight,
   Check,
   Lock,
@@ -313,6 +312,17 @@ function LoginFormContent() {
                 <span>{loading ? "Membuka Suaka..." : "Masuk ke Suaka ZYBA"}</span>
                 <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </button>
+
+              {/* Secondary Direct Link: Buat Akun Baru */}
+              <div className="pt-2 text-center">
+                <span className="text-xs text-brown-700/70">Belum punya akun ZYBA? </span>
+                <Link
+                  href="/onboarding"
+                  className="text-xs font-bold text-[#3E7B54] hover:underline"
+                >
+                  Buat Akun Gratis Sekarang &rarr;
+                </Link>
+              </div>
             </form>
           </div>
 

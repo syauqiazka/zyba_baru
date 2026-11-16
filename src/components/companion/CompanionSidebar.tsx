@@ -11,7 +11,6 @@ import {
   FolderOpen,
   Trash2,
   X,
-  Sparkles,
   ChevronDown,
   Clock,
   BookOpen,
@@ -125,8 +124,8 @@ export function CompanionSidebar({
             className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-charcoal-900 bg-cream/70 hover:bg-cream border border-botanical-500/15 transition-all shadow-2xs group"
           >
             <div className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4 text-botanical-600 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Menu Utama ZYBA</span>
+              <ArrowLeft className="w-4 h-4 text-botanical-600 group-hover:-translate-x-0.5 transition-transform shrink-0" />
+              <span className="whitespace-nowrap">Menu Utama</span>
             </div>
             <span className="text-[10px] text-charcoal-900/40 font-normal">Dashboard &rarr;</span>
           </Link>

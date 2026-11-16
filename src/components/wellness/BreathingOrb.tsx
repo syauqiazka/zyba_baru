@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Wind } from "lucide-react";
+import { Wind } from "lucide-react";
 
 interface BreathingOrbProps {
   size?: "sm" | "md" | "lg";
@@ -70,7 +70,7 @@ export function BreathingOrb({
         >
           {/* Inti Cahaya Mekar */}
           <div className="flex flex-col items-center text-center px-4">
-            <Wind className="h-5 w-5 text-orange-600 stroke-[1.8] mb-1 animate-pulse motion-reduce:animate-none" />
+            <Wind className="h-5 w-5 text-orange-600 stroke-[1.8] mb-1" />
             <span className="font-serif text-sm md:text-base font-bold text-brown-900 transition-opacity duration-500">
               {phase}
             </span>

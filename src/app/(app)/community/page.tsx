@@ -11,7 +11,6 @@ import {
   Menu,
   Plus,
   Filter,
-  Sparkles,
   ShieldAlert,
   X,
   Send,

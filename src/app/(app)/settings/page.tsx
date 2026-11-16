@@ -17,7 +17,7 @@ import {
   Lock,
   ArrowRight,
   ExternalLink,
-  Sparkles,
+  Heart,
   PhoneCall,
   X,
   Loader2,
@@ -298,7 +298,7 @@ export default function SettingsPage() {
         <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 border-b border-[#2D3E33]/10 pb-6">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-[#3E7B54] uppercase mb-1">
-              <Sparkles className="h-3.5 w-3.5" />
+              <Shield className="h-3.5 w-3.5" />
               <span>Pusat Kendali Pengguna</span>
             </div>
             <h1 className="font-display text-3xl font-bold tracking-tight text-[#1B241E] sm:text-4xl">
@@ -793,7 +793,7 @@ export default function SettingsPage() {
                     <div className="space-y-4 text-xs text-[#2D3E33]/85 leading-relaxed">
                       <div className="p-4 rounded-2xl bg-white/70 border border-[#2D3E33]/10">
                         <h3 className="font-semibold text-sm text-[#1B241E] mb-1 flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-[#3E7B54]" />
+                          <Heart className="h-4 w-4 text-[#3E7B54]" />
                           <span>100% Gratis & Terbuka untuk Semua</span>
                         </h3>
                         <p>

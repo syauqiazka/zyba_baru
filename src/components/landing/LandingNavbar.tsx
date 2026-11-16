@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, ArrowRight, Menu, X, Sparkles } from "lucide-react";
+import { ShieldCheck, ArrowRight, Menu, X } from "lucide-react";
 
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -94,18 +94,25 @@ export function LandingNavbar() {
           </Link>
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex sm:hidden items-center gap-2">
+        {/* Mobile Action Buttons: Masuk & Daftar Akun Langsung */}
+        <div className="flex sm:hidden items-center gap-1.5">
           <Link
             href="/login"
-            className="text-xs font-bold text-brown-900 px-3 py-1.5"
+            className="text-xs font-bold text-brown-800 px-2.5 py-1.5 rounded-full hover:bg-brown-900/5 transition-colors"
           >
             Masuk
+          </Link>
+          <Link
+            href="/onboarding"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-orange-500 text-xs font-bold text-brown-900 shadow-2xs hover:bg-orange-600 transition-all active:scale-95"
+          >
+            <span>Daftar</span>
+            <ArrowRight className="w-3 h-3 stroke-[2.5]" />
           </Link>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-brown-900 hover:bg-brown-900/5"
+            className="p-1.5 rounded-xl text-brown-900 hover:bg-brown-900/5"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

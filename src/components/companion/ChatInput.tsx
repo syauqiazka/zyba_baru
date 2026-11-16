@@ -8,7 +8,7 @@ import {
   ArrowUp,
   Plus,
   ChevronDown,
-  Sparkles,
+  MessageSquare,
   Wind,
   Brain,
   Heart,
@@ -144,7 +144,7 @@ export function ChatInput({
   };
 
   const focusOptions = [
-    { label: "Curhat Bebas", icon: Sparkles, desc: "Bercerita tanpa topik tertentu" },
+    { label: "Curhat Bebas", icon: MessageSquare, desc: "Bercerita tanpa topik tertentu" },
     { label: "Urai Overthinking", icon: Brain, desc: "Membagi pikiran rumit jadi langkah kecil" },
     { label: "Jeda Bernafas", icon: Wind, desc: "Menenangkan detak jantung dan tubuh" },
     { label: "Afirmasi Positif", icon: Heart, desc: "Menemukan secercah hal baik hari ini" },
@@ -154,8 +154,8 @@ export function ChatInput({
     <div className={`relative w-full ${className}`}>
       {/* Listening wave badge */}
       {isListening && (
-        <div className="absolute -top-11 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-botanical-500 text-white text-xs font-medium flex items-center gap-2 shadow-md animate-bounce motion-reduce:animate-none z-20">
-          <span className="w-2 h-2 rounded-full bg-red-400 animate-ping motion-reduce:animate-none" />
+        <div className="absolute -top-11 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-botanical-500 text-white text-xs font-medium flex items-center gap-2 shadow-md">
+          <span className="w-2 h-2 rounded-full bg-red-400" />
           Mendengarkan suaramu... Bicara sekarang
         </div>
       )}
@@ -205,7 +205,7 @@ export function ChatInput({
               aria-label={isListening ? "Hentikan suara" : "Bicara dengan suara"}
               className={`p-2 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-xl transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500 ${
                 isListening
-                  ? "bg-red-500 text-white animate-pulse motion-reduce:animate-none"
+                  ? "bg-red-500 text-white shadow-xs"
                   : "text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream/80"
               }`}
             >
@@ -225,7 +225,7 @@ export function ChatInput({
                 aria-haspopup="true"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-xl bg-cream/70 hover:bg-cream border border-botanical-500/15 text-xs text-charcoal-900 transition-colors shadow-2xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500"
               >
-                <Sparkles className="w-3 h-3 text-botanical-600" />
+                <MessageSquare className="w-3 h-3 text-botanical-600" />
                 <span className="font-medium truncate max-w-[120px] sm:max-w-none">
                   {selectedFocus}
                 </span>

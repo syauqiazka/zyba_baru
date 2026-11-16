@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ArrowRight,
   Flame,
-  Sparkles,
+  Activity,
   Moon,
   ShieldCheck,
   MessageCircle,
@@ -67,11 +67,16 @@ export function SketchHeaderCard({
       <div className="relative z-10 space-y-5 sm:space-y-6">
         {/* ROW 1: Sapaan Avatar + Kehadiran Streak + Tombol Check-in Mood Harian */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Avatar + Sapaan */}
+          {/* Avatar (Direct Link to Settings on tap) + Sapaan */}
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-[#EAF4EC] border border-[#C8E4CD] text-[#28583B] font-display text-lg sm:text-2xl font-black shadow-xs">
+            <Link
+              href="/settings"
+              className="flex h-11 w-11 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-[#EAF4EC] border border-[#C8E4CD] text-[#28583B] font-display text-lg sm:text-2xl font-black shadow-xs hover:scale-105 transition-transform"
+              title="Buka Pengaturan Akun"
+              aria-label="Buka Pengaturan Akun"
+            >
               {userName.charAt(0).toUpperCase()}
-            </div>
+            </Link>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-lg sm:text-2xl lg:text-3xl font-bold tracking-tight text-brown-900">
@@ -121,7 +126,6 @@ export function SketchHeaderCard({
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-4 w-4 stroke-[2]" />
                   <span>Check-in Mood Harian</span>
                   <ArrowRight className="h-4 w-4 stroke-[2.5]" />
                 </>
@@ -139,7 +143,7 @@ export function SketchHeaderCard({
                 Skor ZYBA
               </span>
               <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-[#EAF4EC] text-[#28583B]">
-                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[2]" />
+                <Activity className="h-3 w-3 sm:h-3.5 sm:w-3.5 stroke-[2]" />
               </div>
             </div>
             <div className="mt-1.5 sm:mt-2 flex items-baseline gap-1.5">

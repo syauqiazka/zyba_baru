@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { WellnessStatItem } from "@/backend/db/wellnessRepo";
-import { TrendingUp, Activity, Sparkles, Calendar, Info } from "lucide-react";
+import { TrendingUp, Activity, Calendar, Info } from "lucide-react";
 
 interface ScoreTrendChartProps {
   data: WellnessStatItem[];

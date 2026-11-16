@@ -6,7 +6,7 @@ import {
   Wind,
   Headphones,
   BookOpen,
-  Sparkles,
+  Leaf,
   MessageCircle,
   Users,
   ArrowRight,
@@ -67,7 +67,7 @@ const ITEMS: RecommendedItem[] = [
     bgTint: "bg-[#EBF3EC]/70 hover:bg-[#EBF3EC]",
     iconBg: "bg-emerald-100",
     iconColor: "text-emerald-700",
-    icon: Sparkles,
+    icon: Leaf,
   },
   {
     id: "rec-5",

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, TrendingUp, Users, ShieldCheck, HeartHandshake, Check } from "lucide-react";
+import { TrendingUp, Users, ShieldCheck, HeartHandshake, Check } from "lucide-react";
 
 interface CommunityWidgetsProps {
   onSelectTopic: (topic: string) => void;

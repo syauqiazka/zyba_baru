@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   Compass,
-  Sparkles,
   Heart,
   Bookmark,
   Users,
@@ -54,8 +53,8 @@ export function CommunitySidebar({
           className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-brown-900 bg-cream/70 hover:bg-cream border border-brown-900/10 transition-all shadow-2xs group"
         >
           <div className="flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4 text-[#3E7B54] group-hover:-translate-x-0.5 transition-transform" />
-            <span>Menu Utama ZYBA</span>
+            <ArrowLeft className="w-4 h-4 text-[#3E7B54] group-hover:-translate-x-0.5 transition-transform shrink-0" />
+            <span className="whitespace-nowrap">Menu Utama</span>
           </div>
           <span className="text-[10px] text-brown-700/50 font-normal">Dashboard &rarr;</span>
         </Link>

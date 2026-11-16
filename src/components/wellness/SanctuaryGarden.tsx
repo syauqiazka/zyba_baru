@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Droplets, Sprout, Sparkles } from "lucide-react";
+import { Droplets, Sprout } from "lucide-react";
 
 interface SanctuaryGardenProps {
   daysWatered?: number;
@@ -38,7 +38,7 @@ export function SanctuaryGarden({
           </div>
 
           <span className="inline-flex items-center gap-1 rounded-full border border-emerald-600/20 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
-            <Sparkles className="h-2.5 w-2.5 text-emerald-600" />
+            <Sprout className="h-2.5 w-2.5 text-emerald-600" />
             Tingkat 2
           </span>
         </div>

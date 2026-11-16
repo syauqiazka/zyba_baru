@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
-  Sparkles,
   Volume2,
   VolumeX,
   Play,
@@ -175,7 +174,6 @@ export function LandingHero() {
                   Didukung Rantai AI Bebas Biaya
                 </span>
                 <span className="flex items-center gap-1 text-[10px] font-bold text-[#3E7B54] bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
-                  <Sparkles className="w-3 h-3" />
                   <span>Siap 24/7</span>
                 </span>
               </div>
@@ -197,12 +195,8 @@ export function LandingHero() {
 
                 {/* Animated Circular Soundwave Visualizer (Foto 2 Inspired) */}
                 <div className="relative flex items-center justify-center py-4">
-                  {/* Concentric Pulsing Rings */}
-                  <div
-                    className={`absolute w-36 h-36 rounded-full border border-emerald-400/20 ${
-                      pulseActive ? "animate-ping opacity-40 duration-1000" : ""
-                    }`}
-                  />
+                  {/* Concentric Rings */}
+                  <div className="absolute w-36 h-36 rounded-full border border-emerald-400/20" />
                   <div className="absolute w-28 h-28 rounded-full border border-emerald-400/30" />
                   <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#3E7B54] to-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-900/40 relative z-10">
                     <button
@@ -299,7 +293,6 @@ export function LandingHero() {
             {/* GIANT EDITORIAL HEADLINE */}
             <div ref={headlineRef} className="space-y-3">
               <span className="inline-flex items-center gap-2 text-xs font-bold text-[#3E7B54] uppercase tracking-widest bg-emerald-100/90 border border-emerald-500/20 px-3.5 py-1 rounded-full shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5" />
                 <span>Ruang Pemulihan Batin Gen Z</span>
               </span>
 
@@ -367,7 +360,7 @@ export function LandingHero() {
                     Zibi • Siap Menyimak
                   </span>
                   <div className="flex items-center gap-1 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
                     <span className="text-[10px] text-brown-700/60 font-medium">
                       Mendengarkan curhatmu
                     </span>

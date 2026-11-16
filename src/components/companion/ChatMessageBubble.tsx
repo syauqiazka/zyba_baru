@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { PersonaId } from "@/backend/ai/personas";
 import { PersonaAvatar } from "./PersonaAvatars";
-import { Volume2, VolumeX, Copy, Check, Sparkles } from "lucide-react";
+import { Volume2, VolumeX, Copy, Check } from "lucide-react";
 
 export interface ChatMessageItem {
   id: string;
@@ -121,7 +121,6 @@ export function ChatMessageBubble({
           {message.modelUsed && (
             <div className="mt-3 pt-2.5 border-t border-botanical-500/10 flex items-center justify-between gap-2">
               <span className="text-[10px] text-charcoal-900/40 flex items-center gap-1 font-mono">
-                <Sparkles className="w-2.5 h-2.5 text-botanical-500" />
                 {message.modelUsed}
               </span>
 
@@ -132,7 +131,7 @@ export function ChatMessageBubble({
                   onClick={handleSpeak}
                   title={isPlayingTTS ? "Hentikan pembacaan" : "Dengarkan respons suara"}
                   className={`p-1.5 rounded-lg text-charcoal-900/50 hover:text-botanical-600 hover:bg-cream transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-botanical-500 ${
-                    isPlayingTTS ? "text-botanical-600 bg-botanical-100 animate-pulse motion-reduce:animate-none" : ""
+                    isPlayingTTS ? "text-botanical-600 bg-botanical-100" : ""
                   }`}
                   aria-label={isPlayingTTS ? "Hentikan suara" : "Dengarkan respons suara"}
                 >

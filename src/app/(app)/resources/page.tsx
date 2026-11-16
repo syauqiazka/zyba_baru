@@ -14,7 +14,6 @@ import {
   Share2,
   Heart,
   Check,
-  Sparkles,
   BookOpen,
   Filter,
   X,
@@ -243,14 +242,15 @@ export default function ResourcesPage() {
       <header className="sticky top-0 z-50 w-full bg-[#F5F8F5]/95 backdrop-blur-md border-b border-brown-900/10 shadow-2xs">
         <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between gap-4">
           {/* Sisi Kiri: Tombol Kembali ke Dashboard Utama + Brand ZYBA Wawasan */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-brown-900/10 bg-white text-xs font-semibold text-brown-800 hover:bg-brown-50 hover:border-brown-900/20 transition-all shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-brown-900/10 bg-white text-xs font-semibold text-brown-800 hover:bg-brown-50 hover:border-brown-900/20 transition-all shadow-2xs whitespace-nowrap shrink-0"
+              aria-label="Kembali ke Dashboard"
             >
-              <ArrowLeft className="h-3.5 w-3.5 text-brown-600" />
-              <span>Menu Utama ZYBA</span>
-              <span className="hidden sm:inline text-brown-600 font-normal">| Dashboard</span>
+              <ArrowLeft className="h-3.5 w-3.5 text-brown-600 shrink-0" />
+              <span className="hidden sm:inline">Menu Utama</span>
+              <span className="sm:hidden">Kembali</span>
             </Link>
 
             <div className="h-5 w-[1px] bg-brown-900/10 hidden sm:block" />
@@ -266,7 +266,7 @@ export default function ResourcesPage() {
           </div>
 
           {/* Sisi Kanan: Status Wawasan & Kontak Bantuan Krisis */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/guidebook"
               className="hidden sm:inline-flex items-center gap-1.5 text-xs text-brown-600 hover:text-brown-900 transition-colors"
@@ -277,10 +277,10 @@ export default function ResourcesPage() {
 
             <Link
               href="/companion"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[#3E7B54] text-xs font-bold hover:bg-emerald-100 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-[#3E7B54] text-xs font-bold hover:bg-emerald-100 transition-colors shadow-2xs whitespace-nowrap"
             >
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Teman Zibi AI</span>
+              <MessageCircle className="h-3.5 w-3.5" />
+              <span>Zibi AI</span>
             </Link>
           </div>
         </div>
@@ -448,7 +448,7 @@ export default function ResourcesPage() {
               {/* Bagian Penutup / Conclusion */}
               <div className="rounded-3xl border border-emerald-900/10 bg-emerald-50/50 p-6 sm:p-7 space-y-3">
                 <div className="flex items-center gap-2 text-xs font-bold text-[#3E7B54]">
-                  <Sparkles className="h-4 w-4" />
+                  <Heart className="h-4 w-4" />
                   <span>Pengingat Lembut Hari Ini</span>
                 </div>
                 <p className="text-sm text-brown-800 leading-relaxed">
@@ -617,7 +617,7 @@ export default function ResourcesPage() {
           {/* Hero Header Section (Persis Foto 1) */}
           <div className="text-center max-w-3xl mx-auto space-y-3 pb-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/80 border border-emerald-200 text-[#3E7B54] text-xs font-bold tracking-wide">
-              <Sparkles className="h-3.5 w-3.5" />
+              <BookOpen className="h-3.5 w-3.5" />
               <span>Wawasan & Suaka Batin</span>
             </div>
 

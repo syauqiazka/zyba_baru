@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   Upload,
   Camera,
-  Sparkles,
+  Heart,
   Check,
   AlertCircle,
   MessageSquareWarning,
@@ -262,7 +262,7 @@ export function MealScannerCard({ initialMeals = [], onMealSaved }: MealScannerC
           </div>
 
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EAF4EC] border border-[#C8E4CD] text-[#28583B] text-[11px] font-bold shrink-0 shadow-2xs">
-            <Sparkles className="h-3.5 w-3.5" />
+            <Heart className="h-3.5 w-3.5" />
             <span>AI Multimodal Adaptif</span>
           </div>
         </div>
@@ -344,7 +344,7 @@ export function MealScannerCard({ initialMeals = [], onMealSaved }: MealScannerC
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-4 w-4" />
+                  <Camera className="h-4 w-4" />
                   <span>Analisis Piring Nutrisi dengan AI Zibi</span>
                 </>
               )}
@@ -503,7 +503,7 @@ export function MealScannerCard({ initialMeals = [], onMealSaved }: MealScannerC
             </div>
             <div className="space-y-1 text-center sm:text-left">
               <span className="text-xs font-bold text-[#28583B] flex items-center justify-center sm:justify-start gap-1">
-                <Sparkles className="h-3.5 w-3.5" />
+                <Heart className="h-3.5 w-3.5" />
                 Catatan Mindful Zibi
               </span>
               <p className="text-xs text-brown-900 leading-relaxed font-serif italic">

@@ -5,7 +5,6 @@ import {
   HeartHandshake,
   ShieldCheck,
   Flame,
-  Sparkles,
   Lock,
   Users2,
 } from "lucide-react";
@@ -31,7 +30,7 @@ export function LandingValues() {
       color: "bg-blue-100 text-blue-700",
     },
     {
-      icon: Sparkles,
+      icon: HeartHandshake,
       title: "AI Empatis & Beretika",
       desc: "Zibi dirancang dengan pedoman pendampingan yang hangat dan bertanggung jawab. Sistem menerapkan jeda batin sehat untuk mencegah ketergantungan berlebih.",
       color: "bg-amber-100 text-amber-700",

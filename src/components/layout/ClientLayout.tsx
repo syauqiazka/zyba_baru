@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldCheck, User, Sparkles } from "lucide-react";
+import { ShieldCheck, User } from "lucide-react";
 import { SanctuarySidebar } from "@/components/navigation/SanctuarySidebar";
 import { BottomSanctuary } from "@/components/navigation/BottomSanctuary";
 

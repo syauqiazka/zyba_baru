@@ -15,7 +15,6 @@ import {
   Layers,
   Radio,
   Clock,
-  Sparkles,
   AlertCircle,
   Globe,
   Archive,

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Wind, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
+import { Wind, TrendingUp, MessageCircle, ArrowRight } from "lucide-react";
 
 export function LandingDeepDives() {
   return (
@@ -27,7 +27,7 @@ export function LandingDeepDives() {
           {/* Sisi Kiri (6 Kolom): Copy */}
           <div className="lg:col-span-6 space-y-5">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-100 px-3 py-1 rounded-full">
-              <Sparkles className="w-3.5 h-3.5" />
+              <MessageCircle className="w-3.5 h-3.5" />
               <span>Zyba Companion AI</span>
             </span>
 
@@ -75,7 +75,7 @@ export function LandingDeepDives() {
           <div className="lg:col-span-6 rounded-3xl border border-brown-900/10 bg-[#F5F8F5] p-5 sm:p-6 shadow-inner space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-brown-900/8">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#3E7B54]" />
                 <span className="text-xs font-bold text-brown-900">Teman Zibi AI</span>
               </div>
               <span className="text-[10px] text-brown-700/60 font-mono">Status: Aktif</span>

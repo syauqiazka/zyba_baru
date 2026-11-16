@@ -11,7 +11,6 @@ import {
   ShieldAlert,
   Check,
   User,
-  Sparkles,
 } from "lucide-react";
 
 export interface PostItem {
@@ -228,7 +227,7 @@ export function PostCard({
       <div className="flex items-center gap-3 mb-3.5">
         <div className="w-10 h-10 rounded-full bg-emerald-100 text-[#3E7B54] flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-200">
           {post.isAnonymous ? (
-            <Sparkles className="h-4 w-4" />
+            <User className="h-4 w-4" />
           ) : (
             post.authorName.charAt(0).toUpperCase()
           )}

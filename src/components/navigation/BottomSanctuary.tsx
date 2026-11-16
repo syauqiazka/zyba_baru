@@ -3,14 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Smile, MessageCircle, Heart, BookOpen } from "lucide-react";
+import { Compass, Smile, MessageCircle, Heart, Settings } from "lucide-react";
 
 const MOBILE_ITEMS = [
   { href: "/dashboard", label: "Beranda", icon: Compass },
   { href: "/mood-check-in", label: "Check-In", icon: Smile },
   { href: "/companion", label: "Companion", icon: MessageCircle },
   { href: "/wellness-journey", label: "Ruang Sehat", icon: Heart },
-  { href: "/resources", label: "Wawasan", icon: BookOpen },
+  { href: "/settings", label: "Pengaturan", icon: Settings },
 ];
 
 export function BottomSanctuary() {

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MessageSquareHeart, LineChart, Sparkles } from "lucide-react";
+import { MessageSquareHeart, LineChart, Wind } from "lucide-react";
 
 export function LandingSteps() {
   const steps = [
@@ -23,7 +23,7 @@ export function LandingSteps() {
     },
     {
       step: "03",
-      icon: Sparkles,
+      icon: Wind,
       color: "bg-[#3E7B54] text-white",
       badge: "Langkah 3",
       title: "Latihan Aksi Mikro yang Lembut",

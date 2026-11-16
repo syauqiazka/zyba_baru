@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Sparkles,
   ArrowRight,
   ArrowLeft,
   Check,
@@ -105,7 +104,7 @@ export default function AssessmentPage() {
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-500 text-brown-900">
-              <Sparkles className="h-4 w-4" />
+              <ShieldCheck className="h-4 w-4" />
             </div>
             <span className="font-serif text-sm font-bold text-brown-900">
               Ritual Awal ZYBA

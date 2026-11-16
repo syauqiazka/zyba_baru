@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, Volume2, VolumeX, Headphones, Sparkles, Wind, Waves } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Headphones, Wind, Waves } from "lucide-react";
 
 interface AudioTrack {
   id: string;
@@ -132,7 +132,7 @@ export function AudioRelaxPlayer({ tracks }: AudioRelaxPlayerProps) {
                 Audio Relaksasi & Gelombang Batin
               </h3>
               {isPlaying && (
-                <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold animate-pulse motion-reduce:animate-none">
+                <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3E7B54]" />
                   Mengalun
                 </span>

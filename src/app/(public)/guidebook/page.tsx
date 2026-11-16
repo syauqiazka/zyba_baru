@@ -9,7 +9,6 @@ import {
   ShieldAlert,
   ArrowLeft,
   LifeBuoy,
-  Sparkles,
 } from "lucide-react";
 
 export const metadata = {
@@ -122,7 +121,7 @@ export default function GuidebookPage() {
         <Card variant="anchor" elevation={1} className="space-y-4 bg-white/90">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center text-brown-900">
-              <Sparkles className="w-5 h-5 text-brown-900" strokeWidth={1.8} />
+              <HeartHandshake className="w-5 h-5 text-brown-900" strokeWidth={1.8} />
             </div>
             <div>
               <h2 className="font-display font-bold text-lg text-brown-900">

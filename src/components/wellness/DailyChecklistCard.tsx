@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Check, Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
 import Link from "next/link";
 
 interface ChecklistItem {
@@ -131,7 +131,7 @@ export function DailyChecklistCard({
             </h2>
           </div>
           <span className="inline-flex items-center gap-1 rounded-full border border-emerald-600/20 bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-800">
-            <Sparkles className="h-3 w-3 text-emerald-600" />
+            <Check className="h-3 w-3 text-emerald-600 stroke-[2.5]" />
             {completedCount} / {CHECKLIST_ITEMS.length} Selesai
           </span>
         </div>
