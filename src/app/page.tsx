@@ -1,50 +1,54 @@
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingHero } from "@/components/landing/LandingHero";
-import { LandingSteps } from "@/components/landing/LandingSteps";
-import { LandingShowcase } from "@/components/landing/LandingShowcase";
-import { LandingValues } from "@/components/landing/LandingValues";
-import { LandingDeepDives } from "@/components/landing/LandingDeepDives";
-import { LandingTestimonials } from "@/components/landing/LandingTestimonials";
-import { LandingFaq } from "@/components/landing/LandingFaq";
-import { LandingCtaFooter } from "@/components/landing/LandingCtaFooter";
+import { LandingIntro } from "@/components/landing/LandingIntro";
+import { LandingEcosystem } from "@/components/landing/LandingEcosystem";
+import { LandingMeetZibi } from "@/components/landing/LandingMeetZibi";
+import { LandingInsights } from "@/components/landing/LandingInsights";
+import { LandingArticles } from "@/components/landing/LandingArticles";
+import { LandingSafetyPrivacy } from "@/components/landing/LandingSafetyPrivacy";
+import { LandingFinalCta } from "@/components/landing/LandingFinalCta";
+import { LandingFooter } from "@/components/landing/LandingFooter";
 
 export const metadata = {
-  title: "ZYBA Sanctuary — Gen Z Wellness Support",
+  title: "ZYBA — Digital Sanctuary Experience | Gen Z Wellness Support",
   description:
-    "Suaka pendampingan kesehatan mental, fisik, dan sosial berbasis AI. Tenang, hangat, tanpa streak api yang menekan, dan 100% bebas biaya selamanya.",
+    "Find your balance at your own pace. A digital sanctuary space to understand yourself, build healthier habits, and reconnect with your everyday wellbeing. 100% bebas biaya selamanya.",
 };
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#F5F8F5] text-brown-900 selection:bg-orange-200 selection:text-brown-900">
-      {/* 1. Navbar (Foto 4: Sign In & Sign Up buttons) */}
+      {/* 0. Sticky Navigation Bar */}
       <LandingNavbar />
 
-      {/* 2. Hero Section (Foto 2: BirdPulse split style with giant headline, Zibi mascot, and glassy phone pulse) */}
       <main>
+        {/* SECTION 01 — HERO */}
         <LandingHero />
 
-        {/* 3. Alur 3 Langkah (Foto 3: From idea to live page in 3 steps) */}
-        <LandingSteps />
+        {/* SECTION 02 — INTRODUCTION (3 Value Pillars) */}
+        <LandingIntro />
 
-        {/* 4. Ekosistem Suaka (Foto 3: See what it can create) */}
-        <LandingShowcase />
+        {/* SECTION 03 — FEATURE ECOSYSTEM (Real Product Previews) */}
+        <LandingEcosystem />
 
-        {/* 5. 6 Nilai Inti Suaka (Foto 3: Built for conversion grid) */}
-        <LandingValues />
+        {/* SECTION 04 — MEET ZIBI (Mascot & Interaction Preview) */}
+        <LandingMeetZibi />
 
-        {/* 6. Eksplorasi Antarmuka / Deep Dives (Foto 3: Device highlights) */}
-        <LandingDeepDives />
+        {/* SECTION 05 — WELLNESS INSIGHTS (Zyba Score & Tracking) */}
+        <LandingInsights />
 
-        {/* 7. Suara & Cerita Komunitas (Foto 3: User testimonials) */}
-        <LandingTestimonials />
+        {/* SECTION 06 — HEALTH ARTICLES (Curated Literature) */}
+        <LandingArticles />
 
-        {/* 8. Tanya Jawab / FAQ (Foto 3: Frequently Asked Questions) */}
-        <LandingFaq />
+        {/* SECTION 07 — SAFETY AND PRIVACY (Responsible AI & 119 Hotline) */}
+        <LandingSafetyPrivacy />
 
-        {/* 9. Final CTA Banner & Footer (Foto 3: Bottom Banner) */}
-        <LandingCtaFooter />
+        {/* SECTION 08 — FINAL CTA ("Your Journey. Your Pace.") */}
+        <LandingFinalCta />
       </main>
+
+      {/* SECTION 09 — FOOTER */}
+      <LandingFooter />
     </div>
   );
 }

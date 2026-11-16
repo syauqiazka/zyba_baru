@@ -178,18 +178,18 @@ export function LandingHero() {
           <div className="lg:col-span-7 flex flex-col justify-center space-y-8 text-center lg:text-left relative">
             
             {/* GIANT EDITORIAL HEADLINE */}
-            <div ref={headlineRef} className="space-y-3">
+            <div ref={headlineRef} className="space-y-4">
               <span className="inline-flex items-center gap-2 text-xs font-bold text-[#3E7B54] uppercase tracking-widest bg-emerald-100/90 border border-emerald-500/20 px-3.5 py-1 rounded-full shadow-2xs">
-                <span>Ruang Pemulihan Batin Gen Z</span>
+                <span>Digital Sanctuary Experience</span>
               </span>
 
-              <h1 className="font-display text-3xl sm:text-6xl xl:text-7xl font-black text-brown-900 tracking-tight leading-[1.08]">
-                <span className="block">SUAKA BATIN</span>
-                <span className="text-[#3E7B54] block">JEDA HENINGMU.</span>
+              <h1 className="font-serif text-3xl sm:text-5xl xl:text-6xl font-black text-brown-900 tracking-tight leading-[1.1]">
+                <span className="block">Find Your Balance.</span>
+                <span className="text-[#3E7B54] block">At Your Own Pace.</span>
               </h1>
 
               <p className="text-xs sm:text-base lg:text-lg text-brown-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Ketika tuntutan sosial dan dunia di luar terlalu bising, ZYBA hadir sebagai ruang aman untuk mengurai overthinking, bernapas lega, dan memulihkan ritme jiwamu secara alami.
+                A digital space to understand yourself, build healthier habits, and reconnect with your everyday wellbeing. Ruang suaka mindful tanpa tekanan streak, aman, dan 100% bebas biaya.
               </p>
 
               {/* Primary Mobile/Desktop Hero CTAs */}
@@ -198,15 +198,15 @@ export function LandingHero() {
                   href="/onboarding"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-orange-500 hover:bg-orange-600 active:scale-98 text-brown-900 font-bold text-xs sm:text-sm shadow-xs transition-all"
                 >
-                  <span>Mulai Perjalanan Tenangmu (Gratis)</span>
+                  <span>Start Your Journey</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                 </Link>
-                <Link
-                  href="/login"
+                <a
+                  href="#ecosystem"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-brown-900/15 bg-white/80 hover:bg-white text-brown-900 font-semibold text-xs sm:text-sm transition-all shadow-2xs"
                 >
-                  <span>Masuk ke Akun</span>
-                </Link>
+                  <span>Explore ZYBA</span>
+                </a>
               </div>
             </div>
 
