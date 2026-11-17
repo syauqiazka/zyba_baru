@@ -8,12 +8,7 @@ export const dynamic = "force-dynamic";
 
 function getTodayWIB(): string {
   try {
-    return new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Jakarta",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(new Date());
+    return new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
   } catch {
     return new Date().toISOString().slice(0, 10);
   }
@@ -69,6 +64,19 @@ export async function GET() {
           },
         },
       });
+
+      if (!todayCheckIn) {
+        const latest = await accountDb.dailyAssessment.findFirst({
+          where: { userId: session.userId },
+          orderBy: { createdAt: "desc" },
+        });
+        if (latest) {
+          const latestWIBDate = new Date(latest.createdAt.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+          if (latest.date === todayDate || latestWIBDate === todayDate) {
+            todayCheckIn = latest;
+          }
+        }
+      }
 
       // 2. 7 assessment harian terakhir
       recentAssessments = await accountDb.dailyAssessment.findMany({

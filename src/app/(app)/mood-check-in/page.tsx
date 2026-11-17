@@ -49,7 +49,6 @@ export default function MoodCheckInPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   const [alreadyCheckedInToday, setAlreadyCheckedInToday] = useState(false);
   const [existingCheckIn, setExistingCheckIn] = useState<any>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [completed, setCompleted] = useState(false);
   const [resultData, setResultData] = useState<any>(null);
@@ -59,6 +58,20 @@ export default function MoodCheckInPage() {
     const currentHour = new Date().getHours();
     setIsNight(currentHour >= 21 || currentHour < 5);
 
+    // 1. Guard instan client-side dari localStorage (mencegah form berkedip saat reload jika sudah submit hari ini)
+    const todayStr = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    try {
+      const cached = localStorage.getItem(`zyba_checkin_${todayStr}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && (parsed.id || parsed.date)) {
+          setAlreadyCheckedInToday(true);
+          setExistingCheckIn(parsed);
+        }
+      }
+    } catch {}
+
+    // 2. Verifikasi riil dengan server
     const checkStatus = async () => {
       try {
         const res = await fetch("/api/check-in", { cache: "no-store" });
@@ -67,25 +80,16 @@ export default function MoodCheckInPage() {
           if (data.alreadyCheckedIn && data.todayCheckIn) {
             setAlreadyCheckedInToday(true);
             setExistingCheckIn(data.todayCheckIn);
-            // Pre-fill form values in case user wants to update
-            const ci = data.todayCheckIn;
-            if (ci.mood) setMood(ci.mood);
-            if (ci.stressLevel != null) setStressLevel(ci.stressLevel);
-            if (ci.sleepRating != null) setSleepRating(ci.sleepRating);
-            if (Array.isArray(ci.energyTags) && ci.energyTags.length > 0) setEnergyTags(ci.energyTags);
-            if (ci.reflection) setReflection(ci.reflection);
-            const ans = ci.answers || {};
-            if (ans.anxiety != null) setAnxiety(ans.anxiety);
-            if (ans.satisfaction != null) setSatisfaction(ans.satisfaction);
-            if (ans.productivity != null) setProductivity(ans.productivity);
-            if (ans.selfTime != null) setSelfTime(ans.selfTime);
-            if (ans.sleepHours) setSleepHours(ans.sleepHours);
-            if (ans.regularMeals) setRegularMeals(ans.regularMeals);
-            if (ans.physicalActivity) setPhysicalActivity(ans.physicalActivity);
-            if (ans.connection != null) setConnection(ans.connection);
-            if (ans.supported != null) setSupported(ans.supported);
-            if (ans.communityInteraction != null) setCommunityInteraction(ans.communityInteraction);
-            if (ans.gratitude) setGratitude(ans.gratitude);
+            try {
+              localStorage.setItem(`zyba_checkin_${todayStr}`, JSON.stringify(data.todayCheckIn));
+            } catch {}
+          } else {
+            // Jika server menyatakan belum check-in pada hari ini
+            setAlreadyCheckedInToday(false);
+            setExistingCheckIn(null);
+            try {
+              localStorage.removeItem(`zyba_checkin_${todayStr}`);
+            } catch {}
           }
         }
       } catch (err) {
@@ -181,16 +185,38 @@ export default function MoodCheckInPage() {
 
       const data = await res.json();
       if (!res.ok) {
+        if (data.alreadyCheckedIn) {
+          setAlreadyCheckedInToday(true);
+          if (data.todayCheckIn) {
+            setExistingCheckIn(data.todayCheckIn);
+          }
+          const todayStr = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+          try {
+            localStorage.setItem(`zyba_checkin_${todayStr}`, JSON.stringify(data.todayCheckIn || { date: todayStr }));
+          } catch {}
+          throw new Error("Kamu sudah menyelesaikan check-in hari ini.");
+        }
         throw new Error(data.error || "Gagal menyimpan check-in");
       }
 
+      const savedRecord = data.dailyAssessment || data.todayCheckIn;
       setResultData(data);
       setCompleted(true);
       setAlreadyCheckedInToday(true);
-      if (data.dailyAssessment) {
-        setExistingCheckIn(data.dailyAssessment);
+      if (savedRecord) {
+        setExistingCheckIn(savedRecord);
       }
-      setIsEditing(false);
+
+      // Simpan status terkunci ke localStorage & sinkronkan checklist
+      const todayStr = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      try {
+        localStorage.setItem(`zyba_checkin_${todayStr}`, JSON.stringify(savedRecord));
+        const dailyChecklistKey = `zyba_daily_checklist_${todayStr}`;
+        const savedList = JSON.parse(localStorage.getItem(dailyChecklistKey) || "{}");
+        savedList["c-1"] = true;
+        localStorage.setItem(dailyChecklistKey, JSON.stringify(savedList));
+      } catch {}
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
       setErrorMsg(err.message || "Terjadi kesalahan saat menyimpan.");
@@ -293,8 +319,8 @@ export default function MoodCheckInPage() {
     );
   }
 
-  // 2. Layar "Sudah Check-In Hari Ini" jika user sudah menyelesaikan check-in tanggal ini
-  if (alreadyCheckedInToday && !isEditing && existingCheckIn) {
+  // 2. Layar "Sudah Check-In Hari Ini" - Terkunci ketat (1x sehari, tidak bisa di-submit ulang)
+  if (alreadyCheckedInToday && existingCheckIn) {
     const todayMood = existingCheckIn.mood || "HAPPY";
     const moodLabels: Record<string, string> = {
       DEPRESSED: "Tertekan / Berat",
@@ -320,7 +346,7 @@ export default function MoodCheckInPage() {
             Jeda Batinmu Hari Ini Sudah Tersimpan
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-brown-700 max-w-md mx-auto">
-            Kamu sudah meluangkan waktu hadir untuk dirimu sendiri hari ini. Tidak perlu khawatir terlewat, catatan ritmemu aman di suaka ZYBA.
+            Kamu sudah meluangkan waktu hadir untuk dirimu sendiri hari ini. Check-in harian berlaku satu kali per hari agar kamu fokus meresapi harimu tanpa beban berlebih.
           </p>
 
           {/* Rangkuman Check-In Hari Ini */}
@@ -335,7 +361,7 @@ export default function MoodCheckInPage() {
                 </span>
               </div>
               <span className="px-3 py-1 rounded-xl bg-white border border-[#C8E4CD] shadow-2xs text-xs font-bold text-[#28583B]">
-                ✓ Terverifikasi
+                ✓ Terverifikasi & Terkunci
               </span>
             </div>
 
@@ -369,7 +395,7 @@ export default function MoodCheckInPage() {
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons: Navigasi Aman ke Fitur Lain */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/dashboard"
@@ -377,13 +403,18 @@ export default function MoodCheckInPage() {
             >
               Kembali ke Dashboard
             </Link>
-            <button
-              type="button"
-              onClick={() => setIsEditing(true)}
+            <Link
+              href="/wellness-journey"
               className="inline-flex h-12 items-center justify-center rounded-2xl border border-brown-900/15 bg-white px-6 text-xs font-bold text-brown-900 hover:bg-brown-900/5 transition-all"
             >
-              Perbarui / Edit Check-In Hari Ini
-            </button>
+              Lihat di Ruang Sehat
+            </Link>
+            <Link
+              href="/companion"
+              className="inline-flex h-12 items-center justify-center rounded-2xl border border-brown-900/15 bg-white px-6 text-xs font-bold text-brown-900 hover:bg-brown-900/5 transition-all"
+            >
+              Ceritakan ke Companion
+            </Link>
           </div>
         </div>
       </div>
@@ -392,21 +423,6 @@ export default function MoodCheckInPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:py-10 pb-28 md:pb-12">
-      {/* Banner Mode Pembaruan */}
-      {isEditing && (
-        <div className="mb-4 flex items-center justify-between rounded-2xl border border-amber-500/30 bg-amber-50 px-4 py-2.5 text-xs text-amber-900 shadow-2xs">
-          <span>
-            <strong>Mode Pembaruan:</strong> Kamu sedang memperbarui catatan check-in batin hari ini.
-          </span>
-          <button
-            type="button"
-            onClick={() => setIsEditing(false)}
-            className="font-bold underline text-amber-800 hover:text-amber-950 ml-2"
-          >
-            Batal
-          </button>
-        </div>
-      )}
       {/* Top Navigation & Stepper */}
       <div className="mb-6 flex items-center justify-between">
         <Link

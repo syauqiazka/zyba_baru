@@ -8,15 +8,10 @@ import { MoodLevel } from "@/generated/account-client";
 
 export const dynamic = "force-dynamic";
 
-// Format date in WIB (UTC+7)
+// Format date in WIB (UTC+7) dengan kalkulasi absolut tahan runtime
 function getTodayWIB(): string {
   try {
-    return new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Jakarta",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(new Date());
+    return new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
   } catch {
     return new Date().toISOString().slice(0, 10);
   }
@@ -36,8 +31,8 @@ export async function GET() {
 
     const todayDate = getTodayWIB();
 
-    // Check today's check-in
-    const todayCheckIn = await accountDb.dailyAssessment.findUnique({
+    // 1. Cek check-in hari ini via composite unique key (userId_date)
+    let todayCheckIn = await accountDb.dailyAssessment.findUnique({
       where: {
         userId_date: {
           userId: session.userId,
@@ -46,7 +41,21 @@ export async function GET() {
       },
     });
 
-    // Get past 7 check-ins
+    // 2. Resiliensi sinkronisasi: cek record terbaru jika terdaftar pada tanggal WIB hari ini
+    if (!todayCheckIn) {
+      const latest = await accountDb.dailyAssessment.findFirst({
+        where: { userId: session.userId },
+        orderBy: { createdAt: "desc" },
+      });
+      if (latest) {
+        const latestWIBDate = new Date(latest.createdAt.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        if (latest.date === todayDate || latestWIBDate === todayDate) {
+          todayCheckIn = latest;
+        }
+      }
+    }
+
+    // Ambil riwayat 7 check-in terakhir
     const pastCheckIns = await accountDb.dailyAssessment.findMany({
       where: { userId: session.userId },
       orderBy: { date: "desc" },
@@ -87,9 +96,42 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sesi tidak valid" }, { status: 401 });
     }
 
+    const todayDate = getTodayWIB();
+
+    // STRICT LOCK: Cek apakah user sudah pernah check-in hari ini
+    // Memastikan check-in hanya bisa 1x per hari (tidak bisa re-submit)
+    const existing = await accountDb.dailyAssessment.findFirst({
+      where: {
+        userId: session.userId,
+        OR: [
+          { date: todayDate },
+          {
+            createdAt: {
+              gte: new Date(Date.now() - 20 * 60 * 60 * 1000),
+            },
+          },
+        ],
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (existing) {
+      const existingWIBDate = new Date(existing.createdAt.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      if (existing.date === todayDate || existingWIBDate === todayDate) {
+        return NextResponse.json(
+          {
+            error: "Kamu sudah menyelesaikan check-in hari ini. Kembalilah besok untuk jeda batin berikutnya.",
+            alreadyCheckedIn: true,
+            todayCheckIn: existing,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     const body = await request.json();
     const {
-      date = getTodayWIB(),
+      date = todayDate,
       mood = "NEUTRAL",
       stressLevel,
       sleepRating,
@@ -122,37 +164,60 @@ export async function POST(request: Request) {
     let completedActivitiesCount = 0;
     let newStreakDays = 1;
 
-    try {
-      // Upsert 1 record per user per tanggal (AGENTS.md D1 & 7.2)
-      daily = await accountDb.dailyAssessment.upsert({
-        where: {
-          userId_date: {
-            userId: session.userId,
-            date,
+    // Simpan ke DB dengan mekanisme retry (tahan terhadap jeda/cold start pooler database)
+    let lastDbError: any = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        daily = await accountDb.dailyAssessment.upsert({
+          where: {
+            userId_date: {
+              userId: session.userId,
+              date: todayDate,
+            },
           },
-        },
-        create: {
-          userId: session.userId,
-          date,
-          mood: validMood,
-          stressLevel: stressVal,
-          sleepRating: sleepVal,
-          energyTags: Array.isArray(energyTags) ? energyTags : [],
-          reflection: reflection || null,
-          answers: answers || {},
-          flaggedForRisk: isFlagged,
-        },
-        update: {
-          mood: validMood,
-          stressLevel: stressVal,
-          sleepRating: sleepVal,
-          energyTags: Array.isArray(energyTags) ? energyTags : [],
-          reflection: reflection || null,
-          answers: answers || {},
-          flaggedForRisk: isFlagged,
-        },
-      });
+          create: {
+            userId: session.userId,
+            date: todayDate,
+            mood: validMood,
+            stressLevel: stressVal,
+            sleepRating: sleepVal,
+            energyTags: Array.isArray(energyTags) ? energyTags : [],
+            reflection: reflection || null,
+            answers: answers || {},
+            flaggedForRisk: isFlagged,
+          },
+          update: {
+            mood: validMood,
+            stressLevel: stressVal,
+            sleepRating: sleepVal,
+            energyTags: Array.isArray(energyTags) ? energyTags : [],
+            reflection: reflection || null,
+            answers: answers || {},
+            flaggedForRisk: isFlagged,
+          },
+        });
+        break;
+      } catch (err) {
+        lastDbError = err;
+        console.warn(`[POST /api/check-in] DB Upsert attempt ${attempt} failed, retrying...`, err);
+        if (attempt < 2) {
+          await new Promise((resolve) => setTimeout(resolve, 600));
+        }
+      }
+    }
 
+    if (!daily) {
+      console.error("[POST /api/check-in] DB Upsert gagal total:", lastDbError);
+      return NextResponse.json(
+        {
+          error: "Gagal menyimpan check-in harian ke database. Silakan coba kembali sesaat lagi.",
+          details: lastDbError?.message,
+        },
+        { status: 500 }
+      );
+    }
+
+    try {
       // Ambil 7 record check-in terakhir untuk rolling window
       recentAssessments = await accountDb.dailyAssessment.findMany({
         where: { userId: session.userId },
@@ -180,14 +245,8 @@ export async function POST(request: Request) {
       });
 
       if (user?.lastStreakDate) {
-        const lastDate = new Intl.DateTimeFormat("en-CA", {
-          timeZone: "Asia/Jakarta",
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }).format(user.lastStreakDate);
-
-        const today = new Date(date);
+        const lastDate = new Date(user.lastStreakDate.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        const today = new Date(todayDate);
         const prev = new Date(lastDate);
         const diffDays = Math.round((today.getTime() - prev.getTime()) / 86400000);
 
@@ -204,28 +263,18 @@ export async function POST(request: Request) {
       await accountDb.user.update({
         where: { id: session.userId },
         data: {
-          zybaScore: undefined, // will update below
           stressLevel: stressVal ?? undefined,
           streakDays: newStreakDays,
           lastStreakDate: new Date(),
         },
       });
-    } catch (dbErr) {
-      console.warn("[POST /api/check-in] DB operation warning (using calculated in-memory result):", dbErr);
+    } catch (metricErr) {
+      console.warn("[POST /api/check-in] Non-critical metrics update error:", metricErr);
     }
 
     // Pastikan assessment hari ini masuk dalam kalkulasi
     if (recentAssessments.length === 0) {
-      recentAssessments = [
-        {
-          date,
-          mood: validMood,
-          stressLevel: stressVal,
-          sleepRating: sleepVal,
-          energyTags: Array.isArray(energyTags) ? energyTags : [],
-          answers,
-        },
-      ];
+      recentAssessments = [daily];
     }
 
     // Hitung Zyba Score dinamis
@@ -247,17 +296,15 @@ export async function POST(request: Request) {
         });
       }
     } catch {
-      // Ignored if DB offline
+      // Ignored non-critical score update
     }
 
     return NextResponse.json(
       {
         success: true,
-        dailyAssessment: daily || {
-          date,
-          mood: validMood,
-          calculatedScore: scoreResult.zybaScore,
-        },
+        alreadyCheckedIn: true,
+        dailyAssessment: daily,
+        todayCheckIn: daily,
         scoreResult,
         flaggedForRisk: isFlagged,
         crisisResources: isFlagged ? CRISIS_RESOURCES : null,
