@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Trigger ZYBA Article Ingestion
         run: |
-          curl -X POST "${{ secrets.ZYBA_APP_URL || 'https://zyba.my.id' }}/api/cron/sync-articles" \
+          TARGET_URL="${{ secrets.ZYBA_APP_URL || 'https://zyba-baru.vercel.app' }}"
+          echo "Menghubungi endpoint sinkronisasi artikel di: $TARGET_URL"
+          curl -k -X POST "$TARGET_URL/api/cron/sync-articles" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET || 'zyba-cron-sync-wellness-key-2026' }}" \
-            --fail --silent --show-error
+            --retry 2 \
+            --retry-delay 5 \
+            --max-time 60 \
+            --fail \
+            --show-error
