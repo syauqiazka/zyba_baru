@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAuthTokenFromCookies } from "@/lib/authCookies";
-import { verifyToken } from "@/lib/jwt";
+import { getAuthTokenFromCookies, setAuthCookie } from "@/lib/authCookies";
+import { verifyToken, createToken } from "@/lib/jwt";
 import { accountDb } from "@/backend/db/accountClient";
 
 export const dynamic = "force-dynamic";
@@ -17,8 +17,8 @@ export async function GET() {
       return NextResponse.json({ authenticated: false }, { status: 401 });
     }
 
-    // Ambil status terbaru dari DB
-    const user = await accountDb.user.findUnique({
+    // Ambil status terbaru dari DB dengan fallback email jika session.sub ID legacy/tidak cocok
+    let user = await accountDb.user.findUnique({
       where: { id: session.sub },
       select: {
         id: true,
@@ -33,6 +33,39 @@ export async function GET() {
         stressLevel: true,
       },
     });
+
+    if (!user && session.email) {
+      user = await accountDb.user.findUnique({
+        where: { email: session.email.toLowerCase().trim() },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          username: true,
+          avatarUrl: true,
+          companionPersona: true,
+          role: true,
+          onboardingCompleted: true,
+          zybaScore: true,
+          stressLevel: true,
+        },
+      });
+
+      if (user) {
+        // Otomatis sinkronkan & perbarui cookie token dengan ID riil database
+        try {
+          const refreshedToken = await createToken({
+            sub: user.id,
+            userId: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            onboardingCompleted: user.onboardingCompleted,
+          });
+          setAuthCookie(refreshedToken);
+        } catch {}
+      }
+    }
 
     if (!user) {
       return NextResponse.json({ authenticated: false }, { status: 401 });

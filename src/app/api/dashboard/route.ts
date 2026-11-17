@@ -55,11 +55,31 @@ export async function GET() {
         },
       });
 
+      if (!user && session.email) {
+        user = await accountDb.user.findUnique({
+          where: { email: session.email.toLowerCase().trim() },
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            avatarUrl: true,
+            companionPersona: true,
+            zybaScore: true,
+            stressLevel: true,
+            streakDays: true,
+            lastStreakDate: true,
+            createdAt: true,
+          },
+        });
+      }
+
+      const actualUserId = user?.id || session.userId;
+
       // 1. Check-in hari ini
       todayCheckIn = await accountDb.dailyAssessment.findUnique({
         where: {
           userId_date: {
-            userId: session.userId,
+            userId: actualUserId,
             date: todayDate,
           },
         },
@@ -67,7 +87,7 @@ export async function GET() {
 
       if (!todayCheckIn) {
         const latest = await accountDb.dailyAssessment.findFirst({
-          where: { userId: session.userId },
+          where: { userId: actualUserId },
           orderBy: { createdAt: "desc" },
         });
         if (latest) {
@@ -80,7 +100,7 @@ export async function GET() {
 
       // 2. 7 assessment harian terakhir
       recentAssessments = await accountDb.dailyAssessment.findMany({
-        where: { userId: session.userId },
+        where: { userId: actualUserId },
         orderBy: { date: "desc" },
         take: 7,
       });
@@ -88,7 +108,7 @@ export async function GET() {
       // 2b. Semua assessment di tahun berjalan untuk analitik bulanan & mingguan
       allYearAssessments = await accountDb.dailyAssessment.findMany({
         where: {
-          userId: session.userId,
+          userId: actualUserId,
           date: { startsWith: todayDate.slice(0, 4) },
         },
         select: { date: true, calculatedScore: true },
@@ -96,14 +116,14 @@ export async function GET() {
 
       // 3. Initial baseline
       initialAssessment = await accountDb.assessment.findUnique({
-        where: { userId: session.userId },
+        where: { userId: actualUserId },
         select: { initialMood: true, stressLevel: true, sleepQualityRating: true },
       });
 
       // 4. Aktivitas hari ini
       todayActivity = await accountDb.activityLog.findFirst({
         where: {
-          userId: session.userId,
+          userId: actualUserId,
           completed: true,
           createdAt: { gte: startOfToday },
         },

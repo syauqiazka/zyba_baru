@@ -18,34 +18,30 @@ export async function POST(request: Request) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    // 1. Cari user di Account DB dengan perlindungan timeout
+    // 1. Cari user di Account DB dengan mekanisme retry (tahan terhadap cold start Neon pooler)
     let user: any = null;
-    try {
-      user = await Promise.race([
-        accountDb.user.findUnique({
+    let lastError: any = null;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        user = await accountDb.user.findUnique({
           where: { email: normalizedEmail },
-        }),
-        new Promise<null>((_, reject) =>
-          setTimeout(() => reject(new Error("DB Timeout")), 3000)
-        ),
-      ]);
-    } catch (dbErr) {
-      console.warn("[LOGIN] accountDb koneksi timeout/fallback:", dbErr);
+        });
+        break;
+      } catch (dbErr) {
+        lastError = dbErr;
+        console.warn(`[LOGIN] accountDb koneksi attempt ${attempt} gagal, mencoba lagi...`, dbErr);
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, 600));
+        }
+      }
     }
 
-    // Fallback akun administrator jika DB offline/unreachable
-    if (!user && (normalizedEmail === "admin@zyba.id" || normalizedEmail === "syauqi@zyba.id")) {
-      const isSyauqi = normalizedEmail === "syauqi@zyba.id";
-      user = {
-        id: isSyauqi ? "user-test-completed" : "admin-zyba-master",
-        email: normalizedEmail,
-        name: isSyauqi ? "Syauqi Mindful" : "Administrator ZYBA",
-        role: "ADMIN",
-        onboardingCompleted: true,
-        isBanned: false,
-        isSuspended: false,
-        passwordHash: "$2a$12$y1PGMb5i3knliFfzK/Rz8OPiV.4g.knGvHXXg8FDArrt3fP5VYAhS", // AdminZyba2026!
-      };
+    if (!user && lastError) {
+      console.error("[LOGIN] Gagal menghubungi database accountDb:", lastError);
+      return NextResponse.json(
+        { error: "Koneksi database sedang dalam pemulihan. Silakan coba kembali dalam beberapa detik." },
+        { status: 503 }
+      );
     }
 
     if (!user) {

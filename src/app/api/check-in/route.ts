@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAuthTokenFromCookies } from "@/lib/authCookies";
-import { verifyToken } from "@/lib/jwt";
+import { getAuthTokenFromCookies, setAuthCookie } from "@/lib/authCookies";
+import { verifyToken, createToken } from "@/lib/jwt";
 import { accountDb } from "@/backend/db/accountClient";
 import { detectRisk, CRISIS_RESOURCES } from "@/lib/crisisDetection";
 import { calculateZybaScore } from "@/backend/scoring/zybaScore";
@@ -17,6 +17,39 @@ function getTodayWIB(): string {
   }
 }
 
+// Resolusi user riil di database untuk menjamin integritas relasi foreign key (P2003)
+async function resolveRealUser(session: { userId?: string; sub?: string; email?: string }) {
+  const targetId = session.userId || session.sub;
+  let user = targetId
+    ? await accountDb.user.findUnique({
+        where: { id: targetId },
+        select: { id: true, email: true, name: true, role: true, onboardingCompleted: true },
+      })
+    : null;
+
+  if (!user && session.email) {
+    user = await accountDb.user.findUnique({
+      where: { email: session.email.toLowerCase().trim() },
+      select: { id: true, email: true, name: true, role: true, onboardingCompleted: true },
+    });
+    if (user) {
+      try {
+        const refreshedToken = await createToken({
+          sub: user.id,
+          userId: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          onboardingCompleted: user.onboardingCompleted,
+        });
+        setAuthCookie(refreshedToken);
+      } catch {}
+    }
+  }
+
+  return user;
+}
+
 export async function GET() {
   try {
     const token = getAuthTokenFromCookies();
@@ -29,13 +62,19 @@ export async function GET() {
       return NextResponse.json({ error: "Sesi tidak valid" }, { status: 401 });
     }
 
+    const realUser = await resolveRealUser(session);
+    if (!realUser) {
+      return NextResponse.json({ error: "Pengguna tidak ditemukan" }, { status: 401 });
+    }
+    const actualUserId = realUser.id;
+
     const todayDate = getTodayWIB();
 
     // 1. Cek check-in hari ini via composite unique key (userId_date)
     let todayCheckIn = await accountDb.dailyAssessment.findUnique({
       where: {
         userId_date: {
-          userId: session.userId,
+          userId: actualUserId,
           date: todayDate,
         },
       },
@@ -44,7 +83,7 @@ export async function GET() {
     // 2. Resiliensi sinkronisasi: cek record terbaru jika terdaftar pada tanggal WIB hari ini
     if (!todayCheckIn) {
       const latest = await accountDb.dailyAssessment.findFirst({
-        where: { userId: session.userId },
+        where: { userId: actualUserId },
         orderBy: { createdAt: "desc" },
       });
       if (latest) {
@@ -57,7 +96,7 @@ export async function GET() {
 
     // Ambil riwayat 7 check-in terakhir
     const pastCheckIns = await accountDb.dailyAssessment.findMany({
-      where: { userId: session.userId },
+      where: { userId: actualUserId },
       orderBy: { date: "desc" },
       take: 7,
     });
@@ -96,13 +135,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sesi tidak valid" }, { status: 401 });
     }
 
+    const realUser = await resolveRealUser(session);
+    if (!realUser) {
+      return NextResponse.json(
+        { error: "Akun pengguna tidak ditemukan di sistem. Silakan login kembali." },
+        { status: 401 }
+      );
+    }
+    const actualUserId = realUser.id;
+
     const todayDate = getTodayWIB();
 
     // STRICT LOCK: Cek apakah user sudah pernah check-in hari ini
     // Memastikan check-in hanya bisa 1x per hari (tidak bisa re-submit)
     const existing = await accountDb.dailyAssessment.findFirst({
       where: {
-        userId: session.userId,
+        userId: actualUserId,
         OR: [
           { date: todayDate },
           {
@@ -171,12 +219,12 @@ export async function POST(request: Request) {
         daily = await accountDb.dailyAssessment.upsert({
           where: {
             userId_date: {
-              userId: session.userId,
+              userId: actualUserId,
               date: todayDate,
             },
           },
           create: {
-            userId: session.userId,
+            userId: actualUserId,
             date: todayDate,
             mood: validMood,
             stressLevel: stressVal,
@@ -220,19 +268,19 @@ export async function POST(request: Request) {
     try {
       // Ambil 7 record check-in terakhir untuk rolling window
       recentAssessments = await accountDb.dailyAssessment.findMany({
-        where: { userId: session.userId },
+        where: { userId: actualUserId },
         orderBy: { date: "desc" },
         take: 7,
       });
 
       initialAssessment = await accountDb.assessment.findUnique({
-        where: { userId: session.userId },
+        where: { userId: actualUserId },
         select: { initialMood: true, stressLevel: true, sleepQualityRating: true },
       });
 
       completedActivitiesCount = await accountDb.activityLog.count({
         where: {
-          userId: session.userId,
+          userId: actualUserId,
           completed: true,
           createdAt: { gte: new Date(Date.now() - 7 * 86400000) },
         },
@@ -240,7 +288,7 @@ export async function POST(request: Request) {
 
       // Hitung Hearth Flame streak
       const user = await accountDb.user.findUnique({
-        where: { id: session.userId },
+        where: { id: actualUserId },
         select: { streakDays: true, lastStreakDate: true },
       });
 
@@ -261,7 +309,7 @@ export async function POST(request: Request) {
 
       // Update user record
       await accountDb.user.update({
-        where: { id: session.userId },
+        where: { id: actualUserId },
         data: {
           stressLevel: stressVal ?? undefined,
           streakDays: newStreakDays,
@@ -291,7 +339,7 @@ export async function POST(request: Request) {
           data: { calculatedScore: scoreResult.zybaScore },
         });
         await accountDb.user.update({
-          where: { id: session.userId },
+          where: { id: actualUserId },
           data: { zybaScore: scoreResult.zybaScore },
         });
       }
